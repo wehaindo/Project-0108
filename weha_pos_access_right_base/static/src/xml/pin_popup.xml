@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="weha_pos_access_right_base.PinPopup">
+        <Dialog title="'Enter PIN'" size="'md'">
+            <div class="pin-popup-body p-3">
+                <p class="text-center mb-3 text-muted">
+                    Select an advanced employee and enter their PIN to authorize this operation
+                </p>
+                
+                <div class="form-group mb-3">
+                    <label class="form-label fw-bold">Select Employee</label>
+                    <select 
+                        class="form-select form-select-lg"
+                        t-on-change="onSelectEmployee"
+                        t-model="state.selectedEmployeeId">
+                        <t t-foreach="advancedEmployees" t-as="employee" t-key="employee.id">
+                            <option t-att-value="employee.id" t-esc="employee.name" />
+                        </t>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label fw-bold">PIN Code</label>
+                    <input 
+                        type="password" 
+                        class="form-control form-control-lg" 
+                        t-att-class="{'is-invalid': state.error}"
+                        t-model="state.pin"
+                        t-on-input="onInputPin"
+                        placeholder="Enter PIN"
+                        maxlength="10"
+                    />
+                    <div t-if="state.error" class="invalid-feedback d-block">
+                        <t t-esc="state.errorMessage" />
+                    </div>
+                </div>
+            </div>
+            <t t-set-slot="footer">
+                <div class="d-flex gap-2 justify-content-end w-100">
+                    <button class="btn btn-secondary btn-lg" t-on-click="cancel">
+                        Cancel
+                    </button>
+                    <button class="btn btn-primary btn-lg" t-on-click="confirm">
+                        Confirm
+                    </button>
+                </div>
+            </t>
+        </Dialog>
+    </t>
+
+</templates>

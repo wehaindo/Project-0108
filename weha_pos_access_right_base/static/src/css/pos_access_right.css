@@ -1,0 +1,37 @@
+/* Orderline delete button styling */
+.orderline-delete-btn {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    z-index: 10;
+}
+
+.orderline-delete-btn:hover {
+    opacity: 1;
+}
+
+.orderline {
+    position: relative;
+    padding-right: 45px !important;
+}
+
+/* Clear All button styling */
+.clear-all-btn {
+    background-color: #dc3545;
+    color: white;
+    border: 2px solid #dc3545;
+}
+
+.clear-all-btn:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+    color: white;
+}
+
+.clear-all-btn:active {
+    background-color: #bd2130 !important;
+    border-color: #b21f2d !important;
+}

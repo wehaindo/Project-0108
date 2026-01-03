@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- POS Config Form View - Add Operating Unit as Setting -->
+    <record id="view_pos_config_form_operating_unit" model="ir.ui.view">
+        <field name="name">pos.config.form.operating.unit</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/div[3]" position="after">
+                <setting id="operating_unit" string="Operating Unit" help="Set the operating unit for this POS" invisible="not context.get('pos_config_create_mode', False)">
+                    <field name="operating_unit_id" 
+                           widget="many2one" 
+                           options="{'no_create': True}"
+                           required="1"/>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- POS Config Tree View - Add Operating Unit -->
+    <record id="view_pos_config_tree_operating_unit" model="ir.ui.view">
+        <field name="name">pos.config.tree.operating.unit</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_config_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="operating_unit_id" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

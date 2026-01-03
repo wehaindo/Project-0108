@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Professional Product Label 2x7 Template -->
+    <template id="label_2x7">
+        <t t-call="web.basic_layout">
+            <div class="page" style="font-size: 0;">
+                <style>
+                    .label-2x7 { width: 49%; height: 38mm; padding: 2mm; border: 1pt solid #000; box-sizing: border-box; display: inline-block; vertical-align: top; page-break-inside: avoid; text-align: center; font-size: 12pt; margin: 1mm; overflow: hidden; }
+                    .label-name { font-size: 16pt; font-weight: bold; line-height: 1.2; margin-bottom: 2mm; text-align: center; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-height: 40pt; }
+                    .label-price { font-size: 22pt; font-weight: bold; text-align: center; color: #000; margin-bottom: 2mm; padding: 1.5mm 3mm; display: inline-block; }
+                    .label-barcode { text-align: center; margin: 1mm 0; }
+                    .label-barcode-num { font-size: 10pt; text-align: center; font-family: monospace; margin-top: 0.5mm; color: #333; font-weight: 600; }
+                </style>
+                <t t-foreach="quantity" t-as="product">
+                    <t t-foreach="quantity[product]" t-as="barcode_qty">
+                        <t t-set="barcode_value" t-value="barcode_qty[0]"/>
+                        <t t-set="qty" t-value="barcode_qty[1]"/>
+                        <t t-foreach="range(int(qty))" t-as="item">
+                            <div class="label-2x7">
+                                <div class="label-name" t-esc="product.name if product.name else ''"/>
+                                <div class="label-price">
+                                    <span t-if="pricelist and pricelist.currency_id" t-esc="pricelist.currency_id.symbol or '$'"/>
+                                    <span t-elif="product.currency_id" t-esc="product.currency_id.symbol or '$'"/>
+                                    <span t-else="">$</span>
+                                    <span t-if="pricelist" t-esc="'%.0f' % pricelist._get_product_price(product, 1.0)"/>
+                                    <span t-else="" t-esc="'%.0f' % (product.lst_price or 0)"/>
+                                </div>
+                                <t t-if="barcode_value and barcode_value != 'False'">
+                                    <div class="label-barcode"><img t-att-src="'/report/barcode/Code128/%s?width=300&amp;height=50&amp;humanreadable=0' % barcode_value" style="max-width: 90%; height: 8mm;" alt="Barcode"/></div>
+                                    <div class="label-barcode-num" t-esc="barcode_value"/>
+                                </t>
+                            </div>
+                        </t>
+                    </t>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- Professional Product Label 3x7 Template -->
+    <template id="label_3x7">
+        <t t-call="web.basic_layout">
+            <div class="page" style="font-size: 0;">
+                <style>
+                    .label-3x7 { width: 32%; height: 38mm; padding: 1.5mm; border: 1pt solid #000; box-sizing: border-box; display: inline-block; vertical-align: top; page-break-inside: avoid; text-align: center; font-size: 12pt; margin: 1mm; overflow: hidden; }
+                    .label-name-3x7 { font-size: 12pt; font-weight: bold; line-height: 1.1; margin-bottom: 1.5mm; text-align: center; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-height: 28pt; }
+                    .label-price-3x7 { font-size: 18pt; font-weight: bold; text-align: center; color: #000; margin-bottom: 1.5mm; padding: 1.2mm 2.5mm; display: inline-block; }
+                    .label-barcode-3x7 { text-align: center; margin: 1mm 0; }
+                    .label-barcode-num-3x7 { font-size: 8pt; text-align: center; font-family: monospace; margin-top: 0.5mm; color: #333; font-weight: 600; }
+                </style>
+                <t t-foreach="quantity" t-as="product">
+                    <t t-foreach="quantity[product]" t-as="barcode_qty">
+                        <t t-set="barcode_value" t-value="barcode_qty[0]"/>
+                        <t t-set="qty" t-value="barcode_qty[1]"/>
+                        <t t-foreach="range(int(qty))" t-as="item">
+                            <div class="label-3x7">
+                                <div class="label-name-3x7" t-esc="product.name if product.name else ''"/>
+                                <div class="label-price-3x7">
+                                    <span t-if="pricelist and pricelist.currency_id" t-esc="pricelist.currency_id.symbol or '$'"/>
+                                    <span t-elif="product.currency_id" t-esc="product.currency_id.symbol or '$'"/>
+                                    <span t-else="">$</span>
+                                    <span t-if="pricelist" t-esc="'%.0f' % pricelist._get_product_price(product, 1.0)"/>
+                                    <span t-else="" t-esc="'%.0f' % (product.lst_price or 0)"/>
+                                </div>
+                                <t t-if="barcode_value and barcode_value != 'False'">
+                                    <div class="label-barcode-3x7"><img t-att-src="'/report/barcode/Code128/%s?width=250&amp;height=40&amp;humanreadable=0' % barcode_value" style="max-width: 90%; height: 6mm;" alt="Barcode"/></div>
+                                    <div class="label-barcode-num-3x7" t-esc="barcode_value"/>
+                                </t>
+                            </div>
+                        </t>
+                    </t>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- Professional Product Label 4x7 Template -->
+    <template id="label_4x7">
+        <t t-call="web.basic_layout">
+            <div class="page" style="font-size: 0;">
+                <style>
+                    .label-4x7 { width: 24%; height: 38mm; padding: 1.2mm; border: 1pt solid #000; box-sizing: border-box; display: inline-block; vertical-align: top; page-break-inside: avoid; text-align: center; font-size: 12pt; margin: 1mm; overflow: hidden; }
+                    .label-name-4x7 { font-size: 10pt; font-weight: bold; line-height: 1.05; margin-bottom: 1.2mm; text-align: center; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-height: 22pt; }
+                    .label-price-4x7 { font-size: 14pt; font-weight: bold; text-align: center; color: #000; margin-bottom: 1.2mm; padding: 1mm 2mm; display: inline-block; }
+                    .label-barcode-4x7 { text-align: center; margin: 0.8mm 0; }
+                    .label-barcode-num-4x7 { font-size: 7.5pt; text-align: center; font-family: monospace; margin-top: 0.5mm; color: #333; font-weight: 600; }
+                </style>
+                <t t-foreach="quantity" t-as="product">
+                    <t t-foreach="quantity[product]" t-as="barcode_qty">
+                        <t t-set="barcode_value" t-value="barcode_qty[0]"/>
+                        <t t-set="qty" t-value="barcode_qty[1]"/>
+                        <t t-foreach="range(int(qty))" t-as="item">
+                            <div class="label-4x7">
+                                <div class="label-name-4x7" t-esc="product.name if product.name else ''"/>
+                                <div class="label-price-4x7">
+                                    <span t-if="pricelist and pricelist.currency_id" t-esc="pricelist.currency_id.symbol or '$'"/>
+                                    <span t-elif="product.currency_id" t-esc="product.currency_id.symbol or '$'"/>
+                                    <span t-else="">$</span>
+                                    <span t-if="pricelist" t-esc="'%.0f' % pricelist._get_product_price(product, 1.0)"/>
+                                    <span t-else="" t-esc="'%.0f' % (product.lst_price or 0)"/>
+                                </div>
+                                <t t-if="barcode_value and barcode_value != 'False'">
+                                    <div class="label-barcode-4x7"><img t-att-src="'/report/barcode/Code128/%s?width=200&amp;height=35&amp;humanreadable=0' % barcode_value" style="max-width: 90%; height: 5.5mm;" alt="Barcode"/></div>
+                                    <div class="label-barcode-num-4x7" t-esc="barcode_value"/>
+                                </t>
+                            </div>
+                        </t>
+                    </t>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- Professional Product Label 4x12 Template -->
+    <template id="label_4x12">
+        <t t-call="web.basic_layout">
+            <div class="page" style="font-size: 0;">
+                <style>
+                    .label-4x12 { width: 24%; height: 22mm; padding: 0.8mm; border: 1pt solid #000; box-sizing: border-box; display: inline-block; vertical-align: top; page-break-inside: avoid; text-align: center; font-size: 12pt; margin: 1mm; overflow: hidden; }
+                    .label-name-4x12 { font-size: 8pt; font-weight: bold; line-height: 0.95; margin-bottom: 0.6mm; text-align: center; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-height: 16pt; }
+                    .label-price-4x12 { font-size: 11pt; font-weight: bold; text-align: center; color: #000; margin-bottom: 0.6mm; padding: 0.7mm 1.8mm; display: inline-block; }
+                    .label-barcode-4x12 { text-align: center; margin: 0.4mm 0; }
+                    .label-barcode-num-4x12 { font-size: 6.5pt; text-align: center; font-family: monospace; margin-top: 0.4mm; color: #333; font-weight: 600; }
+                </style>
+                <t t-foreach="quantity" t-as="product">
+                    <t t-foreach="quantity[product]" t-as="barcode_qty">
+                        <t t-set="barcode_value" t-value="barcode_qty[0]"/>
+                        <t t-set="qty" t-value="barcode_qty[1]"/>
+                        <t t-foreach="range(int(qty))" t-as="item">
+                            <div class="label-4x12">
+                                <div class="label-name-4x12" t-esc="product.name if product.name else ''"/>
+                                <div class="label-price-4x12">
+                                    <span t-if="pricelist and pricelist.currency_id" t-esc="pricelist.currency_id.symbol or '$'"/>
+                                    <span t-elif="product.currency_id" t-esc="product.currency_id.symbol or '$'"/>
+                                    <span t-else="">$</span>
+                                    <span t-if="pricelist" t-esc="'%.0f' % pricelist._get_product_price(product, 1.0)"/>
+                                    <span t-else="" t-esc="'%.0f' % (product.lst_price or 0)"/>
+                                </div>
+                                <t t-if="barcode_value and barcode_value != 'False'">
+                                    <div class="label-barcode-4x12"><img t-att-src="'/report/barcode/Code128/%s?width=180&amp;height=30&amp;humanreadable=0' % barcode_value" style="max-width: 90%; height: 4mm;" alt="Barcode"/></div>
+                                    <div class="label-barcode-num-4x12" t-esc="barcode_value"/>
+                                </t>
+                            </div>
+                        </t>
+                    </t>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- Product Label 2x7 with Logo Template -->
+    <template id="label_2x7_logo">
+        <t t-call="web.basic_layout">
+            <div class="page" style="font-size: 0;">
+                <style>
+                    .label-2x7-logo { width: 49%; height: 38mm; padding: 2mm; border: 1pt solid #000; box-sizing: border-box; display: inline-block; vertical-align: top; page-break-inside: avoid; font-size: 12pt; margin: 1mm; overflow: hidden; }
+                    .label-logo { width: 35%; float: left; height: 34mm; display: flex; align-items: center; justify-content: center; }
+                    .label-logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
+                    .label-content { width: 65%; float: right; text-align: center; padding-left: 2mm; }
+                    .label-name-logo { font-size: 14pt; font-weight: bold; line-height: 1.1; margin-bottom: 1.5mm; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-height: 32pt; }
+                    .label-price-logo { font-size: 18pt; font-weight: bold; color: #000; margin-bottom: 1.5mm; padding: 1.2mm 2.5mm; display: inline-block; }
+                    .label-barcode-logo { text-align: center; margin: 1mm 0; }
+                    .label-barcode-num-logo { font-size: 9pt; text-align: center; font-family: monospace; margin-top: 0.5mm; color: #333; font-weight: 600; }
+                </style>
+                <t t-foreach="quantity" t-as="product">
+                    <t t-foreach="quantity[product]" t-as="barcode_qty">
+                        <t t-set="barcode_value" t-value="barcode_qty[0]"/>
+                        <t t-set="qty" t-value="barcode_qty[1]"/>
+                        <t t-foreach="range(int(qty))" t-as="item">
+                            <div class="label-2x7-logo">
+                                <div class="label-logo">
+                                    <img t-if="env.company.logo" t-att-src="'data:image/png;base64,%s' % env.company.logo.decode('utf-8')" alt="Company Logo"/>
+                                </div>
+                                <div class="label-content">
+                                    <div class="label-name-logo" t-esc="product.name if product.name else ''"/>
+                                    <div class="label-price-logo">
+                                        <span t-if="pricelist and pricelist.currency_id" t-esc="pricelist.currency_id.symbol or '$'"/>
+                                        <span t-elif="product.currency_id" t-esc="product.currency_id.symbol or '$'"/>
+                                        <span t-else="">$</span>
+                                        <span t-if="pricelist" t-esc="'%.0f' % pricelist._get_product_price(product, 1.0)"/>
+                                        <span t-else="" t-esc="'%.0f' % (product.lst_price or 0)"/>
+                                    </div>
+                                    <t t-if="barcode_value and barcode_value != 'False'">
+                                        <div class="label-barcode-logo"><img t-att-src="'/report/barcode/Code128/%s?width=250&amp;height=40&amp;humanreadable=0' % barcode_value" style="max-width: 95%; height: 7mm;" alt="Barcode"/></div>
+                                        <div class="label-barcode-num-logo" t-esc="barcode_value"/>
+                                    </t>
+                                </div>
+                                <div style="clear: both;"/>
+                            </div>
+                        </t>
+                    </t>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- Product Label 3x7 with Logo Template -->
+    <template id="label_3x7_logo">
+        <t t-call="web.basic_layout">
+            <div class="page" style="font-size: 0;">
+                <style>
+                    .label-3x7-logo { width: 32%; height: 38mm; padding: 1.5mm; border: 1pt solid #000; box-sizing: border-box; display: inline-block; vertical-align: top; page-break-inside: avoid; font-size: 12pt; margin: 1mm; overflow: hidden; }
+                    .label-logo-3x7 { width: 35%; float: left; height: 35mm; display: flex; align-items: center; justify-content: center; }
+                    .label-logo-3x7 img { max-width: 100%; max-height: 100%; object-fit: contain; }
+                    .label-content-3x7 { width: 65%; float: right; text-align: center; padding-left: 1mm; }
+                    .label-name-logo-3x7 { font-size: 10pt; font-weight: bold; line-height: 1.05; margin-bottom: 1mm; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-height: 22pt; }
+                    .label-price-logo-3x7 { font-size: 15pt; font-weight: bold; color: #000; margin-bottom: 1mm; padding: 1mm 2mm; display: inline-block; }
+                    .label-barcode-logo-3x7 { text-align: center; margin: 0.8mm 0; }
+                    .label-barcode-num-logo-3x7 { font-size: 7.5pt; text-align: center; font-family: monospace; margin-top: 0.4mm; color: #333; font-weight: 600; }
+                </style>
+                <t t-foreach="quantity" t-as="product">
+                    <t t-foreach="quantity[product]" t-as="barcode_qty">
+                        <t t-set="barcode_value" t-value="barcode_qty[0]"/>
+                        <t t-set="qty" t-value="barcode_qty[1]"/>
+                        <t t-foreach="range(int(qty))" t-as="item">
+                            <div class="label-3x7-logo">
+                                <div class="label-logo-3x7">
+                                    <img t-if="env.company.logo" t-att-src="'data:image/png;base64,%s' % env.company.logo.decode('utf-8')" alt="Company Logo"/>
+                                </div>
+                                <div class="label-content-3x7">
+                                    <div class="label-name-logo-3x7" t-esc="product.name if product.name else ''"/>
+                                    <div class="label-price-logo-3x7">
+                                        <span t-if="pricelist and pricelist.currency_id" t-esc="pricelist.currency_id.symbol or '$'"/>
+                                        <span t-elif="product.currency_id" t-esc="product.currency_id.symbol or '$'"/>
+                                        <span t-else="">$</span>
+                                        <span t-if="pricelist" t-esc="'%.0f' % pricelist._get_product_price(product, 1.0)"/>
+                                        <span t-else="" t-esc="'%.0f' % (product.list_price or 0)"/>
+                                    </div>
+                                    <t t-if="barcode_value and barcode_value != 'False'">
+                                        <div class="label-barcode-logo-3x7"><img t-att-src="'/report/barcode/Code128/%s?width=200&amp;height=35&amp;humanreadable=0' % barcode_value" style="max-width: 95%; height: 5mm;" alt="Barcode"/></div>
+                                        <div class="label-barcode-num-logo-3x7" t-esc="barcode_value"/>
+                                    </t>
+                                </div>
+                                <div style="clear: both;"/>
+                            </div>
+                        </t>
+                    </t>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- Product Label 4x7 with Logo Template -->
+    <template id="label_4x7_logo">
+        <t t-call="web.basic_layout">
+            <div class="page" style="font-size: 0;">
+                <style>
+                    .label-4x7-logo { width: 24%; height: 38mm; padding: 1mm; border: 1pt solid #000; box-sizing: border-box; display: inline-block; vertical-align: top; page-break-inside: avoid; font-size: 12pt; margin: 1mm; overflow: hidden; }
+                    .label-logo-4x7 { width: 35%; float: left; height: 36mm; display: flex; align-items: center; justify-content: center; }
+                    .label-logo-4x7 img { max-width: 100%; max-height: 100%; object-fit: contain; }
+                    .label-content-4x7 { width: 65%; float: right; text-align: center; padding-left: 0.8mm; }
+                    .label-name-logo-4x7 { font-size: 8.5pt; font-weight: bold; line-height: 1.0; margin-bottom: 0.8mm; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-height: 18pt; }
+                    .label-price-logo-4x7 { font-size: 12pt; font-weight: bold; color: #000; margin-bottom: 0.8mm; padding: 0.8mm 1.8mm; display: inline-block; }
+                    .label-barcode-logo-4x7 { text-align: center; margin: 0.6mm 0; }
+                    .label-barcode-num-logo-4x7 { font-size: 6.5pt; text-align: center; font-family: monospace; margin-top: 0.3mm; color: #333; font-weight: 600; }
+                </style>
+                <t t-foreach="quantity" t-as="product">
+                    <t t-foreach="quantity[product]" t-as="barcode_qty">
+                        <t t-set="barcode_value" t-value="barcode_qty[0]"/>
+                        <t t-set="qty" t-value="barcode_qty[1]"/>
+                        <t t-foreach="range(int(qty))" t-as="item">
+                            <div class="label-4x7-logo">
+                                <div class="label-logo-4x7">
+                                    <img t-if="env.company.logo" t-att-src="'data:image/png;base64,%s' % env.company.logo.decode('utf-8')" alt="Company Logo"/>
+                                </div>
+                                <div class="label-content-4x7">
+                                    <div class="label-name-logo-4x7" t-esc="product.name if product.name else ''"/>
+                                    <div class="label-price-logo-4x7">
+                                        <span t-if="pricelist and pricelist.currency_id" t-esc="pricelist.currency_id.symbol or '$'"/>
+                                        <span t-elif="product.currency_id" t-esc="product.currency_id.symbol or '$'"/>
+                                        <span t-else="">$</span>
+                                        <span t-if="pricelist" t-esc="'%.0f' % pricelist._get_product_price(product, 1.0)"/>
+                                        <span t-else="" t-esc="'%.0f' % (product.list_price or 0)"/>
+                                    </div>
+                                    <t t-if="barcode_value and barcode_value != 'False'">
+                                        <div class="label-barcode-logo-4x7"><img t-att-src="'/report/barcode/Code128/%s?width=180&amp;height=30&amp;humanreadable=0' % barcode_value" style="max-width: 95%; height: 4.5mm;" alt="Barcode"/></div>
+                                        <div class="label-barcode-num-logo-4x7" t-esc="barcode_value"/>
+                                    </t>
+                                </div>
+                                <div style="clear: both;"/>
+                            </div>
+                        </t>
+                    </t>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- Product Label 4x12 with Logo Template -->
+    <template id="label_4x12_logo">
+        <t t-call="web.basic_layout">
+            <div class="page" style="font-size: 0;">
+                <style>
+                    .label-4x12-logo { width: 24%; height: 22mm; padding: 0.8mm; border: 1pt solid #000; box-sizing: border-box; display: inline-block; vertical-align: top; page-break-inside: avoid; font-size: 12pt; margin: 1mm; overflow: hidden; }
+                    .label-logo-4x12 { width: 35%; float: left; height: 20.4mm; display: flex; align-items: center; justify-content: center; }
+                    .label-logo-4x12 img { max-width: 100%; max-height: 100%; object-fit: contain; }
+                    .label-content-4x12 { width: 65%; float: right; text-align: center; padding-left: 0.5mm; }
+                    .label-name-logo-4x12 { font-size: 7pt; font-weight: bold; line-height: 0.95; margin-bottom: 0.5mm; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-height: 14pt; }
+                    .label-price-logo-4x12 { font-size: 9.5pt; font-weight: bold; color: #000; margin-bottom: 0.5mm; padding: 0.6mm 1.5mm; display: inline-block; }
+                    .label-barcode-logo-4x12 { text-align: center; margin: 0.4mm 0; }
+                    .label-barcode-num-logo-4x12 { font-size: 5.5pt; text-align: center; font-family: monospace; margin-top: 0.3mm; color: #333; font-weight: 600; }
+                </style>
+                <t t-foreach="quantity" t-as="product">
+                    <t t-foreach="quantity[product]" t-as="barcode_qty">
+                        <t t-set="barcode_value" t-value="barcode_qty[0]"/>
+                        <t t-set="qty" t-value="barcode_qty[1]"/>
+                        <t t-foreach="range(int(qty))" t-as="item">
+                            <div class="label-4x12-logo">
+                                <div class="label-logo-4x12">
+                                    <img t-if="env.company.logo" t-att-src="'data:image/png;base64,%s' % env.company.logo.decode('utf-8')" alt="Company Logo"/>
+                                </div>
+                                <div class="label-content-4x12">
+                                    <div class="label-name-logo-4x12" t-esc="product.name if product.name else ''"/>
+                                    <div class="label-price-logo-4x12">
+                                        <span t-if="pricelist and pricelist.currency_id" t-esc="pricelist.currency_id.symbol or '$'"/>
+                                        <span t-elif="product.currency_id" t-esc="product.currency_id.symbol or '$'"/>
+                                        <span t-else="">$</span>
+                                        <span t-if="pricelist" t-esc="'%.0f' % pricelist._get_product_price(product, 1.0)"/>
+                                        <span t-else="" t-esc="'%.0f' % (product.list_price or 0)"/>
+                                    </div>
+                                    <t t-if="barcode_value and barcode_value != 'False'">
+                                        <div class="label-barcode-logo-4x12"><img t-att-src="'/report/barcode/Code128/%s?width=160&amp;height=28&amp;humanreadable=0' % barcode_value" style="max-width: 95%; height: 3.5mm;" alt="Barcode"/></div>
+                                        <div class="label-barcode-num-logo-4x12" t-esc="barcode_value"/>
+                                    </t>
+                                </div>
+                                <div style="clear: both;"/>
+                            </div>
+                        </t>
+                    </t>
+                </t>
+            </div>
+        </t>
+    </template>
+
+</odoo>

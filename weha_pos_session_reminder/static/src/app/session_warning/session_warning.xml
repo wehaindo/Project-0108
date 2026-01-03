@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="weha_pos_session_reminder.SessionDateWarning">
+        <t t-if="isSessionDateOld">
+            <div class="session-date-warning" 
+                 t-att-title="'Session started on ' + sessionDate + ' (Today: ' + currentDate + '). Please close this session and start a new one for today.'">
+                <i class="fa fa-exclamation-triangle text-warning" style="font-size: 24px; margin: 0 10px;"/>
+                <span class="text-warning fw-bold">Old Session: <t t-esc="sessionDate"/></span>
+            </div>
+        </t>
+    </t>
+
+    <!-- Patch Navbar to add warning icon -->
+    <t t-name="weha_pos_session_reminder.Navbar" t-inherit="point_of_sale.Navbar" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('pos-rightheader')]" position="inside">
+            <SessionDateWarning />
+        </xpath>
+    </t>
+
+</templates>

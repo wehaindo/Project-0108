@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add fields to POS Configuration form -->
+    <record id="view_pos_config_form_order_limit" model="ir.ui.view">
+        <field name="name">pos.config.form.order.limit</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/div[4]/div" position="before">
+                <setting id="hide_add_order_button" string="Hide Add Order Button" help="Hide the Add Order button in the POS interface">
+                    <field name="hide_add_order_button"/>
+                </setting>
+                <setting id="enable_order_limit" string="Enable Order Limit" help="Enable limitation on number of orders that can be created">
+                    <field name="enable_order_limit"/>
+                </setting>
+                <setting id="max_orders" string="Maximum Orders" help="Maximum number of orders that can be created in a single session" invisible="not enable_order_limit">
+                    <field name="max_orders"/>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>

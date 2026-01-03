@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- A4 Label Sheet Paper Format -->
+    <record id="paperformat_label_a4" model="report.paperformat">
+        <field name="name">A4 Label Sheet</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">0</field>
+        <field name="margin_bottom">0</field>
+        <field name="margin_left">0</field>
+        <field name="margin_right">0</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="dpi">90</field>
+        <field name="disable_shrinking" eval="True"/>
+    </record>
+
+    <!-- Product Label 2x7 with Price (PDF) -->
+    <record id="report_product_template_label_2x7" model="ir.actions.report">
+        <field name="name">Product Label 2x7 with Price (PDF)</field>
+        <field name="model">product.template</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">weha_product_print_label.label_2x7</field>
+        <field name="report_file">weha_product_print_label.label_2x7</field>
+        <field name="print_report_name">'Product Labels - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_label_a4"/>
+    </record>
+
+    <!-- Product Label 3x7 with Price (PDF) -->
+    <record id="report_product_template_label_3x7" model="ir.actions.report">
+        <field name="name">Product Label 3x7 with Price (PDF)</field>
+        <field name="model">product.template</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">weha_product_print_label.label_3x7</field>
+        <field name="report_file">weha_product_print_label.label_3x7</field>
+        <field name="print_report_name">'Product Labels - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_label_a4"/>
+    </record>
+
+    <!-- Product Label 4x7 with Price (PDF) -->
+    <record id="report_product_template_label_4x7" model="ir.actions.report">
+        <field name="name">Product Label 4x7 with Price (PDF)</field>
+        <field name="model">product.template</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">weha_product_print_label.label_4x7</field>
+        <field name="report_file">weha_product_print_label.label_4x7</field>
+        <field name="print_report_name">'Product Labels - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_label_a4"/>
+    </record>
+
+    <!-- Product Label 4x12 with Price (PDF) -->
+    <record id="report_product_template_label_4x12" model="ir.actions.report">
+        <field name="name">Product Label 4x12 with Price (PDF)</field>
+        <field name="model">product.template</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">weha_product_print_label.label_4x12</field>
+        <field name="report_file">weha_product_print_label.label_4x12</field>
+        <field name="print_report_name">'Product Labels - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_label_a4"/>
+    </record>
+
+    <!-- Product Label 2x7 with Logo (PDF) -->
+    <record id="report_product_template_label_2x7_logo" model="ir.actions.report">
+        <field name="name">Product Label 2x7 with Logo (PDF)</field>
+        <field name="model">product.template</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">weha_product_print_label.label_2x7_logo</field>
+        <field name="report_file">weha_product_print_label.label_2x7_logo</field>
+        <field name="print_report_name">'Product Labels - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_label_a4"/>
+    </record>
+
+    <!-- Product Label 3x7 with Logo (PDF) -->
+    <record id="report_product_template_label_3x7_logo" model="ir.actions.report">
+        <field name="name">Product Label 3x7 with Logo (PDF)</field>
+        <field name="model">product.template</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">weha_product_print_label.label_3x7_logo</field>
+        <field name="report_file">weha_product_print_label.label_3x7_logo</field>
+        <field name="print_report_name">'Product Labels - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_label_a4"/>
+    </record>
+
+    <!-- Product Label 4x7 with Logo (PDF) -->
+    <record id="report_product_template_label_4x7_logo" model="ir.actions.report">
+        <field name="name">Product Label 4x7 with Logo (PDF)</field>
+        <field name="model">product.template</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">weha_product_print_label.label_4x7_logo</field>
+        <field name="report_file">weha_product_print_label.label_4x7_logo</field>
+        <field name="print_report_name">'Product Labels - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_label_a4"/>
+    </record>
+
+    <!-- Product Label 4x12 with Logo (PDF) -->
+    <record id="report_product_template_label_4x12_logo" model="ir.actions.report">
+        <field name="name">Product Label 4x12 with Logo (PDF)</field>
+        <field name="model">product.template</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">weha_product_print_label.label_4x12_logo</field>
+        <field name="report_file">weha_product_print_label.label_4x12_logo</field>
+        <field name="print_report_name">'Product Labels - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_label_a4"/>
+    </record>
+
+</odoo>

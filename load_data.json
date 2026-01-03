@@ -1,0 +1,3121 @@
+{
+    "jsonrpc": "2.0",
+    "id": 0,
+    "result": {
+        "pos.session": {
+            "data": [
+                {
+                    "id": 36,
+                    "name": "POS/00031",
+                    "user_id": 2,
+                    "config_id": 1,
+                    "start_at": "2026-01-03 02:09:41",
+                    "stop_at": false,
+                    "sequence_number": 1,
+                    "login_number": 0,
+                    "payment_method_ids": [
+                        1,
+                        4,
+                        5,
+                        6
+                    ],
+                    "state": "opened",
+                    "update_stock_at_closing": false,
+                    "cash_register_balance_start": 0.0,
+                    "access_token": "d41986c4-1551-4d53-b4e3-b154f6138742",
+                    "_partner_commercial_fields": [
+                        "vat",
+                        "company_registry",
+                        "industry_id",
+                        "specific_property_product_pricelist",
+                        "debit_limit",
+                        "property_account_payable_id",
+                        "property_account_receivable_id",
+                        "property_account_position_id",
+                        "property_payment_term_id",
+                        "property_supplier_payment_term_id",
+                        "credit_limit"
+                    ],
+                    "_server_version": {
+                        "server_version": "18.0-20251228",
+                        "server_version_info": [
+                            18,
+                            0,
+                            0,
+                            "final",
+                            0,
+                            ""
+                        ],
+                        "server_serie": "18.0",
+                        "protocol_version": 1
+                    },
+                    "_base_url": "https://warungdesa.saas1801.weha-id.com",
+                    "_has_cash_move_perm": true,
+                    "_has_available_products": true,
+                    "_pos_special_products_ids": [
+                        1,
+                        22377,
+                        22383,
+                        22384
+                    ],
+                    "_pos_special_display_products_ids": [
+                        22375
+                    ]
+                }
+            ],
+            "fields": [
+                "id",
+                "name",
+                "user_id",
+                "config_id",
+                "start_at",
+                "stop_at",
+                "sequence_number",
+                "login_number",
+                "payment_method_ids",
+                "state",
+                "update_stock_at_closing",
+                "cash_register_balance_start",
+                "access_token"
+            ],
+            "relations": {
+                "access_token": {
+                    "name": "access_token",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "config_id": {
+                    "name": "config_id",
+                    "model": "pos.session",
+                    "compute": false,
+                    "related": false,
+                    "relation": "pos.config",
+                    "type": "many2one"
+                },
+                "name": {
+                    "name": "name",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "user_id": {
+                    "name": "user_id",
+                    "model": "pos.session",
+                    "compute": false,
+                    "related": false,
+                    "relation": "res.users",
+                    "type": "many2one"
+                },
+                "start_at": {
+                    "name": "start_at",
+                    "type": "datetime",
+                    "compute": false,
+                    "related": false
+                },
+                "stop_at": {
+                    "name": "stop_at",
+                    "type": "datetime",
+                    "compute": false,
+                    "related": false
+                },
+                "state": {
+                    "name": "state",
+                    "type": "selection",
+                    "compute": false,
+                    "related": false
+                },
+                "sequence_number": {
+                    "name": "sequence_number",
+                    "type": "integer",
+                    "compute": false,
+                    "related": false
+                },
+                "login_number": {
+                    "name": "login_number",
+                    "type": "integer",
+                    "compute": false,
+                    "related": false
+                },
+                "cash_register_balance_start": {
+                    "name": "cash_register_balance_start",
+                    "type": "monetary",
+                    "compute": false,
+                    "related": false
+                },
+                "payment_method_ids": {
+                    "name": "payment_method_ids",
+                    "model": "pos.session",
+                    "compute": true,
+                    "related": true,
+                    "relation": "pos.payment.method",
+                    "type": "many2many",
+                    "relation_table": null
+                },
+                "update_stock_at_closing": {
+                    "name": "update_stock_at_closing",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "compute": false,
+                    "related": false
+                }
+            }
+        },
+        "pos.config": {
+            "data": [
+                {
+                    "id": 1,
+                    "access_token": "d2578f2638954dc7",
+                    "name": "OUTNG-01",
+                    "printer_ids": [],
+                    "is_order_printer": false,
+                    "is_installed_account_accountant": false,
+                    "picking_type_id": 18,
+                    "journal_id": 9,
+                    "invoice_journal_id": 1,
+                    "currency_id": 12,
+                    "iface_cashdrawer": false,
+                    "iface_electronic_scale": false,
+                    "iface_print_via_proxy": false,
+                    "iface_scan_via_proxy": false,
+                    "iface_big_scrollbars": false,
+                    "iface_print_auto": false,
+                    "iface_print_skip_screen": true,
+                    "iface_tax_included": "total",
+                    "iface_available_categ_ids": [],
+                    "customer_display_type": "local",
+                    "customer_display_bg_img": false,
+                    "customer_display_bg_img_name": false,
+                    "restrict_price_control": true,
+                    "is_margins_costs_accessible_to_every_user": false,
+                    "cash_control": true,
+                    "set_maximum_difference": false,
+                    "receipt_header": false,
+                    "receipt_footer": false,
+                    "basic_receipt": true,
+                    "proxy_ip": false,
+                    "active": true,
+                    "uuid": "b1ddab04-271a-4fcf-bd3a-db161b02056e",
+                    "sequence_id": 29,
+                    "sequence_line_id": 30,
+                    "session_ids": [
+                        36,
+                        34,
+                        33,
+                        32,
+                        30,
+                        26,
+                        23,
+                        21,
+                        19,
+                        17,
+                        15,
+                        13,
+                        11,
+                        9,
+                        7,
+                        5,
+                        3,
+                        1
+                    ],
+                    "current_session_id": 36,
+                    "current_session_state": "opened",
+                    "number_of_rescue_session": 0,
+                    "last_session_closing_cash": 0.0,
+                    "last_session_closing_date": "2026-01-03",
+                    "pos_session_username": "Administrator",
+                    "pos_session_state": "opened",
+                    "pos_session_duration": "0",
+                    "pricelist_id": 1,
+                    "available_pricelist_ids": [
+                        1
+                    ],
+                    "company_id": 1,
+                    "group_pos_manager_id": 50,
+                    "group_pos_user_id": 49,
+                    "iface_tipproduct": false,
+                    "tip_product_id": false,
+                    "fiscal_position_ids": [],
+                    "default_fiscal_position_id": false,
+                    "default_bill_ids": [],
+                    "use_pricelist": true,
+                    "tax_regime_selection": false,
+                    "limit_categories": false,
+                    "module_pos_restaurant": false,
+                    "module_pos_avatax": false,
+                    "module_pos_discount": false,
+                    "is_posbox": false,
+                    "is_header_or_footer": false,
+                    "module_pos_hr": true,
+                    "amount_authorized_diff": 0.0,
+                    "payment_method_ids": [
+                        1,
+                        4,
+                        5,
+                        6
+                    ],
+                    "company_has_template": true,
+                    "current_user_id": 2,
+                    "other_devices": false,
+                    "rounding_method": 1,
+                    "cash_rounding": true,
+                    "only_round_cash_method": true,
+                    "has_active_session": true,
+                    "manual_discount": false,
+                    "ship_later": false,
+                    "warehouse_id": 1,
+                    "route_id": false,
+                    "picking_policy": "direct",
+                    "auto_validate_terminal_payment": true,
+                    "trusted_config_ids": [],
+                    "show_product_images": true,
+                    "show_category_images": true,
+                    "note_ids": [],
+                    "module_pos_sms": false,
+                    "is_closing_entry_by_product": false,
+                    "order_edit_tracking": false,
+                    "orderlines_sequence_in_cart_by_category": false,
+                    "display_name": "OUTNG-01",
+                    "create_uid": 2,
+                    "create_date": "2025-12-27 15:32:36",
+                    "write_uid": 2,
+                    "write_date": "2026-01-03 02:05:28",
+                    "epson_printer_ip": false,
+                    "basic_employee_ids": [
+                        2,
+                        3,
+                        5
+                    ],
+                    "advanced_employee_ids": [
+                        1,
+                        4
+                    ],
+                    "sms_receipt_template_id": false,
+                    "operating_unit_id": 2,
+                    "hide_add_order_button": false,
+                    "enable_order_limit": true,
+                    "max_orders": 2,
+                    "crm_team_id": false,
+                    "down_payment_product_id": false,
+                    "require_pin_delete_orderline": true,
+                    "require_pin_clear_order": true,
+                    "require_pin_refund": true,
+                    "_product_default_values": {}
+                }
+            ],
+            "fields": [],
+            "relations": {
+                "access_token": {
+                    "name": "access_token",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "name": {
+                    "name": "name",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "printer_ids": {
+                    "name": "printer_ids",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "pos.printer",
+                    "type": "many2many",
+                    "relation_table": "pos_config_printer_rel"
+                },
+                "is_order_printer": {
+                    "name": "is_order_printer",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "is_installed_account_accountant": {
+                    "name": "is_installed_account_accountant",
+                    "type": "boolean",
+                    "compute": true,
+                    "related": false
+                },
+                "picking_type_id": {
+                    "name": "picking_type_id",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "stock.picking.type",
+                    "type": "many2one"
+                },
+                "journal_id": {
+                    "name": "journal_id",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "account.journal",
+                    "type": "many2one"
+                },
+                "invoice_journal_id": {
+                    "name": "invoice_journal_id",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "account.journal",
+                    "type": "many2one"
+                },
+                "currency_id": {
+                    "name": "currency_id",
+                    "model": "pos.config",
+                    "compute": true,
+                    "related": false,
+                    "relation": "res.currency",
+                    "type": "many2one"
+                },
+                "iface_cashdrawer": {
+                    "name": "iface_cashdrawer",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "iface_electronic_scale": {
+                    "name": "iface_electronic_scale",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "iface_print_via_proxy": {
+                    "name": "iface_print_via_proxy",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "iface_scan_via_proxy": {
+                    "name": "iface_scan_via_proxy",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "iface_big_scrollbars": {
+                    "name": "iface_big_scrollbars",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "iface_print_auto": {
+                    "name": "iface_print_auto",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "iface_print_skip_screen": {
+                    "name": "iface_print_skip_screen",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "iface_tax_included": {
+                    "name": "iface_tax_included",
+                    "type": "selection",
+                    "compute": false,
+                    "related": false
+                },
+                "iface_available_categ_ids": {
+                    "name": "iface_available_categ_ids",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "pos.category",
+                    "type": "many2many",
+                    "relation_table": "pos_category_pos_config_rel"
+                },
+                "customer_display_type": {
+                    "name": "customer_display_type",
+                    "type": "selection",
+                    "compute": false,
+                    "related": false
+                },
+                "customer_display_bg_img": {
+                    "name": "customer_display_bg_img",
+                    "type": "binary",
+                    "compute": false,
+                    "related": false
+                },
+                "customer_display_bg_img_name": {
+                    "name": "customer_display_bg_img_name",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "restrict_price_control": {
+                    "name": "restrict_price_control",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "is_margins_costs_accessible_to_every_user": {
+                    "name": "is_margins_costs_accessible_to_every_user",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "cash_control": {
+                    "name": "cash_control",
+                    "type": "boolean",
+                    "compute": true,
+                    "related": false
+                },
+                "set_maximum_difference": {
+                    "name": "set_maximum_difference",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "receipt_header": {
+                    "name": "receipt_header",
+                    "type": "text",
+                    "compute": false,
+                    "related": false
+                },
+                "receipt_footer": {
+                    "name": "receipt_footer",
+                    "type": "text",
+                    "compute": false,
+                    "related": false
+                },
+                "basic_receipt": {
+                    "name": "basic_receipt",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "proxy_ip": {
+                    "name": "proxy_ip",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "active": {
+                    "name": "active",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "uuid": {
+                    "name": "uuid",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "sequence_id": {
+                    "name": "sequence_id",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "ir.sequence",
+                    "type": "many2one"
+                },
+                "sequence_line_id": {
+                    "name": "sequence_line_id",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "ir.sequence",
+                    "type": "many2one"
+                },
+                "session_ids": {
+                    "name": "session_ids",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "pos.session",
+                    "type": "one2many",
+                    "inverse_name": "config_id"
+                },
+                "current_session_id": {
+                    "name": "current_session_id",
+                    "model": "pos.config",
+                    "compute": true,
+                    "related": false,
+                    "relation": "pos.session",
+                    "type": "many2one"
+                },
+                "current_session_state": {
+                    "name": "current_session_state",
+                    "type": "char",
+                    "compute": true,
+                    "related": false
+                },
+                "number_of_rescue_session": {
+                    "name": "number_of_rescue_session",
+                    "type": "integer",
+                    "compute": true,
+                    "related": false
+                },
+                "last_session_closing_cash": {
+                    "name": "last_session_closing_cash",
+                    "type": "float",
+                    "compute": true,
+                    "related": false
+                },
+                "last_session_closing_date": {
+                    "name": "last_session_closing_date",
+                    "type": "date",
+                    "compute": true,
+                    "related": false
+                },
+                "pos_session_username": {
+                    "name": "pos_session_username",
+                    "type": "char",
+                    "compute": true,
+                    "related": false
+                },
+                "pos_session_state": {
+                    "name": "pos_session_state",
+                    "type": "char",
+                    "compute": true,
+                    "related": false
+                },
+                "pos_session_duration": {
+                    "name": "pos_session_duration",
+                    "type": "char",
+                    "compute": true,
+                    "related": false
+                },
+                "pricelist_id": {
+                    "name": "pricelist_id",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "product.pricelist",
+                    "type": "many2one"
+                },
+                "available_pricelist_ids": {
+                    "name": "available_pricelist_ids",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "product.pricelist",
+                    "type": "many2many",
+                    "relation_table": "pos_config_product_pricelist_rel"
+                },
+                "company_id": {
+                    "name": "company_id",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "res.company",
+                    "type": "many2one"
+                },
+                "group_pos_manager_id": {
+                    "name": "group_pos_manager_id",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "res.groups",
+                    "type": "many2one"
+                },
+                "group_pos_user_id": {
+                    "name": "group_pos_user_id",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "res.groups",
+                    "type": "many2one"
+                },
+                "iface_tipproduct": {
+                    "name": "iface_tipproduct",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "tip_product_id": {
+                    "name": "tip_product_id",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "product.product",
+                    "type": "many2one"
+                },
+                "fiscal_position_ids": {
+                    "name": "fiscal_position_ids",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "account.fiscal.position",
+                    "type": "many2many",
+                    "relation_table": "account_fiscal_position_pos_config_rel"
+                },
+                "default_fiscal_position_id": {
+                    "name": "default_fiscal_position_id",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "account.fiscal.position",
+                    "type": "many2one"
+                },
+                "default_bill_ids": {
+                    "name": "default_bill_ids",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "pos.bill",
+                    "type": "many2many",
+                    "relation_table": "pos_bill_pos_config_rel"
+                },
+                "use_pricelist": {
+                    "name": "use_pricelist",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "tax_regime_selection": {
+                    "name": "tax_regime_selection",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "limit_categories": {
+                    "name": "limit_categories",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "module_pos_restaurant": {
+                    "name": "module_pos_restaurant",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "module_pos_avatax": {
+                    "name": "module_pos_avatax",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "module_pos_discount": {
+                    "name": "module_pos_discount",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "is_posbox": {
+                    "name": "is_posbox",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "is_header_or_footer": {
+                    "name": "is_header_or_footer",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "module_pos_hr": {
+                    "name": "module_pos_hr",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "amount_authorized_diff": {
+                    "name": "amount_authorized_diff",
+                    "type": "float",
+                    "compute": false,
+                    "related": false
+                },
+                "payment_method_ids": {
+                    "name": "payment_method_ids",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "pos.payment.method",
+                    "type": "many2many",
+                    "relation_table": "pos_config_pos_payment_method_rel"
+                },
+                "company_has_template": {
+                    "name": "company_has_template",
+                    "type": "boolean",
+                    "compute": true,
+                    "related": false
+                },
+                "current_user_id": {
+                    "name": "current_user_id",
+                    "model": "pos.config",
+                    "compute": true,
+                    "related": false,
+                    "relation": "res.users",
+                    "type": "many2one"
+                },
+                "other_devices": {
+                    "name": "other_devices",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "rounding_method": {
+                    "name": "rounding_method",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "account.cash.rounding",
+                    "type": "many2one"
+                },
+                "cash_rounding": {
+                    "name": "cash_rounding",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "only_round_cash_method": {
+                    "name": "only_round_cash_method",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "has_active_session": {
+                    "name": "has_active_session",
+                    "type": "boolean",
+                    "compute": true,
+                    "related": false
+                },
+                "manual_discount": {
+                    "name": "manual_discount",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "ship_later": {
+                    "name": "ship_later",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "warehouse_id": {
+                    "name": "warehouse_id",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "stock.warehouse",
+                    "type": "many2one"
+                },
+                "route_id": {
+                    "name": "route_id",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "stock.route",
+                    "type": "many2one"
+                },
+                "picking_policy": {
+                    "name": "picking_policy",
+                    "type": "selection",
+                    "compute": false,
+                    "related": false
+                },
+                "auto_validate_terminal_payment": {
+                    "name": "auto_validate_terminal_payment",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "trusted_config_ids": {
+                    "name": "trusted_config_ids",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "pos.config",
+                    "type": "many2many",
+                    "relation_table": "pos_config_trust_relation"
+                },
+                "show_product_images": {
+                    "name": "show_product_images",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "show_category_images": {
+                    "name": "show_category_images",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "note_ids": {
+                    "name": "note_ids",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "pos.note",
+                    "type": "many2many",
+                    "relation_table": "pos_config_pos_note_rel"
+                },
+                "module_pos_sms": {
+                    "name": "module_pos_sms",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "is_closing_entry_by_product": {
+                    "name": "is_closing_entry_by_product",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "order_edit_tracking": {
+                    "name": "order_edit_tracking",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "orderlines_sequence_in_cart_by_category": {
+                    "name": "orderlines_sequence_in_cart_by_category",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "compute": false,
+                    "related": false
+                },
+                "display_name": {
+                    "name": "display_name",
+                    "type": "char",
+                    "compute": true,
+                    "related": false
+                },
+                "create_uid": {
+                    "name": "create_uid",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "res.users",
+                    "type": "many2one"
+                },
+                "create_date": {
+                    "name": "create_date",
+                    "type": "datetime",
+                    "compute": false,
+                    "related": false
+                },
+                "write_uid": {
+                    "name": "write_uid",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "res.users",
+                    "type": "many2one"
+                },
+                "write_date": {
+                    "name": "write_date",
+                    "type": "datetime",
+                    "compute": false,
+                    "related": false
+                },
+                "epson_printer_ip": {
+                    "name": "epson_printer_ip",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "basic_employee_ids": {
+                    "name": "basic_employee_ids",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "hr.employee",
+                    "type": "many2many",
+                    "relation_table": "pos_hr_basic_employee_hr_employee"
+                },
+                "advanced_employee_ids": {
+                    "name": "advanced_employee_ids",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "hr.employee",
+                    "type": "many2many",
+                    "relation_table": "pos_hr_advanced_employee_hr_employee"
+                },
+                "sms_receipt_template_id": {
+                    "name": "sms_receipt_template_id",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "sms.template",
+                    "type": "many2one"
+                },
+                "operating_unit_id": {
+                    "name": "operating_unit_id",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "operating.unit",
+                    "type": "many2one"
+                },
+                "hide_add_order_button": {
+                    "name": "hide_add_order_button",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "enable_order_limit": {
+                    "name": "enable_order_limit",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "max_orders": {
+                    "name": "max_orders",
+                    "type": "integer",
+                    "compute": false,
+                    "related": false
+                },
+                "crm_team_id": {
+                    "name": "crm_team_id",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "crm.team",
+                    "type": "many2one"
+                },
+                "down_payment_product_id": {
+                    "name": "down_payment_product_id",
+                    "model": "pos.config",
+                    "compute": false,
+                    "related": false,
+                    "relation": "product.product",
+                    "type": "many2one"
+                },
+                "require_pin_delete_orderline": {
+                    "name": "require_pin_delete_orderline",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "require_pin_clear_order": {
+                    "name": "require_pin_clear_order",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "require_pin_refund": {
+                    "name": "require_pin_refund",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                }
+            }
+        },
+        "pos.order": {
+            "data": [],
+            "fields": [],
+            "relations": {
+                "message_is_follower": {
+                    "name": "message_is_follower",
+                    "type": "boolean",
+                    "compute": true,
+                    "related": false
+                },
+                "message_follower_ids": {
+                    "name": "message_follower_ids",
+                    "model": "pos.order",
+                    "compute": false,
+                    "related": false,
+                    "relation": "mail.followers",
+                    "type": "one2many",
+                    "inverse_name": "res_id"
+                },
+                "message_partner_ids": {
+                    "name": "message_partner_ids",
+                    "model": "pos.order",
+                    "compute": true,
+                    "related": false,
+                    "relation": "res.partner",
+                    "type": "many2many",
+                    "relation_table": null
+                },
+                "message_ids": {
+                    "name": "message_ids",
+                    "model": "pos.order",
+                    "compute": false,
+                    "related": false,
+                    "relation": "mail.message",
+                    "type": "one2many",
+                    "inverse_name": "res_id"
+                },
+                "has_message": {
+                    "name": "has_message",
+                    "type": "boolean",
+                    "compute": true,
+                    "related": false
+                },
+                "message_needaction": {
+                    "name": "message_needaction",
+                    "type": "boolean",
+                    "compute": true,
+                    "related": false
+                },
+                "message_needaction_counter": {
+                    "name": "message_needaction_counter",
+                    "type": "integer",
+                    "compute": true,
+                    "related": false
+                },
+                "message_has_error": {
+                    "name": "message_has_error",
+                    "type": "boolean",
+                    "compute": true,
+                    "related": false
+                },
+                "message_has_error_counter": {
+                    "name": "message_has_error_counter",
+                    "type": "integer",
+                    "compute": true,
+                    "related": false
+                },
+                "message_attachment_count": {
+                    "name": "message_attachment_count",
+                    "type": "integer",
+                    "compute": true,
+                    "related": false
+                },
+                "rating_ids": {
+                    "name": "rating_ids",
+                    "model": "pos.order",
+                    "compute": false,
+                    "related": false,
+                    "relation": "rating.rating",
+                    "type": "one2many",
+                    "inverse_name": "res_id"
+                },
+                "website_message_ids": {
+                    "name": "website_message_ids",
+                    "model": "pos.order",
+                    "compute": false,
+                    "related": false,
+                    "relation": "mail.message",
+                    "type": "one2many",
+                    "inverse_name": "res_id"
+                },
+                "message_has_sms_error": {
+                    "name": "message_has_sms_error",
+                    "type": "boolean",
+                    "compute": true,
+                    "related": false
+                },
+                "access_token": {
+                    "name": "access_token",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "access_url": {
+                    "name": "access_url",
+                    "type": "char",
+                    "compute": true,
+                    "related": false
+                },
+                "access_warning": {
+                    "name": "access_warning",
+                    "type": "text",
+                    "compute": true,
+                    "related": false
+                },
+                "name": {
+                    "name": "name",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "last_order_preparation_change": {
+                    "name": "last_order_preparation_change",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "date_order": {
+                    "name": "date_order",
+                    "type": "datetime",
+                    "compute": false,
+                    "related": false
+                },
+                "user_id": {
+                    "name": "user_id",
+                    "model": "pos.order",
+                    "compute": false,
+                    "related": false,
+                    "relation": "res.users",
+                    "type": "many2one"
+                },
+                "amount_difference": {
+                    "name": "amount_difference",
+                    "type": "monetary",
+                    "compute": false,
+                    "related": false
+                },
+                "amount_tax": {
+                    "name": "amount_tax",
+                    "type": "monetary",
+                    "compute": false,
+                    "related": false
+                },
+                "amount_total": {
+                    "name": "amount_total",
+                    "type": "monetary",
+                    "compute": false,
+                    "related": false
+                },
+                "amount_paid": {
+                    "name": "amount_paid",
+                    "type": "monetary",
+                    "compute": false,
+                    "related": false
+                },
+                "amount_return": {
+                    "name": "amount_return",
+                    "type": "monetary",
+                    "compute": false,
+                    "related": false
+                },
+                "margin": {
+                    "name": "margin",
+                    "type": "monetary",
+                    "compute": true,
+                    "related": false
+                },
+                "margin_percent": {
+                    "name": "margin_percent",
+                    "type": "float",
+                    "compute": true,
+                    "related": false
+                },
+                "is_total_cost_computed": {
+                    "name": "is_total_cost_computed",
+                    "type": "boolean",
+                    "compute": true,
+                    "related": false
+                },
+                "lines": {
+                    "name": "lines",
+                    "model": "pos.order",
+                    "compute": false,
+                    "related": false,
+                    "relation": "pos.order.line",
+                    "type": "one2many",
+                    "inverse_name": "order_id"
+                },
+                "company_id": {
+                    "name": "company_id",
+                    "model": "pos.order",
+                    "compute": false,
+                    "related": false,
+                    "relation": "res.company",
+                    "type": "many2one"
+                },
+                "country_code": {
+                    "name": "country_code",
+                    "type": "char",
+                    "compute": true,
+                    "related": true
+                },
+                "pricelist_id": {
+                    "name": "pricelist_id",
+                    "model": "pos.order",
+                    "compute": false,
+                    "related": false,
+                    "relation": "product.pricelist",
+                    "type": "many2one"
+                },
+                "partner_id": {
+                    "name": "partner_id",
+                    "model": "pos.order",
+                    "compute": false,
+                    "related": false,
+                    "relation": "res.partner",
+                    "type": "many2one"
+                },
+                "sequence_number": {
+                    "name": "sequence_number",
+                    "type": "integer",
+                    "compute": false,
+                    "related": false
+                },
+                "session_id": {
+                    "name": "session_id",
+                    "model": "pos.order",
+                    "compute": false,
+                    "related": false,
+                    "relation": "pos.session",
+                    "type": "many2one"
+                },
+                "config_id": {
+                    "name": "config_id",
+                    "model": "pos.order",
+                    "compute": true,
+                    "related": true,
+                    "relation": "pos.config",
+                    "type": "many2one"
+                },
+                "currency_id": {
+                    "name": "currency_id",
+                    "model": "pos.order",
+                    "compute": true,
+                    "related": true,
+                    "relation": "res.currency",
+                    "type": "many2one"
+                },
+                "currency_rate": {
+                    "name": "currency_rate",
+                    "type": "float",
+                    "compute": true,
+                    "related": false
+                },
+                "state": {
+                    "name": "state",
+                    "type": "selection",
+                    "compute": false,
+                    "related": false
+                },
+                "account_move": {
+                    "name": "account_move",
+                    "model": "pos.order",
+                    "compute": false,
+                    "related": false,
+                    "relation": "account.move",
+                    "type": "many2one"
+                },
+                "picking_ids": {
+                    "name": "picking_ids",
+                    "model": "pos.order",
+                    "compute": false,
+                    "related": false,
+                    "relation": "stock.picking",
+                    "type": "one2many",
+                    "inverse_name": "pos_order_id"
+                },
+                "picking_count": {
+                    "name": "picking_count",
+                    "type": "integer",
+                    "compute": true,
+                    "related": false
+                },
+                "failed_pickings": {
+                    "name": "failed_pickings",
+                    "type": "boolean",
+                    "compute": true,
+                    "related": false
+                },
+                "picking_type_id": {
+                    "name": "picking_type_id",
+                    "model": "pos.order",
+                    "compute": true,
+                    "related": true,
+                    "relation": "stock.picking.type",
+                    "type": "many2one"
+                },
+                "procurement_group_id": {
+                    "name": "procurement_group_id",
+                    "model": "pos.order",
+                    "compute": false,
+                    "related": false,
+                    "relation": "procurement.group",
+                    "type": "many2one"
+                },
+                "floating_order_name": {
+                    "name": "floating_order_name",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "general_note": {
+                    "name": "general_note",
+                    "type": "text",
+                    "compute": false,
+                    "related": false
+                },
+                "nb_print": {
+                    "name": "nb_print",
+                    "type": "integer",
+                    "compute": false,
+                    "related": false
+                },
+                "pos_reference": {
+                    "name": "pos_reference",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "sale_journal": {
+                    "name": "sale_journal",
+                    "model": "pos.order",
+                    "compute": true,
+                    "related": true,
+                    "relation": "account.journal",
+                    "type": "many2one"
+                },
+                "fiscal_position_id": {
+                    "name": "fiscal_position_id",
+                    "model": "pos.order",
+                    "compute": false,
+                    "related": false,
+                    "relation": "account.fiscal.position",
+                    "type": "many2one"
+                },
+                "payment_ids": {
+                    "name": "payment_ids",
+                    "model": "pos.order",
+                    "compute": false,
+                    "related": false,
+                    "relation": "pos.payment",
+                    "type": "one2many",
+                    "inverse_name": "pos_order_id"
+                },
+                "session_move_id": {
+                    "name": "session_move_id",
+                    "model": "pos.order",
+                    "compute": true,
+                    "related": true,
+                    "relation": "account.move",
+                    "type": "many2one"
+                },
+                "to_invoice": {
+                    "name": "to_invoice",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "shipping_date": {
+                    "name": "shipping_date",
+                    "type": "date",
+                    "compute": false,
+                    "related": false
+                },
+                "is_invoiced": {
+                    "name": "is_invoiced",
+                    "type": "boolean",
+                    "compute": true,
+                    "related": false
+                },
+                "is_tipped": {
+                    "name": "is_tipped",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "tip_amount": {
+                    "name": "tip_amount",
+                    "type": "monetary",
+                    "compute": false,
+                    "related": false
+                },
+                "refund_orders_count": {
+                    "name": "refund_orders_count",
+                    "type": "integer",
+                    "compute": true,
+                    "related": false
+                },
+                "refunded_order_id": {
+                    "name": "refunded_order_id",
+                    "model": "pos.order",
+                    "compute": true,
+                    "related": false,
+                    "relation": "pos.order",
+                    "type": "many2one"
+                },
+                "has_refundable_lines": {
+                    "name": "has_refundable_lines",
+                    "type": "boolean",
+                    "compute": true,
+                    "related": false
+                },
+                "ticket_code": {
+                    "name": "ticket_code",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "tracking_number": {
+                    "name": "tracking_number",
+                    "type": "char",
+                    "compute": true,
+                    "related": false
+                },
+                "uuid": {
+                    "name": "uuid",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "email": {
+                    "name": "email",
+                    "type": "char",
+                    "compute": true,
+                    "related": false
+                },
+                "mobile": {
+                    "name": "mobile",
+                    "type": "char",
+                    "compute": true,
+                    "related": false
+                },
+                "is_edited": {
+                    "name": "is_edited",
+                    "type": "boolean",
+                    "compute": true,
+                    "related": false
+                },
+                "has_deleted_line": {
+                    "name": "has_deleted_line",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "order_edit_tracking": {
+                    "name": "order_edit_tracking",
+                    "type": "boolean",
+                    "compute": true,
+                    "related": true
+                },
+                "available_payment_method_ids": {
+                    "name": "available_payment_method_ids",
+                    "model": "pos.order",
+                    "compute": true,
+                    "related": true,
+                    "relation": "pos.payment.method",
+                    "type": "many2many",
+                    "relation_table": null
+                },
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "compute": false,
+                    "related": false
+                },
+                "display_name": {
+                    "name": "display_name",
+                    "type": "char",
+                    "compute": true,
+                    "related": false
+                },
+                "create_uid": {
+                    "name": "create_uid",
+                    "model": "pos.order",
+                    "compute": false,
+                    "related": false,
+                    "relation": "res.users",
+                    "type": "many2one"
+                },
+                "create_date": {
+                    "name": "create_date",
+                    "type": "datetime",
+                    "compute": false,
+                    "related": false
+                },
+                "write_uid": {
+                    "name": "write_uid",
+                    "model": "pos.order",
+                    "compute": false,
+                    "related": false,
+                    "relation": "res.users",
+                    "type": "many2one"
+                },
+                "write_date": {
+                    "name": "write_date",
+                    "type": "datetime",
+                    "compute": false,
+                    "related": false
+                },
+                "l10n_id_qris_transaction_ids": {
+                    "name": "l10n_id_qris_transaction_ids",
+                    "model": "pos.order",
+                    "compute": false,
+                    "related": false,
+                    "relation": "l10n_id.qris.transaction",
+                    "type": "many2many",
+                    "relation_table": "l10n_id_qris_transaction_pos_order_rel"
+                },
+                "employee_id": {
+                    "name": "employee_id",
+                    "model": "pos.order",
+                    "compute": false,
+                    "related": false,
+                    "relation": "hr.employee",
+                    "type": "many2one"
+                },
+                "cashier": {
+                    "name": "cashier",
+                    "type": "char",
+                    "compute": true,
+                    "related": false
+                },
+                "online_payment_method_id": {
+                    "name": "online_payment_method_id",
+                    "model": "pos.order",
+                    "compute": true,
+                    "related": false,
+                    "relation": "pos.payment.method",
+                    "type": "many2one"
+                },
+                "next_online_payment_amount": {
+                    "name": "next_online_payment_amount",
+                    "type": "float",
+                    "compute": false,
+                    "related": false
+                },
+                "operating_unit_id": {
+                    "name": "operating_unit_id",
+                    "model": "pos.order",
+                    "compute": true,
+                    "related": true,
+                    "relation": "operating.unit",
+                    "type": "many2one"
+                },
+                "crm_team_id": {
+                    "name": "crm_team_id",
+                    "model": "pos.order",
+                    "compute": false,
+                    "related": false,
+                    "relation": "crm.team",
+                    "type": "many2one"
+                },
+                "sale_order_count": {
+                    "name": "sale_order_count",
+                    "type": "integer",
+                    "compute": true,
+                    "related": false
+                }
+            }
+        },
+        "pos.order.line": {
+            "data": [],
+            "fields": [
+                "qty",
+                "attribute_value_ids",
+                "custom_attribute_value_ids",
+                "price_unit",
+                "skip_change",
+                "uuid",
+                "price_subtotal",
+                "price_subtotal_incl",
+                "order_id",
+                "note",
+                "price_type",
+                "write_date",
+                "product_id",
+                "discount",
+                "tax_ids",
+                "pack_lot_ids",
+                "customer_note",
+                "refunded_qty",
+                "price_extra",
+                "full_product_name",
+                "refunded_orderline_id",
+                "combo_parent_id",
+                "combo_line_ids",
+                "combo_item_id",
+                "refund_orderline_ids",
+                "is_reward_line",
+                "reward_id",
+                "reward_identifier_code",
+                "points_cost",
+                "coupon_id",
+                "sale_order_origin_id",
+                "sale_order_line_id",
+                "down_payment_details"
+            ],
+            "relations": {
+                "skip_change": {
+                    "name": "skip_change",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "product_id": {
+                    "name": "product_id",
+                    "model": "pos.order.line",
+                    "compute": false,
+                    "related": false,
+                    "relation": "product.product",
+                    "type": "many2one"
+                },
+                "attribute_value_ids": {
+                    "name": "attribute_value_ids",
+                    "model": "pos.order.line",
+                    "compute": false,
+                    "related": false,
+                    "relation": "product.template.attribute.value",
+                    "type": "many2many",
+                    "relation_table": "pos_order_line_product_template_attribute_value_rel"
+                },
+                "custom_attribute_value_ids": {
+                    "name": "custom_attribute_value_ids",
+                    "model": "pos.order.line",
+                    "compute": false,
+                    "related": false,
+                    "relation": "product.attribute.custom.value",
+                    "type": "one2many",
+                    "inverse_name": "pos_order_line_id"
+                },
+                "price_unit": {
+                    "name": "price_unit",
+                    "type": "float",
+                    "compute": false,
+                    "related": false
+                },
+                "qty": {
+                    "name": "qty",
+                    "type": "float",
+                    "compute": false,
+                    "related": false
+                },
+                "price_subtotal": {
+                    "name": "price_subtotal",
+                    "type": "monetary",
+                    "compute": false,
+                    "related": false
+                },
+                "price_subtotal_incl": {
+                    "name": "price_subtotal_incl",
+                    "type": "monetary",
+                    "compute": false,
+                    "related": false
+                },
+                "price_extra": {
+                    "name": "price_extra",
+                    "type": "float",
+                    "compute": false,
+                    "related": false
+                },
+                "price_type": {
+                    "name": "price_type",
+                    "type": "selection",
+                    "compute": false,
+                    "related": false
+                },
+                "discount": {
+                    "name": "discount",
+                    "type": "float",
+                    "compute": false,
+                    "related": false
+                },
+                "order_id": {
+                    "name": "order_id",
+                    "model": "pos.order.line",
+                    "compute": false,
+                    "related": false,
+                    "relation": "pos.order",
+                    "type": "many2one"
+                },
+                "tax_ids": {
+                    "name": "tax_ids",
+                    "model": "pos.order.line",
+                    "compute": false,
+                    "related": false,
+                    "relation": "account.tax",
+                    "type": "many2many",
+                    "relation_table": "account_tax_pos_order_line_rel"
+                },
+                "pack_lot_ids": {
+                    "name": "pack_lot_ids",
+                    "model": "pos.order.line",
+                    "compute": false,
+                    "related": false,
+                    "relation": "pos.pack.operation.lot",
+                    "type": "one2many",
+                    "inverse_name": "pos_order_line_id"
+                },
+                "full_product_name": {
+                    "name": "full_product_name",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "customer_note": {
+                    "name": "customer_note",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "refund_orderline_ids": {
+                    "name": "refund_orderline_ids",
+                    "model": "pos.order.line",
+                    "compute": false,
+                    "related": false,
+                    "relation": "pos.order.line",
+                    "type": "one2many",
+                    "inverse_name": "refunded_orderline_id"
+                },
+                "refunded_orderline_id": {
+                    "name": "refunded_orderline_id",
+                    "model": "pos.order.line",
+                    "compute": false,
+                    "related": false,
+                    "relation": "pos.order.line",
+                    "type": "many2one"
+                },
+                "refunded_qty": {
+                    "name": "refunded_qty",
+                    "type": "float",
+                    "compute": true,
+                    "related": false
+                },
+                "uuid": {
+                    "name": "uuid",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "note": {
+                    "name": "note",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "combo_parent_id": {
+                    "name": "combo_parent_id",
+                    "model": "pos.order.line",
+                    "compute": false,
+                    "related": false,
+                    "relation": "pos.order.line",
+                    "type": "many2one"
+                },
+                "combo_line_ids": {
+                    "name": "combo_line_ids",
+                    "model": "pos.order.line",
+                    "compute": false,
+                    "related": false,
+                    "relation": "pos.order.line",
+                    "type": "one2many",
+                    "inverse_name": "combo_parent_id"
+                },
+                "combo_item_id": {
+                    "name": "combo_item_id",
+                    "model": "pos.order.line",
+                    "compute": false,
+                    "related": false,
+                    "relation": "product.combo.item",
+                    "type": "many2one"
+                },
+                "write_date": {
+                    "name": "write_date",
+                    "type": "datetime",
+                    "compute": false,
+                    "related": false
+                },
+                "is_reward_line": {
+                    "name": "is_reward_line",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "reward_id": {
+                    "name": "reward_id",
+                    "model": "pos.order.line",
+                    "compute": false,
+                    "related": false,
+                    "relation": "loyalty.reward",
+                    "type": "many2one"
+                },
+                "coupon_id": {
+                    "name": "coupon_id",
+                    "model": "pos.order.line",
+                    "compute": false,
+                    "related": false,
+                    "relation": "loyalty.card",
+                    "type": "many2one"
+                },
+                "reward_identifier_code": {
+                    "name": "reward_identifier_code",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "points_cost": {
+                    "name": "points_cost",
+                    "type": "float",
+                    "compute": false,
+                    "related": false
+                },
+                "sale_order_origin_id": {
+                    "name": "sale_order_origin_id",
+                    "model": "pos.order.line",
+                    "compute": false,
+                    "related": false,
+                    "relation": "sale.order",
+                    "type": "many2one"
+                },
+                "sale_order_line_id": {
+                    "name": "sale_order_line_id",
+                    "model": "pos.order.line",
+                    "compute": false,
+                    "related": false,
+                    "relation": "sale.order.line",
+                    "type": "many2one"
+                },
+                "down_payment_details": {
+                    "name": "down_payment_details",
+                    "type": "text",
+                    "compute": false,
+                    "related": false
+                }
+            }
+        },
+        "pos.pack.operation.lot": {
+            "data": [],
+            "fields": [
+                "lot_name",
+                "pos_order_line_id",
+                "write_date"
+            ],
+            "relations": {
+                "pos_order_line_id": {
+                    "name": "pos_order_line_id",
+                    "model": "pos.pack.operation.lot",
+                    "compute": false,
+                    "related": false,
+                    "relation": "pos.order.line",
+                    "type": "many2one"
+                },
+                "lot_name": {
+                    "name": "lot_name",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "write_date": {
+                    "name": "write_date",
+                    "type": "datetime",
+                    "compute": false,
+                    "related": false
+                }
+            }
+        },
+        "pos.payment": {
+            "data": [],
+            "fields": [],
+            "relations": {
+                "name": {
+                    "name": "name",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "pos_order_id": {
+                    "name": "pos_order_id",
+                    "model": "pos.payment",
+                    "compute": false,
+                    "related": false,
+                    "relation": "pos.order",
+                    "type": "many2one"
+                },
+                "amount": {
+                    "name": "amount",
+                    "type": "monetary",
+                    "compute": false,
+                    "related": false
+                },
+                "payment_method_id": {
+                    "name": "payment_method_id",
+                    "model": "pos.payment",
+                    "compute": false,
+                    "related": false,
+                    "relation": "pos.payment.method",
+                    "type": "many2one"
+                },
+                "payment_date": {
+                    "name": "payment_date",
+                    "type": "datetime",
+                    "compute": false,
+                    "related": false
+                },
+                "currency_id": {
+                    "name": "currency_id",
+                    "model": "pos.payment",
+                    "compute": true,
+                    "related": true,
+                    "relation": "res.currency",
+                    "type": "many2one"
+                },
+                "currency_rate": {
+                    "name": "currency_rate",
+                    "type": "float",
+                    "compute": true,
+                    "related": true
+                },
+                "partner_id": {
+                    "name": "partner_id",
+                    "model": "pos.payment",
+                    "compute": true,
+                    "related": true,
+                    "relation": "res.partner",
+                    "type": "many2one"
+                },
+                "session_id": {
+                    "name": "session_id",
+                    "model": "pos.payment",
+                    "compute": true,
+                    "related": true,
+                    "relation": "pos.session",
+                    "type": "many2one"
+                },
+                "user_id": {
+                    "name": "user_id",
+                    "model": "pos.payment",
+                    "compute": true,
+                    "related": true,
+                    "relation": "res.users",
+                    "type": "many2one"
+                },
+                "company_id": {
+                    "name": "company_id",
+                    "model": "pos.payment",
+                    "compute": true,
+                    "related": true,
+                    "relation": "res.company",
+                    "type": "many2one"
+                },
+                "card_type": {
+                    "name": "card_type",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "card_brand": {
+                    "name": "card_brand",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "card_no": {
+                    "name": "card_no",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "cardholder_name": {
+                    "name": "cardholder_name",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "payment_ref_no": {
+                    "name": "payment_ref_no",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "payment_method_authcode": {
+                    "name": "payment_method_authcode",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "payment_method_issuer_bank": {
+                    "name": "payment_method_issuer_bank",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "payment_method_payment_mode": {
+                    "name": "payment_method_payment_mode",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "transaction_id": {
+                    "name": "transaction_id",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "payment_status": {
+                    "name": "payment_status",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "ticket": {
+                    "name": "ticket",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "is_change": {
+                    "name": "is_change",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "account_move_id": {
+                    "name": "account_move_id",
+                    "model": "pos.payment",
+                    "compute": false,
+                    "related": false,
+                    "relation": "account.move",
+                    "type": "many2one"
+                },
+                "uuid": {
+                    "name": "uuid",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "compute": false,
+                    "related": false
+                },
+                "display_name": {
+                    "name": "display_name",
+                    "type": "char",
+                    "compute": true,
+                    "related": false
+                },
+                "create_uid": {
+                    "name": "create_uid",
+                    "model": "pos.payment",
+                    "compute": false,
+                    "related": false,
+                    "relation": "res.users",
+                    "type": "many2one"
+                },
+                "create_date": {
+                    "name": "create_date",
+                    "type": "datetime",
+                    "compute": false,
+                    "related": false
+                },
+                "write_uid": {
+                    "name": "write_uid",
+                    "model": "pos.payment",
+                    "compute": false,
+                    "related": false,
+                    "relation": "res.users",
+                    "type": "many2one"
+                },
+                "write_date": {
+                    "name": "write_date",
+                    "type": "datetime",
+                    "compute": false,
+                    "related": false
+                },
+                "employee_id": {
+                    "name": "employee_id",
+                    "model": "pos.payment",
+                    "compute": true,
+                    "related": true,
+                    "relation": "hr.employee",
+                    "type": "many2one"
+                },
+                "online_account_payment_id": {
+                    "name": "online_account_payment_id",
+                    "model": "pos.payment",
+                    "compute": false,
+                    "related": false,
+                    "relation": "account.payment",
+                    "type": "many2one"
+                },
+                "operating_unit_id": {
+                    "name": "operating_unit_id",
+                    "model": "pos.payment",
+                    "compute": true,
+                    "related": true,
+                    "relation": "operating.unit",
+                    "type": "many2one"
+                }
+            }
+        },
+        "pos.payment.method": {
+            "data": [
+                {
+                    "id": 2,
+                    "name": "Card",
+                    "is_cash_count": false,
+                    "use_payment_terminal": false,
+                    "split_transactions": false,
+                    "type": "bank",
+                    "image": false,
+                    "sequence": 1,
+                    "payment_method_type": "none",
+                    "default_qr": false,
+                    "is_online_payment": false
+                },
+                {
+                    "id": 3,
+                    "name": "Customer Account",
+                    "is_cash_count": false,
+                    "use_payment_terminal": false,
+                    "split_transactions": true,
+                    "type": "pay_later",
+                    "image": false,
+                    "sequence": 2,
+                    "payment_method_type": "none",
+                    "default_qr": false,
+                    "is_online_payment": false
+                },
+                {
+                    "id": 1,
+                    "name": "Cash",
+                    "is_cash_count": true,
+                    "use_payment_terminal": false,
+                    "split_transactions": false,
+                    "type": "cash",
+                    "image": false,
+                    "sequence": 0,
+                    "payment_method_type": "none",
+                    "default_qr": false,
+                    "is_online_payment": false
+                },
+                {
+                    "id": 4,
+                    "name": "BCA Debit Card",
+                    "is_cash_count": false,
+                    "use_payment_terminal": false,
+                    "split_transactions": false,
+                    "type": "bank",
+                    "image": false,
+                    "sequence": 0,
+                    "payment_method_type": "none",
+                    "default_qr": false,
+                    "is_online_payment": false
+                },
+                {
+                    "id": 5,
+                    "name": "BCA Credit Card",
+                    "is_cash_count": false,
+                    "use_payment_terminal": false,
+                    "split_transactions": false,
+                    "type": "bank",
+                    "image": false,
+                    "sequence": 0,
+                    "payment_method_type": "none",
+                    "default_qr": false,
+                    "is_online_payment": false
+                },
+                {
+                    "id": 6,
+                    "name": "QRIS",
+                    "is_cash_count": false,
+                    "use_payment_terminal": false,
+                    "split_transactions": false,
+                    "type": "bank",
+                    "image": false,
+                    "sequence": 0,
+                    "payment_method_type": "none",
+                    "default_qr": false,
+                    "is_online_payment": false
+                }
+            ],
+            "fields": [
+                "id",
+                "name",
+                "is_cash_count",
+                "use_payment_terminal",
+                "split_transactions",
+                "type",
+                "image",
+                "sequence",
+                "payment_method_type",
+                "default_qr",
+                "is_online_payment"
+            ],
+            "relations": {
+                "name": {
+                    "name": "name",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "sequence": {
+                    "name": "sequence",
+                    "type": "integer",
+                    "compute": false,
+                    "related": false
+                },
+                "is_cash_count": {
+                    "name": "is_cash_count",
+                    "type": "boolean",
+                    "compute": true,
+                    "related": false
+                },
+                "split_transactions": {
+                    "name": "split_transactions",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "use_payment_terminal": {
+                    "name": "use_payment_terminal",
+                    "type": "selection",
+                    "compute": false,
+                    "related": false
+                },
+                "type": {
+                    "name": "type",
+                    "type": "selection",
+                    "compute": true,
+                    "related": false
+                },
+                "image": {
+                    "name": "image",
+                    "type": "binary",
+                    "compute": false,
+                    "related": false
+                },
+                "payment_method_type": {
+                    "name": "payment_method_type",
+                    "type": "selection",
+                    "compute": false,
+                    "related": false
+                },
+                "default_qr": {
+                    "name": "default_qr",
+                    "type": "char",
+                    "compute": true,
+                    "related": false
+                },
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "compute": false,
+                    "related": false
+                },
+                "is_online_payment": {
+                    "name": "is_online_payment",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                }
+            }
+        },
+        "pos.printer": {
+            "data": [],
+            "fields": [
+                "id",
+                "name",
+                "proxy_ip",
+                "product_categories_ids",
+                "printer_type",
+                "epson_printer_ip"
+            ],
+            "relations": {
+                "name": {
+                    "name": "name",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "printer_type": {
+                    "name": "printer_type",
+                    "type": "selection",
+                    "compute": false,
+                    "related": false
+                },
+                "proxy_ip": {
+                    "name": "proxy_ip",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "product_categories_ids": {
+                    "name": "product_categories_ids",
+                    "model": "pos.printer",
+                    "compute": false,
+                    "related": false,
+                    "relation": "pos.category",
+                    "type": "many2many",
+                    "relation_table": "printer_category_rel"
+                },
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "compute": false,
+                    "related": false
+                },
+                "epson_printer_ip": {
+                    "name": "epson_printer_ip",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                }
+            }
+        },
+        "pos.category": {
+            "data": [
+                {
+                    "id": 1,
+                    "name": "Test Products",
+                    "parent_id": false,
+                    "child_ids": [],
+                    "write_date": "2025-12-28 15:18:36",
+                    "has_image": false,
+                    "color": 7,
+                    "sequence": 0
+                }
+            ],
+            "fields": [
+                "id",
+                "name",
+                "parent_id",
+                "child_ids",
+                "write_date",
+                "has_image",
+                "color",
+                "sequence"
+            ],
+            "relations": {
+                "name": {
+                    "name": "name",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "parent_id": {
+                    "name": "parent_id",
+                    "model": "pos.category",
+                    "compute": false,
+                    "related": false,
+                    "relation": "pos.category",
+                    "type": "many2one"
+                },
+                "child_ids": {
+                    "name": "child_ids",
+                    "model": "pos.category",
+                    "compute": false,
+                    "related": false,
+                    "relation": "pos.category",
+                    "type": "one2many",
+                    "inverse_name": "parent_id"
+                },
+                "sequence": {
+                    "name": "sequence",
+                    "type": "integer",
+                    "compute": false,
+                    "related": false
+                },
+                "color": {
+                    "name": "color",
+                    "type": "integer",
+                    "compute": false,
+                    "related": false
+                },
+                "has_image": {
+                    "name": "has_image",
+                    "type": "boolean",
+                    "compute": true,
+                    "related": false
+                },
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "compute": false,
+                    "related": false
+                },
+                "write_date": {
+                    "name": "write_date",
+                    "type": "datetime",
+                    "compute": false,
+                    "related": false
+                }
+            }
+        },
+        "pos.bill": {
+            "data": [
+                {
+                    "id": 1,
+                    "name": "0.05",
+                    "value": 0.05
+                },
+                {
+                    "id": 2,
+                    "name": "0.10",
+                    "value": 0.1
+                },
+                {
+                    "id": 3,
+                    "name": "0.20",
+                    "value": 0.2
+                },
+                {
+                    "id": 4,
+                    "name": "0.25",
+                    "value": 0.25
+                },
+                {
+                    "id": 5,
+                    "name": "0.50",
+                    "value": 0.5
+                },
+                {
+                    "id": 6,
+                    "name": "1.00",
+                    "value": 1.0
+                },
+                {
+                    "id": 7,
+                    "name": "2.00",
+                    "value": 2.0
+                },
+                {
+                    "id": 8,
+                    "name": "5.00",
+                    "value": 5.0
+                },
+                {
+                    "id": 9,
+                    "name": "10.00",
+                    "value": 10.0
+                },
+                {
+                    "id": 10,
+                    "name": "20.00",
+                    "value": 20.0
+                },
+                {
+                    "id": 11,
+                    "name": "50.00",
+                    "value": 50.0
+                },
+                {
+                    "id": 12,
+                    "name": "100.00",
+                    "value": 100.0
+                },
+                {
+                    "id": 13,
+                    "name": "200.00",
+                    "value": 200.0
+                }
+            ],
+            "fields": [
+                "id",
+                "name",
+                "value"
+            ],
+            "relations": {
+                "name": {
+                    "name": "name",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "value": {
+                    "name": "value",
+                    "type": "float",
+                    "compute": false,
+                    "related": false
+                },
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "compute": false,
+                    "related": false
+                }
+            }
+        },
+        "res.company": {
+            "data": [
+                {
+                    "id": 1,
+                    "currency_id": 12,
+                    "email": false,
+                    "website": false,
+                    "company_registry": false,
+                    "vat": false,
+                    "name": "PT. Warung Desa",
+                    "phone": "",
+                    "partner_id": 1,
+                    "country_id": 100,
+                    "state_id": false,
+                    "tax_calculation_rounding_method": "round_per_line",
+                    "nomenclature_id": 1,
+                    "point_of_sale_use_ticket_qr_code": false,
+                    "point_of_sale_ticket_unique_code": false,
+                    "point_of_sale_ticket_portal_url_display_mode": "qr_code",
+                    "street": "",
+                    "city": "",
+                    "zip": "",
+                    "account_fiscal_country_id": 100
+                }
+            ],
+            "fields": [
+                "id",
+                "currency_id",
+                "email",
+                "website",
+                "company_registry",
+                "vat",
+                "name",
+                "phone",
+                "partner_id",
+                "country_id",
+                "state_id",
+                "tax_calculation_rounding_method",
+                "nomenclature_id",
+                "point_of_sale_use_ticket_qr_code",
+                "point_of_sale_ticket_unique_code",
+                "point_of_sale_ticket_portal_url_display_mode",
+                "street",
+                "city",
+                "zip",
+                "account_fiscal_country_id"
+            ],
+            "relations": {
+                "name": {
+                    "name": "name",
+                    "type": "char",
+                    "compute": true,
+                    "related": true
+                },
+                "partner_id": {
+                    "name": "partner_id",
+                    "model": "res.company",
+                    "compute": false,
+                    "related": false,
+                    "relation": "res.partner",
+                    "type": "many2one"
+                },
+                "currency_id": {
+                    "name": "currency_id",
+                    "model": "res.company",
+                    "compute": false,
+                    "related": false,
+                    "relation": "res.currency",
+                    "type": "many2one"
+                },
+                "street": {
+                    "name": "street",
+                    "type": "char",
+                    "compute": true,
+                    "related": false
+                },
+                "zip": {
+                    "name": "zip",
+                    "type": "char",
+                    "compute": true,
+                    "related": false
+                },
+                "city": {
+                    "name": "city",
+                    "type": "char",
+                    "compute": true,
+                    "related": false
+                },
+                "state_id": {
+                    "name": "state_id",
+                    "model": "res.company",
+                    "compute": true,
+                    "related": false,
+                    "relation": "res.country.state",
+                    "type": "many2one"
+                },
+                "country_id": {
+                    "name": "country_id",
+                    "model": "res.company",
+                    "compute": true,
+                    "related": false,
+                    "relation": "res.country",
+                    "type": "many2one"
+                },
+                "email": {
+                    "name": "email",
+                    "type": "char",
+                    "compute": true,
+                    "related": true
+                },
+                "phone": {
+                    "name": "phone",
+                    "type": "char",
+                    "compute": true,
+                    "related": true
+                },
+                "website": {
+                    "name": "website",
+                    "type": "char",
+                    "compute": true,
+                    "related": true
+                },
+                "vat": {
+                    "name": "vat",
+                    "type": "char",
+                    "compute": true,
+                    "related": true
+                },
+                "company_registry": {
+                    "name": "company_registry",
+                    "type": "char",
+                    "compute": true,
+                    "related": true
+                },
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "compute": false,
+                    "related": false
+                },
+                "nomenclature_id": {
+                    "name": "nomenclature_id",
+                    "model": "res.company",
+                    "compute": false,
+                    "related": false,
+                    "relation": "barcode.nomenclature",
+                    "type": "many2one"
+                },
+                "tax_calculation_rounding_method": {
+                    "name": "tax_calculation_rounding_method",
+                    "type": "selection",
+                    "compute": false,
+                    "related": false
+                },
+                "account_fiscal_country_id": {
+                    "name": "account_fiscal_country_id",
+                    "model": "res.company",
+                    "compute": true,
+                    "related": false,
+                    "relation": "res.country",
+                    "type": "many2one"
+                },
+                "point_of_sale_use_ticket_qr_code": {
+                    "name": "point_of_sale_use_ticket_qr_code",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "point_of_sale_ticket_unique_code": {
+                    "name": "point_of_sale_ticket_unique_code",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "point_of_sale_ticket_portal_url_display_mode": {
+                    "name": "point_of_sale_ticket_portal_url_display_mode",
+                    "type": "selection",
+                    "compute": false,
+                    "related": false
+                }
+            }
+        },
+        "account.tax": {
+            "data": [
+                {
+                    "id": 1,
+                    "name": "12% (Non-Luxury Good)",
+                    "price_include": true,
+                    "include_base_amount": true,
+                    "is_base_affected": true,
+                    "has_negative_factor": false,
+                    "amount_type": "percent",
+                    "children_tax_ids": [],
+                    "amount": 11.0,
+                    "company_id": 1,
+                    "sequence": 1,
+                    "tax_group_id": 3
+                },
+                {
+                    "id": 2,
+                    "name": "12% (Non-Luxury Good)",
+                    "price_include": false,
+                    "include_base_amount": false,
+                    "is_base_affected": true,
+                    "has_negative_factor": false,
+                    "amount_type": "percent",
+                    "children_tax_ids": [],
+                    "amount": 11.0,
+                    "company_id": 1,
+                    "sequence": 1,
+                    "tax_group_id": 3
+                },
+                {
+                    "id": 3,
+                    "name": "12%",
+                    "price_include": false,
+                    "include_base_amount": false,
+                    "is_base_affected": true,
+                    "has_negative_factor": false,
+                    "amount_type": "percent",
+                    "children_tax_ids": [],
+                    "amount": 12.0,
+                    "company_id": 1,
+                    "sequence": 1,
+                    "tax_group_id": 2
+                },
+                {
+                    "id": 4,
+                    "name": "12%",
+                    "price_include": false,
+                    "include_base_amount": false,
+                    "is_base_affected": true,
+                    "has_negative_factor": false,
+                    "amount_type": "percent",
+                    "children_tax_ids": [],
+                    "amount": 12.0,
+                    "company_id": 1,
+                    "sequence": 1,
+                    "tax_group_id": 2
+                },
+                {
+                    "id": 5,
+                    "name": "20% (STLG)",
+                    "price_include": false,
+                    "include_base_amount": false,
+                    "is_base_affected": false,
+                    "has_negative_factor": false,
+                    "amount_type": "percent",
+                    "children_tax_ids": [],
+                    "amount": 20.0,
+                    "company_id": 1,
+                    "sequence": 1,
+                    "tax_group_id": 6
+                },
+                {
+                    "id": 6,
+                    "name": "12% Pemungut PPN (Non-Luxury Good)",
+                    "price_include": false,
+                    "include_base_amount": false,
+                    "is_base_affected": true,
+                    "has_negative_factor": true,
+                    "amount_type": "percent",
+                    "children_tax_ids": [],
+                    "amount": 11.0,
+                    "company_id": 1,
+                    "sequence": 1,
+                    "tax_group_id": 3
+                },
+                {
+                    "id": 7,
+                    "name": "12% Pemungut PPN",
+                    "price_include": false,
+                    "include_base_amount": false,
+                    "is_base_affected": true,
+                    "has_negative_factor": true,
+                    "amount_type": "percent",
+                    "children_tax_ids": [],
+                    "amount": 12.0,
+                    "company_id": 1,
+                    "sequence": 1,
+                    "tax_group_id": 2
+                },
+                {
+                    "id": 8,
+                    "name": "20% Pemungut PPN (STLG)",
+                    "price_include": false,
+                    "include_base_amount": false,
+                    "is_base_affected": false,
+                    "has_negative_factor": true,
+                    "amount_type": "percent",
+                    "children_tax_ids": [],
+                    "amount": 20.0,
+                    "company_id": 1,
+                    "sequence": 1,
+                    "tax_group_id": 6
+                },
+                {
+                    "id": 9,
+                    "name": "0%",
+                    "price_include": false,
+                    "include_base_amount": false,
+                    "is_base_affected": true,
+                    "has_negative_factor": false,
+                    "amount_type": "percent",
+                    "children_tax_ids": [],
+                    "amount": 0.0,
+                    "company_id": 1,
+                    "sequence": 1,
+                    "tax_group_id": 4
+                },
+                {
+                    "id": 10,
+                    "name": "0% EXPORT",
+                    "price_include": false,
+                    "include_base_amount": false,
+                    "is_base_affected": true,
+                    "has_negative_factor": false,
+                    "amount_type": "percent",
+                    "children_tax_ids": [],
+                    "amount": 0.0,
+                    "company_id": 1,
+                    "sequence": 1,
+                    "tax_group_id": 4
+                },
+                {
+                    "id": 11,
+                    "name": "0% EXEMPT",
+                    "price_include": false,
+                    "include_base_amount": false,
+                    "is_base_affected": true,
+                    "has_negative_factor": false,
+                    "amount_type": "percent",
+                    "children_tax_ids": [],
+                    "amount": 0.0,
+                    "company_id": 1,
+                    "sequence": 1,
+                    "tax_group_id": 5
+                },
+                {
+                    "id": 12,
+                    "name": "0%",
+                    "price_include": false,
+                    "include_base_amount": false,
+                    "is_base_affected": true,
+                    "has_negative_factor": false,
+                    "amount_type": "percent",
+                    "children_tax_ids": [],
+                    "amount": 0.0,
+                    "company_id": 1,
+                    "sequence": 1,
+                    "tax_group_id": 4
+                },
+                {
+                    "id": 13,
+                    "name": "0% EXEMPT",
+                    "price_include": false,
+                    "include_base_amount": false,
+                    "is_base_affected": true,
+                    "has_negative_factor": false,
+                    "amount_type": "percent",
+                    "children_tax_ids": [],
+                    "amount": 0.0,
+                    "company_id": 1,
+                    "sequence": 1,
+                    "tax_group_id": 5
+                },
+                {
+                    "id": 14,
+                    "name": "20% (STLG)",
+                    "price_include": false,
+                    "include_base_amount": false,
+                    "is_base_affected": false,
+                    "has_negative_factor": false,
+                    "amount_type": "percent",
+                    "children_tax_ids": [],
+                    "amount": 20.0,
+                    "company_id": 1,
+                    "sequence": 1,
+                    "tax_group_id": 6
+                },
+                {
+                    "id": 15,
+                    "name": "12% NCR",
+                    "price_include": false,
+                    "include_base_amount": false,
+                    "is_base_affected": true,
+                    "has_negative_factor": false,
+                    "amount_type": "percent",
+                    "children_tax_ids": [],
+                    "amount": 0.0,
+                    "company_id": 1,
+                    "sequence": 1,
+                    "tax_group_id": 3
+                },
+                {
+                    "id": 16,
+                    "name": "12% IM",
+                    "price_include": false,
+                    "include_base_amount": false,
+                    "is_base_affected": true,
+                    "has_negative_factor": false,
+                    "amount_type": "percent",
+                    "children_tax_ids": [],
+                    "amount": 11.0,
+                    "company_id": 1,
+                    "sequence": 1,
+                    "tax_group_id": 3
+                }
+            ],
+            "fields": [
+                "id",
+                "name",
+                "price_include",
+                "include_base_amount",
+                "is_base_affected",
+                "has_negative_factor",
+                "amount_type",
+                "children_tax_ids",
+                "amount",
+                "company_id",
+                "id",
+                "sequence",
+                "tax_group_id"
+            ],
+            "relations": {
+                "name": {
+                    "name": "name",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "amount_type": {
+                    "name": "amount_type",
+                    "type": "selection",
+                    "compute": false,
+                    "related": false
+                },
+                "company_id": {
+                    "name": "company_id",
+                    "model": "account.tax",
+                    "compute": false,
+                    "related": false,
+                    "relation": "res.company",
+                    "type": "many2one"
+                },
+                "children_tax_ids": {
+                    "name": "children_tax_ids",
+                    "model": "account.tax",
+                    "compute": false,
+                    "related": false,
+                    "relation": "account.tax",
+                    "type": "many2many",
+                    "relation_table": "account_tax_filiation_rel"
+                },
+                "sequence": {
+                    "name": "sequence",
+                    "type": "integer",
+                    "compute": false,
+                    "related": false
+                },
+                "amount": {
+                    "name": "amount",
+                    "type": "float",
+                    "compute": false,
+                    "related": false
+                },
+                "price_include": {
+                    "name": "price_include",
+                    "type": "boolean",
+                    "compute": true,
+                    "related": false
+                },
+                "include_base_amount": {
+                    "name": "include_base_amount",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "is_base_affected": {
+                    "name": "is_base_affected",
+                    "type": "boolean",
+                    "compute": false,
+                    "related": false
+                },
+                "tax_group_id": {
+                    "name": "tax_group_id",
+                    "model": "account.tax",
+                    "compute": true,
+                    "related": false,
+                    "relation": "account.tax.group",
+                    "type": "many2one"
+                },
+                "has_negative_factor": {
+                    "name": "has_negative_factor",
+                    "type": "boolean",
+                    "compute": true,
+                    "related": false
+                },
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "compute": false,
+                    "related": false
+                }
+            }
+        },
+        "account.tax.group": {
+            "data": [
+                {
+                    "id": 2,
+                    "name": "Luxury Good Taxes",
+                    "pos_receipt_label": false
+                },
+                {
+                    "id": 3,
+                    "name": "Tax",
+                    "pos_receipt_label": false
+                },
+                {
+                    "id": 4,
+                    "name": "Zero-rated Taxes",
+                    "pos_receipt_label": false
+                },
+                {
+                    "id": 5,
+                    "name": "Tax Exempted",
+                    "pos_receipt_label": false
+                },
+                {
+                    "id": 6,
+                    "name": "SLTG",
+                    "pos_receipt_label": false
+                }
+            ],
+            "fields": [
+                "id",
+                "name",
+                "pos_receipt_label"
+            ],
+            "relations": {
+                "name": {
+                    "name": "name",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "pos_receipt_label": {
+                    "name": "pos_receipt_label",
+                    "type": "char",
+                    "compute": false,
+                    "related": false
+                },
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "compute": false,
+                    "related": false
+                }
+            }
+        },
+        "product.product": {
+            "data": [
+                {
+                    "id": 22375,
+                    "pos_categ_ids": [],
+                    "image_128": true,
+                    "barcode": false,
+                    "type": "service",
+                    "taxes_id": [
+                        1
+                    ],
+                    "all_product_tag_ids": [],
+                    "categ_id": 1,
+                    "tracking": "none",
+                    "to_weight": false,
+                    "active": true,
+                    "attribute_line_ids": [],
+                    "lst_price": 50.0,
+                    "product_template_variant_value_ids": [],
+                    "is_storable": false,
+                    "combo_ids": [],
+                    "uom_id": 1,
+                    "standard_price": 0.0,
+                    "default_code": false,
+                    "write_date": "2025-12-30 12:57:46",
+                    "service_tracking": "no",
+                    "display_name": "Gift Card",
+                    "color": 0,
+                    "invoice_policy": "order",
+                    "product_tmpl_id": 22375,
+                    "product_tag_ids": [],
+                    "description": false,
+                    "optional_product_ids": [],
+                    "available_in_pos": true,
+                    "description_sale": false,
+                    "name": "Gift Card"
+                }
+            ]
+        }
+    }
+}            
+    

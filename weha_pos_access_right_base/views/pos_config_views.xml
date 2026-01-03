@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add fields to POS Configuration form -->
+    <record id="view_pos_config_form_access_right" model="ir.ui.view">
+        <field name="name">pos.config.form.access.right</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/div[4]/div" position="before">
+                <setting id="require_pin_delete_orderline" string="Require PIN to Delete Order Line" help="Require advanced employee PIN to delete order lines. Uses employees from 'Employees with manager access' field">
+                    <field name="require_pin_delete_orderline"/>
+                </setting>
+                <setting id="require_pin_clear_order" string="Require PIN to Clear Order" help="Require advanced employee PIN to clear all order lines. Uses employees from 'Employees with manager access' field">
+                    <field name="require_pin_clear_order"/>
+                </setting>
+                <setting id="require_pin_refund" string="Require PIN for Refund" help="Require advanced employee PIN for refund operations. Uses employees from 'Employees with manager access' field">
+                    <field name="require_pin_refund"/>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>
