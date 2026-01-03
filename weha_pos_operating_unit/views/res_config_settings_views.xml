@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add Operating Unit setting in POS Configuration Settings -->
+    <record id="res_config_settings_view_form_pos_operating_unit" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.pos.operating.unit</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="point_of_sale.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Add Operating Unit setting after IoT Box setting -->
+            <xpath expr="//field[@name='pos_is_posbox']/.." position="after">
+                <setting id="pos_operating_unit_setting" string="Operating Unit" 
+                         help="Set the operating unit for this Point of Sale"
+                         groups="operating_unit.group_multi_operating_unit">
+                    <div class="content-group mt16">
+                        <div class="row">
+                            <label string="Operating Unit" for="pos_operating_unit_id" class="col-lg-4 o_light_label"/>
+                            <field name="pos_operating_unit_id" 
+                                   options="{'no_create': True}"
+                                   domain="[('company_id', '=', company_id)]"/>
+                        </div>
+                    </div>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>

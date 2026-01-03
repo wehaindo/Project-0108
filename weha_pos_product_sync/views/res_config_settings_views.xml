@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.weha.pos.product.sync</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="point_of_sale.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@id='product_and_category_block']" position="inside">
+                <setting id="weha_fast_product_loading" string="Fast Product Loading" help="Optimize POS product loading with pagination and caching">
+                    <field name="pos_fast_product_loading"/>
+                    <div class="content-group mt16" invisible="not pos_fast_product_loading">
+                        <div class="row">
+                            <label for="pos_enable_local_product_storage" string="Store Products Locally" class="col-lg-3 o_light_label"/>
+                            <field name="pos_enable_local_product_storage"/>
+                        </div>
+                        <div class="row mt8">
+                            <div class="col-lg-12">
+                                <span class="text-muted">
+                                    Products will be saved in browser storage and synced automatically.
+                                    Enables instant POS loading and offline capability.
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row mt16">
+                            <label for="pos_product_load_limit" string="Initial Load Limit" class="col-lg-3 o_light_label"/>
+                            <field name="pos_product_load_limit"/>
+                        </div>
+                        <div class="row mt16">
+                            <label for="pos_limit_product_categories" string="Limit to Categories" class="col-lg-3 o_light_label"/>
+                            <field name="pos_limit_product_categories"/>
+                        </div>
+                        <div class="row mt8" invisible="not pos_limit_product_categories">
+                            <label for="pos_category_ids" string="Categories" class="col-lg-3 o_light_label"/>
+                            <field name="pos_category_ids" widget="many2many_tags" placeholder="Select POS categories..."/>
+                        </div>
+                    </div>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- POS Session Form View - Show Operating Unit -->
+    <record id="view_pos_session_form_operating_unit" model="ir.ui.view">
+        <field name="name">pos.session.form.operating.unit</field>
+        <field name="model">pos.session</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_session_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='config_id']" position="after">
+                <field name="operating_unit_id" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- POS Session Tree View - Add Operating Unit -->
+    <record id="view_pos_session_tree_operating_unit" model="ir.ui.view">
+        <field name="name">pos.session.tree.operating.unit</field>
+        <field name="model">pos.session</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_session_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='config_id']" position="after">
+                <field name="operating_unit_id" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- POS Session Search View - Add Operating Unit Filter -->
+    <record id="view_pos_session_search_operating_unit" model="ir.ui.view">
+        <field name="name">pos.session.search.operating.unit</field>
+        <field name="model">pos.session</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_session_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="operating_unit_id"/>
+                <filter string="Operating Unit" name="operating_unit" domain="[]" context="{'group_by': 'operating_unit_id'}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

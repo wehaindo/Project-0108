@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_generator_wizard_form" model="ir.ui.view">
+        <field name="name">product.generator.wizard.form</field>
+        <field name="model">product.generator.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate Test Products">
+                <group>
+                    <group>
+                        <field name="product_count"/>
+                        <field name="prefix"/>
+                        <field name="available_in_pos"/>
+                    </group>
+                    <group>
+                        <field name="price_min"/>
+                        <field name="price_max"/>
+                        <field name="category_id"/>
+                    </group>
+                </group>
+                <group>
+                    <group>
+                        <field name="generate_barcodes"/>
+                        <field name="generate_images"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_generate_products" 
+                            string="Generate Products" 
+                            type="object" 
+                            class="btn-primary"/>
+                    <button name="action_delete_test_products" 
+                            string="Delete Test Products" 
+                            type="object" 
+                            class="btn-danger"
+                            confirm="Are you sure you want to delete all test products?"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_product_generator_wizard" model="ir.actions.act_window">
+        <field name="name">Generate Test Products</field>
+        <field name="res_model">product.generator.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+    </record>
+
+    <menuitem id="menu_product_generator"
+              name="Generate Test Products"
+              parent="point_of_sale.menu_point_config_product"
+              action="action_product_generator_wizard"
+              sequence="99"/>
+</odoo>

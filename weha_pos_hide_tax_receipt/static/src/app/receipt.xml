@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <!-- Override OrderReceipt to hide tax details -->
+    <t t-name="point_of_sale.OrderReceipt" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension">
+        <!-- Hide the entire tax section -->
+        <xpath expr="//div[@class='pos-receipt-taxes']" position="replace">
+            <!-- Tax details hidden -->
+        </xpath>
+    </t>
+</templates>

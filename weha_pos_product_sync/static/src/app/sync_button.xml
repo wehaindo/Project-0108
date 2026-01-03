@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="weha_pos_product_sync.ProductSyncButton">
+        <div class="product-sync-btn-container" t-if="pos and isEnabled">
+            <!-- Simple Icon Button -->
+            <button class="btn btn-light product-sync-icon-btn" 
+                    t-on-click="toggleDetails"
+                    title="Product Sync">
+                <i t-att-class="syncStatusIcon"/>
+                <span t-if="state.syncRequired?.sync_required and state.syncRequired.modified_count > 0" 
+                      class="badge badge-warning sync-badge">
+                    <t t-esc="state.syncRequired.modified_count"/>
+                </span>
+            </button>
+
+            <!-- Dropdown Panel (shows on click) -->
+            <div class="sync-dropdown-panel" t-if="state.showDetails">
+                <div class="sync-dropdown-header">
+                    <strong>Product Sync</strong>
+                    <button class="btn-close-panel" t-on-click="toggleDetails">
+                        <i class="fa fa-times"/>
+                    </button>
+                </div>
+
+                <div class="sync-dropdown-body">
+                    <div class="sync-info-row">
+                        <span class="text-muted">Status:</span>
+                        <span><t t-esc="syncStatusText"/></span>
+                    </div>
+                    <div class="sync-info-row">
+                        <span class="text-muted">Last Sync:</span>
+                        <span><t t-esc="lastSyncFormatted"/></span>
+                    </div>
+                    <div class="sync-info-row">
+                        <span class="text-muted">Products:</span>
+                        <span><t t-esc="state.productCount"/></span>
+                    </div>
+                    <div class="sync-info-row" t-if="state.syncRequired?.modified_count > 0">
+                        <span class="text-muted">Updates:</span>
+                        <span class="text-warning">
+                            <t t-esc="state.syncRequired.modified_count"/>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="sync-dropdown-actions">
+                    <button 
+                        class="btn btn-sm btn-primary w-100 mb-1" 
+                        t-on-click="() => this.onClickSync(false)"
+                        t-att-disabled="syncStatus.is_syncing">
+                        <i class="fa fa-refresh"/> Sync Now
+                    </button>
+                    <button 
+                        class="btn btn-sm btn-secondary w-100" 
+                        t-on-click="onClickClearDB"
+                        t-att-disabled="syncStatus.is_syncing">
+                        <i class="fa fa-trash"/> Clear &amp; Resync
+                    </button>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>

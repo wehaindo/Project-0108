@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    
+    <!-- Patch the OrderTabs to conditionally show Add Order button -->
+    <t t-name="weha_pos_order_limit.OrderTabs" t-inherit="point_of_sale.OrderTabs" t-inherit-mode="extension">
+        <xpath expr="//ListContainer" position="attributes">
+            <attribute name="onClickPlus">shouldShowAddButton ? () => this.newFloatingOrder() : undefined</attribute>
+        </xpath>
+    </t>
+    
+</templates>

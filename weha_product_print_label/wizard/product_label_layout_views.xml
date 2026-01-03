@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Enhanced product label layout wizard view -->
+    <record id="product_label_layout_form_view_enhanced" model="ir.ui.view">
+        <field name="name">product.label.layout.form.enhanced</field>
+        <field name="model">product.label.layout</field>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <form string="Choose Labels Layout">
+                <group>
+                    <group>
+                        <field name="print_format" widget="radio"/>
+                        <field name="custom_quantity"/>
+                    </group>
+                    <group>
+                        <field name="pricelist_id" groups="product.group_product_pricelist"/>
+                    </group>
+                </group>
+                <group string="Performance Options">
+                    <group>
+                        <field name="use_batch_processing"/>
+                        <field name="enable_caching"/>
+                    </group>
+                    <group>
+                        <field name="batch_size" invisible="use_batch_processing == False"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="extra_html" placeholder="Extra content to print on labels..."/>
+                </group>
+                <footer>
+                    <button name="process" string="Print" type="object" class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

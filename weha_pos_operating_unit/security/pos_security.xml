@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- © 2025 Weha -->
+<!-- License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl.html). -->
+<odoo noupdate="0">
+    
+    <!-- POS Config: Allow full access to configs in user's operating units -->
+    <record id="ir_rule_pos_config_allowed_operating_units" model="ir.rule">
+        <field name="model_id" ref="point_of_sale.model_pos_config"/>
+        <field name="domain_force">
+            ['|', ('operating_unit_id', '=', False),
+            ('operating_unit_id', 'in', operating_unit_ids)]
+        </field>
+        <field name="name">POS Configs from allowed operating units</field>
+        <field name="global" eval="True"/>
+        <field eval="1" name="perm_unlink"/>
+        <field eval="1" name="perm_write"/>
+        <field eval="1" name="perm_read"/>
+        <field eval="1" name="perm_create"/>
+    </record>
+
+    <!-- POS Session: Allow full access to sessions in user's operating units -->
+    <record id="ir_rule_pos_session_allowed_operating_units" model="ir.rule">
+        <field name="model_id" ref="point_of_sale.model_pos_session"/>
+        <field name="domain_force">
+            ['|', ('operating_unit_id', '=', False),
+            ('operating_unit_id', 'in', operating_unit_ids)]
+        </field>
+        <field name="name">POS Sessions from allowed operating units</field>
+        <field name="global" eval="True"/>
+        <field eval="1" name="perm_unlink"/>
+        <field eval="1" name="perm_write"/>
+        <field eval="1" name="perm_read"/>
+        <field eval="1" name="perm_create"/>
+    </record>
+
+    <!-- POS Order: Allow full access to orders in user's operating units -->
+    <record id="ir_rule_pos_order_allowed_operating_units" model="ir.rule">
+        <field name="model_id" ref="point_of_sale.model_pos_order"/>
+        <field name="domain_force">
+            ['|', ('operating_unit_id', '=', False),
+            ('operating_unit_id', 'in', operating_unit_ids)]
+        </field>
+        <field name="name">POS Orders from allowed operating units</field>
+        <field name="global" eval="True"/>
+        <field eval="1" name="perm_unlink"/>
+        <field eval="1" name="perm_write"/>
+        <field eval="1" name="perm_read"/>
+        <field eval="1" name="perm_create"/>
+    </record>
+
+    <!-- POS Payment: Allow full access to POS payments in user's operating units -->
+    <record id="ir_rule_pos_payment_allowed_operating_units" model="ir.rule">
+        <field name="model_id" ref="point_of_sale.model_pos_payment"/>
+        <field name="domain_force">
+            ['|', ('session_id.operating_unit_id', '=', False),
+            ('session_id.operating_unit_id', 'in', operating_unit_ids)]
+        </field>
+        <field name="name">POS Payments from allowed operating units</field>
+        <field name="global" eval="True"/>
+        <field eval="1" name="perm_unlink"/>
+        <field eval="1" name="perm_write"/>
+        <field eval="1" name="perm_read"/>
+        <field eval="1" name="perm_create"/>
+    </record>
+
+</odoo>
