@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- RFID Tag Tree View -->
+    <record id="view_product_rfid_tag_tree" model="ir.ui.view">
+        <field name="name">product.rfid.tag.tree</field>
+        <field name="model">product.rfid.tag</field>
+        <field name="arch" type="xml">
+            <tree string="RFID Tags" create="1" delete="1">
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="lot_id"/>
+                <field name="location_id"/>
+                <field name="on_hand_qty"/>
+                <field name="status" decoration-success="status == 'active'" 
+                       decoration-danger="status == 'sold'" 
+                       decoration-muted="status == 'inactive'"/>
+                <field name="tracking" column_invisible="1"/>
+                <field name="last_scanned_date"/>
+                <field name="scan_count"/>
+                <field name="last_location_update"/>
+                <field name="create_date"/>
+            </tree>
+        </field>
+    </record>
+    
+    <!-- RFID Tag Form View -->
+    <record id="view_product_rfid_tag_form" model="ir.ui.view">
+        <field name="name">product.rfid.tag.form</field>
+        <field name="model">product.rfid.tag</field>
+        <field name="arch" type="xml">
+            <form string="RFID Tag">
+                <header>
+                    <button name="action_mark_as_active" string="Mark as Active" 
+                            type="object" class="btn-primary"
+                            invisible="status == 'active'"/>
+                    <button name="action_mark_as_sold" string="Mark as Sold" 
+                            type="object" class="btn-warning"
+                            invisible="status == 'sold'"/>
+                    <button name="action_mark_as_inactive" string="Mark as Inactive" 
+                            type="object" class="btn-secondary"
+                            invisible="status == 'inactive'"/>
+                    <field name="status" widget="statusbar" 
+                           statusbar_visible="active,sold,inactive"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" placeholder="e.g., RFID-001-ABC123"/>
+                            <field name="product_id"/>
+                            <field name="tracking" invisible="1"/>
+                            <field name="location_id"/>
+                            <field name="lot_id" readonly="tracking == 'none'"/>
+                        </group>
+                        <group>
+                            <field name="on_hand_qty" readonly="1"/>
+                            <field name="available_qty" readonly="1"/>
+                            <field name="last_scanned_date" readonly="1"/>
+                            <field name="scan_count" readonly="1"/>
+                            <field name="last_location_update" readonly="1"/>
+                            <field name="create_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notes" placeholder="Additional notes about this RFID tag..."/>
+                    </group>
+                    <notebook>
+                        <page string="Location History" name="location_history">
+                            <field name="location_history_ids" readonly="1">
+                                <tree>
+                                    <field name="move_date"/>
+                                    <field name="from_location_id"/>
+                                    <field name="to_location_id"/>
+                                    <field name="user_id"/>
+                                    <field name="notes"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Stock Quantities" name="stock_quants">
+                            <field name="quant_ids" readonly="1">
+                                <tree>
+                                    <field name="location_id"/>
+                                    <field name="lot_id"/>
+                                    <field name="quantity"/>
+                                    <field name="reserved_quantity"/>
+                                    <field name="available_quantity"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- RFID Tag Search View -->
+    <record id="view_product_rfid_tag_search" model="ir.ui.view">
+        <field name="name">product.rfid.tag.search</field>
+        <field name="model">product.rfid.tag</field>
+        <field name="arch" type="xml">
+            <search string="Search RFID Tags">
+                <field name="name" string="RFID Tag"
+                       filter_domain="[('name', 'ilike', self)]"/>
+                <field name="product_id" string="Product"/>
+                <field name="location_id" string="Location"/>
+                <filter string="Active" name="active" 
+                        domain="[('status', '=', 'active')]"/>
+                <filter string="Sold" name="sold" 
+                        domain="[('status', '=', 'sold')]"/>
+                <filter string="Inactive" name="inactive" 
+                        domain="[('status', '=', 'inactive')]"/>
+                <filter string="With Location" name="has_location" 
+                        domain="[('location_id', '!=', False)]"/>
+                <filter string="No Location" name="no_location" 
+                        domain="[('location_id', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Product" name="group_product" 
+                            context="{'group_by': 'product_id'}"/>
+                    <filter string="Location" name="group_location" 
+                            context="{'group_by': 'location_id'}"/>
+                    <filter string="Status" name="group_status" 
+                            context="{'group_by': 'status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- RFID Tag Action -->
+    <record id="action_product_rfid_tag" model="ir.actions.act_window">
+        <field name="name">RFID Tags</field>
+        <field name="res_model">product.rfid.tag</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first RFID Tag
+            </p>
+            <p>
+                RFID tags are unique identifiers for physical product items.
+                Each item in stock should have its own RFID tag.
+            </p>
+        </field>
+    </record>
+    
+    <!-- Menu Item -->
+    <menuitem id="menu_product_rfid_tag_root"
+              name="RFID Management"
+              parent="point_of_sale.menu_point_root"
+              sequence="10"/>
+    
+    <menuitem id="menu_product_rfid_tag"
+              name="RFID Tags"
+              parent="menu_product_rfid_tag_root"
+              action="action_product_rfid_tag"
+              sequence="1"/>
+</odoo>

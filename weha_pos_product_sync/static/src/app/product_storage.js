@@ -12,19 +12,11 @@ export class ProductStorage {
         this.dbVersion = 2; // Increment version for schema changes
         this.db = null;
         
-        // Define all stores for product-related models
+        // Store products, pricelists, and pricelist items
         this.stores = {
             'product.product': 'products',
-            'product.template': 'product_templates',
-            'product.category': 'product_categories',
             'product.pricelist': 'pricelists',
-            'product.pricelist.item': 'pricelist_items',
-            'product.packaging': 'product_packaging',
-            'product.tag': 'product_tags',
-            'product.attribute': 'product_attributes',
-            'product.attribute.value': 'product_attribute_values',
-            'product.template.attribute.line': 'product_template_attribute_lines',
-            'product.template.attribute.value': 'product_template_attribute_values'
+            'product.pricelist.item': 'pricelist_items'
         };
         
         this.metaStoreName = 'metadata';
@@ -46,22 +38,27 @@ export class ProductStorage {
             request.onupgradeneeded = (event) => {
                 const db = event.target.result;
 
-                // Create object stores for each model
-                for (const [modelName, storeName] of Object.entries(this.stores)) {
-                    if (!db.objectStoreNames.contains(storeName)) {
-                        const objectStore = db.createObjectStore(storeName, { keyPath: 'id' });
-                        objectStore.createIndex('write_date', 'write_date', { unique: false });
-                        
-                        // Add model-specific indexes
-                        if (modelName === 'product.product') {
-                            objectStore.createIndex('barcode', 'barcode', { unique: false });
-                            objectStore.createIndex('default_code', 'default_code', { unique: false });
-                        } else if (modelName === 'product.category') {
-                            objectStore.createIndex('name', 'name', { unique: false });
-                        } else if (modelName === 'product.pricelist') {
-                            objectStore.createIndex('name', 'name', { unique: false });
-                        }
-                    }
+                // Create products store
+                if (!db.objectStoreNames.contains('products')) {
+                    const objectStore = db.createObjectStore('products', { keyPath: 'id' });
+                    objectStore.createIndex('write_date', 'write_date', { unique: false });
+                    objectStore.createIndex('barcode', 'barcode', { unique: false });
+                    objectStore.createIndex('default_code', 'default_code', { unique: false });
+                }
+
+                // Create pricelists store
+                if (!db.objectStoreNames.contains('pricelists')) {
+                    const pricelistStore = db.createObjectStore('pricelists', { keyPath: 'id' });
+                    pricelistStore.createIndex('write_date', 'write_date', { unique: false });
+                    pricelistStore.createIndex('name', 'name', { unique: false });
+                }
+
+                // Create pricelist items store
+                if (!db.objectStoreNames.contains('pricelist_items')) {
+                    const itemStore = db.createObjectStore('pricelist_items', { keyPath: 'id' });
+                    itemStore.createIndex('write_date', 'write_date', { unique: false });
+                    itemStore.createIndex('pricelist_id', 'pricelist_id', { unique: false });
+                    itemStore.createIndex('product_id', 'product_id', { unique: false });
                 }
 
                 // Metadata store (for tracking sync info)

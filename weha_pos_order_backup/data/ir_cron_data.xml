@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Scheduled Action: Auto Cleanup Old Backups -->
+    <record id="ir_cron_cleanup_old_backups" model="ir.cron">
+        <field name="name">POS: Cleanup Old Order Backups</field>
+        <field name="model_id" ref="weha_pos_order_backup.model_pos_order_backup"/>
+        <field name="state">code</field>
+        <field name="code">model.cleanup_old_backups(days=30)</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <!-- Scheduled Action: Auto Verify Backups -->
+    <record id="ir_cron_verify_backups" model="ir.cron">
+        <field name="name">POS: Verify Order Backups on Server</field>
+        <field name="model_id" ref="weha_pos_order_backup.model_pos_order_backup"/>
+        <field name="state">code</field>
+        <field name="code">
+# Verify recent unverified backups (last 7 days)
+cutoff_date = datetime.now() - timedelta(days=7)
+backups = model.search([
+    ('state', 'in', ['backup', 'synced']),
+    ('backup_date', '&gt;=', cutoff_date.strftime('%Y-%m-%d'))
+])
+for backup in backups:
+    backup._verify_order_on_server()
+        </field>
+        <field name="interval_number">6</field>
+        <field name="interval_type">hours</field>
+        <field name="active" eval="True"/>
+    </record>
+</odoo>

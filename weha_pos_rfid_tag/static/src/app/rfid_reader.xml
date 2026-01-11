@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="weha_pos_rfid_tag.RfidReader">
+        <div class="rfid-reader" t-att-class="statusClass">
+            <div class="rfid-status">
+                <i class="fa fa-wifi" t-att-class="state.connected ? 'text-success' : 'text-danger'"/>
+                <span class="status-text" t-esc="statusText"/>
+                <span class="badge badge-secondary ms-2" t-if="state.tagCount > 0">
+                    <t t-esc="state.tagCount"/> tags
+                </span>
+            </div>
+            
+            <div class="rfid-controls">
+                <button class="btn btn-sm btn-primary" t-on-click="toggleConnection">
+                    <t t-esc="buttonText"/>
+                </button>
+            </div>
+            
+            <div class="rfid-last-tag" t-if="state.lastTag">
+                <small class="text-muted">Last tag: <t t-esc="state.lastTag"/></small>
+            </div>
+        </div>
+    </t>
+</templates>

@@ -32,7 +32,7 @@ export class OrderBackupStorage {
 
                 // Orders backup store
                 if (!db.objectStoreNames.contains(this.storeName)) {
-                    const objectStore = db.createObjectStore(this.storeName, { keyPath: 'uid' });
+                    const objectStore = db.createObjectStore(this.storeName, { keyPath: 'access_token' });
                     objectStore.createIndex('pos_reference', 'pos_reference', { unique: false });
                     objectStore.createIndex('date_order', 'date_order', { unique: false });
                     objectStore.createIndex('backup_date', 'backup_date', { unique: false });
@@ -63,7 +63,7 @@ export class OrderBackupStorage {
             const request = store.put(backupData);
 
             request.onsuccess = () => {
-                console.log('[Order Backup] Saved:', orderData.uid);
+                console.log('[Order Backup] Saved:', orderData.access_token);
                 resolve(backupData);
             };
             request.onerror = () => reject(request.error);
@@ -93,13 +93,13 @@ export class OrderBackupStorage {
     /**
      * Mark backup as synced
      */
-    async markAsSynced(orderUid) {
+    async markAsSynced(accessToken) {
         if (!this.db) await this.init();
 
         return new Promise((resolve, reject) => {
             const transaction = this.db.transaction([this.storeName], 'readwrite');
             const store = transaction.objectStore(this.storeName);
-            const getRequest = store.get(orderUid);
+            const getRequest = store.get(accessToken);
 
             getRequest.onsuccess = () => {
                 const data = getRequest.result;
@@ -134,15 +134,42 @@ export class OrderBackupStorage {
     }
 
     /**
-     * Get backup by UID
+     * Update backup with receipt HTML
      */
-    async getBackup(orderUid) {
+    async updateBackupReceipt(accessToken, receiptHtml) {
+        if (!this.db) await this.init();
+
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([this.storeName], 'readwrite');
+            const store = transaction.objectStore(this.storeName);
+            const getRequest = store.get(accessToken);
+
+            getRequest.onsuccess = () => {
+                const data = getRequest.result;
+                if (data) {
+                    data.receipt_html = receiptHtml;
+                    const updateRequest = store.put(data);
+                    updateRequest.onsuccess = () => resolve(true);
+                    updateRequest.onerror = () => reject(updateRequest.error);
+                } else {
+                    console.warn('[Order Backup] Backup not found for access_token:', accessToken);
+                    resolve(false);
+                }
+            };
+            getRequest.onerror = () => reject(getRequest.error);
+        });
+    }
+
+    /**
+     * Get backup by access_token
+     */
+    async getBackup(accessToken) {
         if (!this.db) await this.init();
 
         return new Promise((resolve, reject) => {
             const transaction = this.db.transaction([this.storeName], 'readonly');
             const store = transaction.objectStore(this.storeName);
-            const request = store.get(orderUid);
+            const request = store.get(accessToken);
 
             request.onsuccess = () => resolve(request.result);
             request.onerror = () => reject(request.error);
@@ -152,13 +179,13 @@ export class OrderBackupStorage {
     /**
      * Delete backup
      */
-    async deleteBackup(orderUid) {
+    async deleteBackup(accessToken) {
         if (!this.db) await this.init();
 
         return new Promise((resolve, reject) => {
             const transaction = this.db.transaction([this.storeName], 'readwrite');
             const store = transaction.objectStore(this.storeName);
-            const request = store.delete(orderUid);
+            const request = store.delete(accessToken);
 
             request.onsuccess = () => resolve(true);
             request.onerror = () => reject(request.error);

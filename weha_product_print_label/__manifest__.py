@@ -21,7 +21,7 @@
         * Minimized redundant calculations
     """,
     'author': 'Weha',
-    'depends': ['product', 'stock'],
+    'depends': ['product', 'stock', 'barcodes'],
     'data': [
         'security/ir.model.access.csv',
         'wizard/product_label_layout_views.xml',

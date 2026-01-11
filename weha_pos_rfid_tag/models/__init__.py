@@ -1,0 +1,6 @@
+# -*- coding: utf-8 -*-
+from . import product_rfid_tag
+from . import rfid_tag_location_history
+from . import product_template
+from . import res_config_settings
+from . import stock_integration

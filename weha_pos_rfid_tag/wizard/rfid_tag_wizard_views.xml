@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Bulk Location Update Wizard -->
+    <record id="view_rfid_tag_location_update_wizard" model="ir.ui.view">
+        <field name="name">rfid.tag.location.update.wizard.form</field>
+        <field name="model">rfid.tag.location.update.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Update RFID Tag Locations">
+                <group>
+                    <field name="location_id"/>
+                    <field name="notes" placeholder="Optional: Reason for location change..."/>
+                </group>
+                <footer>
+                    <button string="Update Locations" name="action_update_location" 
+                            type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Search RFID Tag Wizard -->
+    <record id="view_rfid_tag_search_wizard" model="ir.ui.view">
+        <field name="name">rfid.tag.search.wizard.form</field>
+        <field name="model">rfid.tag.search.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Search RFID Tag">
+                <group>
+                    <field name="tag_name" placeholder="e.g., RFID-001-ABC123"/>
+                </group>
+                <footer>
+                    <button string="Search" name="action_search_tag" 
+                            type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Wizard Actions -->
+    <record id="action_rfid_tag_location_update_wizard" model="ir.actions.act_window">
+        <field name="name">Update Location</field>
+        <field name="res_model">rfid.tag.location.update.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_product_rfid_tag"/>
+        <field name="binding_view_types">list</field>
+    </record>
+    
+    <record id="action_rfid_tag_search_wizard" model="ir.actions.act_window">
+        <field name="name">Search RFID Tag</field>
+        <field name="res_model">rfid.tag.search.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    
+    <!-- Add Search action to menu -->
+    <menuitem id="menu_rfid_tag_search"
+              name="Search Tag"
+              parent="weha_pos_rfid_tag.menu_product_rfid_tag_root"
+              action="action_rfid_tag_search_wizard"
+              sequence="3"/>
+    
+    <!-- RFID Inventory Count Wizard -->
+    <record id="view_rfid_inventory_count_wizard" model="ir.ui.view">
+        <field name="name">rfid.inventory.count.wizard.form</field>
+        <field name="model">rfid.inventory.count.wizard</field>
+        <field name="arch" type="xml">
+            <form string="RFID Physical Inventory Count">
+                <header>
+                    <button string="Start Counting" name="action_start_counting" 
+                            type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button string="View Discrepancies" name="action_view_discrepancies" 
+                            type="object" class="btn-warning"
+                            invisible="state != 'counting'"/>
+                    <button string="Generate Adjustment" name="action_generate_adjustment" 
+                            type="object" class="btn-success"
+                            invisible="state != 'counting'"
+                            confirm="This will create an inventory adjustment. Continue?"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="location_id" readonly="state != 'draft'"/>
+                            <field name="product_ids" widget="many2many_tags" 
+                                   readonly="state != 'draft'"/>
+                            <field name="count_date" readonly="state == 'done'"/>
+                        </group>
+                        <group>
+                            <field name="total_scanned" readonly="1"/>
+                            <field name="total_system" readonly="1"/>
+                            <field name="discrepancy_count" readonly="1"
+                                   decoration-danger="discrepancy_count > 0"
+                                   decoration-success="discrepancy_count == 0"/>
+                        </group>
+                    </group>
+                    <notebook invisible="state == 'draft'">
+                        <page string="Scanned Tags" name="scanned_tags">
+                            <field name="scanned_tag_ids" readonly="state == 'done'">
+                                <tree>
+                                    <field name="rfid_tag_id"/>
+                                    <field name="product_id"/>
+                                    <field name="location_id"/>
+                                    <field name="lot_id"/>
+                                    <field name="scan_time"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer invisible="state == 'draft'">
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_rfid_inventory_count_wizard" model="ir.actions.act_window">
+        <field name="name">RFID Inventory Count</field>
+        <field name="res_model">rfid.inventory.count.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    
+    <!-- Add Inventory Count action to menu -->
+    <menuitem id="menu_rfid_inventory_count"
+              name="Inventory Count (Opname)"
+              parent="weha_pos_rfid_tag.menu_product_rfid_tag_root"
+              action="action_rfid_inventory_count_wizard"
+              sequence="4"/>
+</odoo>

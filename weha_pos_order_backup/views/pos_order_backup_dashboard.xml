@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Dashboard Kanban View -->
+    <record id="view_pos_order_backup_kanban_dashboard" model="ir.ui.view">
+        <field name="name">pos.order.backup.kanban.dashboard</field>
+        <field name="model">pos.order.backup</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_dashboard" create="0">
+                <field name="state"/>
+                <field name="backup_date"/>
+                <field name="amount_total"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_card_content">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <a type="object" name="action_import_order">
+                                            <field name="pos_reference"/>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <field name="state" widget="label" 
+                                               options="{'classes': {'backup': 'warning', 'synced': 'info', 'verified': 'success', 'imported': 'success', 'duplicate': 'muted', 'error': 'danger'}}"/>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-12">
+                                        <i class="fa fa-calendar"/> <field name="backup_date"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <i class="fa fa-money"/> <field name="amount_total"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Session Statistics Report -->
+    <record id="view_pos_session_backup_stats" model="ir.ui.view">
+        <field name="name">pos.session.backup.stats</field>
+        <field name="model">pos.session</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_session_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="action_view_backup_stats" type="object"
+                            string="View Backup Statistics"
+                            class="btn-secondary"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Backup Statistics Pivot View -->
+    <record id="view_pos_order_backup_pivot" model="ir.ui.view">
+        <field name="name">pos.order.backup.pivot</field>
+        <field name="model">pos.order.backup</field>
+        <field name="arch" type="xml">
+            <pivot string="Backup Statistics" sample="1">
+                <field name="config_id" type="row"/>
+                <field name="state" type="col"/>
+                <field name="amount_total" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Backup Statistics Graph View -->
+    <record id="view_pos_order_backup_graph" model="ir.ui.view">
+        <field name="name">pos.order.backup.graph</field>
+        <field name="model">pos.order.backup</field>
+        <field name="arch" type="xml">
+            <graph string="Backup Trends" sample="1" type="line">
+                <field name="backup_date" interval="day"/>
+                <field name="amount_total" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Dashboard Action -->
+    <record id="action_pos_order_backup_dashboard" model="ir.actions.act_window">
+        <field name="name">Backup Dashboard</field>
+        <field name="res_model">pos.order.backup</field>
+        <field name="view_mode">graph,pivot,kanban,list</field>
+        <field name="context">{'search_default_last_30_days': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No backup data to display
+            </p>
+        </field>
+    </record>
+
+    <!-- Dashboard Menu -->
+    <menuitem id="menu_pos_order_backup_dashboard"
+              name="Backup Dashboard"
+              parent="weha_pos_order_backup.menu_pos_order_backup_root"
+              action="action_pos_order_backup_dashboard"
+              sequence="5"/>
+</odoo>

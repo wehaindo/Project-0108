@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Batch Import Wizard View -->
+    <record id="view_pos_order_backup_import_wizard_form" model="ir.ui.view">
+        <field name="name">pos.order.backup.import.wizard.form</field>
+        <field name="model">pos.order.backup.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Batch Import Order Backups">
+                <group invisible="context.get('show_results', False)">
+                    <group string="Filter Options">
+                        <field name="filter_type" widget="radio"/>
+                        <field name="session_id" invisible="filter_type != 'by_session'"
+                               required="filter_type == 'by_session'"/>
+                        <field name="date_from" invisible="filter_type != 'by_date'"/>
+                        <field name="date_to" invisible="filter_type != 'by_date'"/>
+                        <field name="backup_ids" widget="many2many_tags"
+                               invisible="filter_type != 'selected'"/>
+                    </group>
+                    <group string="Options">
+                        <field name="only_missing"/>
+                        <field name="backup_count" readonly="1"/>
+                    </group>
+                </group>
+                
+                <group invisible="not context.get('show_results', False)">
+                    <field name="result_message" nolabel="1"/>
+                </group>
+                
+                <footer>
+                    <button string="Preview" name="action_preview_backups" 
+                            type="object" class="btn-secondary"
+                            invisible="context.get('show_results', False)"/>
+                    <button string="Import Orders" name="action_import_backups" 
+                            type="object" class="btn-primary"
+                            invisible="context.get('show_results', False)"/>
+                    <button string="Close" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Batch Import Action -->
+    <record id="action_pos_order_backup_import" model="ir.actions.act_window">
+        <field name="name">Batch Import Orders</field>
+        <field name="res_model">pos.order.backup.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_pos_order_backup"/>
+        <field name="binding_view_types">list</field>
+    </record>
+</odoo>

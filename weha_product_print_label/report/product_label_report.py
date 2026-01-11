@@ -4,6 +4,41 @@
 from collections import defaultdict
 from odoo import _, models
 from odoo.exceptions import UserError
+import base64
+import io
+
+try:
+    import barcode
+    from barcode.writer import ImageWriter
+except ImportError:
+    barcode = None
+
+
+def generate_barcode_base64(barcode_value, width=2, height=50):
+    """Generate barcode as base64 encoded image"""
+    if not barcode or not barcode_value:
+        return None
+    
+    try:
+        # Create barcode
+        code128 = barcode.get('code128', barcode_value, writer=ImageWriter())
+        
+        # Generate image in memory
+        buffer = io.BytesIO()
+        code128.write(buffer, options={
+            'module_width': 0.2,
+            'module_height': height / 3,
+            'quiet_zone': 2,
+            'text_distance': 2,
+            'font_size': 0,
+        })
+        
+        # Convert to base64
+        buffer.seek(0)
+        barcode_base64 = base64.b64encode(buffer.read()).decode('utf-8')
+        return f'data:image/png;base64,{barcode_base64}'
+    except Exception:
+        return None
 
 
 def _prepare_data(env, docids, data):
@@ -43,9 +78,10 @@ def _prepare_data(env, docids, data):
 
     return {
         'quantity': quantity_by_product,
-        'page_numbers': max(1, total // (layout_wizard.rows * layout_wizard.columns)),
+        'page_numbers': -(-total // (layout_wizard.rows * layout_wizard.columns)),  # Ceiling division
         'pricelist': layout_wizard.pricelist_id,
         'extra_html': layout_wizard.extra_html,
+        'generate_barcode': generate_barcode_base64,
     }
 
 

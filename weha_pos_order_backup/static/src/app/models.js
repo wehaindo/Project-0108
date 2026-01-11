@@ -2,6 +2,7 @@
 
 import { PosStore } from "@point_of_sale/app/store/pos_store";
 import { PaymentScreen } from "@point_of_sale/app/screens/payment_screen/payment_screen";
+import { ReceiptScreen } from "@point_of_sale/app/screens/receipt_screen/receipt_screen";
 import { patch } from "@web/core/utils/patch";
 import { OrderBackupStorage } from "./order_backup_storage";
 
@@ -53,8 +54,8 @@ patch(PosStore.prototype, {
             );
 
             // Mark synced backups
-            for (const uid of result.success) {
-                await this.orderBackupStorage.markAsSynced(uid);
+            for (const accessToken of result.success) {
+                await this.orderBackupStorage.markAsSynced(accessToken);
             }
 
             console.log(`[Order Backup] Synced: ${result.success.length}, Failed: ${result.failed.length}, Duplicates: ${result.duplicates.length}`);
@@ -146,22 +147,123 @@ patch(PaymentScreen.prototype, {
         console.log('[Order Backup] _finalizeValidation called');
         console.log('[Order Backup] Current order:', this.currentOrder);
         
+        // Call parent finalization first to ensure order is fully processed
+        await super._finalizeValidation(...arguments);
+        
+        // Now serialize the finalized order with access_token
         const orderData = this.currentOrder.serialize({ orm: true });
         
-        // Ensure uid exists (required for IndexedDB key)
-        if (!orderData.uid) {
-            orderData.uid = this.currentOrder.uid || orderData.pos_reference || orderData.id || this.currentOrder.name;
+        // Ensure access_token exists (required for IndexedDB key)
+        if (!orderData.access_token) {
+            orderData.access_token = this.currentOrder.access_token || this.currentOrder.uid || orderData.pos_reference;
         }
         
-        console.log('[Order Backup] Finalized order data with uid:', orderData.uid);
-        
-        await super._finalizeValidation(...arguments);
+        console.log('[Order Backup] Saving backup for order with access_token:', orderData.access_token);
         
         try {
             await this.pos.orderBackupStorage.saveOrderBackup(orderData);
-            console.log('[Order Backup] Order backup saved successfully');
+            console.log('[Order Backup] Order backup saved successfully (receipt will be captured on receipt screen)');
         } catch (error) {
             console.error('[Order Backup] Failed to save backup:', error);
         }
     }       
+});
+
+// Patch ReceiptScreen to capture receipt HTML when print button is clicked
+patch(ReceiptScreen.prototype, {
+    setup() {
+        super.setup(...arguments);
+        
+        // Wrap the doFullPrint method
+        const originalDoFullPrint = this.doFullPrint;
+        this.doFullPrint = {
+            ...originalDoFullPrint,
+            call: async () => {
+                console.log('[Order Backup] Print Full Receipt button clicked, capturing receipt...');
+                await this.captureReceiptForBackup();
+                return await originalDoFullPrint.call();
+            }
+        };
+        
+        // Wrap the doBasicPrint method if it exists
+        if (this.doBasicPrint) {
+            const originalDoBasicPrint = this.doBasicPrint;
+            this.doBasicPrint = {
+                ...originalDoBasicPrint,
+                call: async () => {
+                    console.log('[Order Backup] Print Basic Receipt button clicked, capturing receipt...');
+                    await this.captureReceiptForBackup();
+                    return await originalDoBasicPrint.call();
+                }
+            };
+        }
+    },
+    
+    async captureReceiptForBackup() {
+        console.log('[Order Backup] Starting receipt capture...');
+        try {
+            const order = this.currentOrder;
+            if (!order) {
+                console.log('[Order Backup] No current order');
+                return;
+            }
+            
+            console.log('[Order Backup] Current order:', order.pos_reference || order.uid);
+            
+            // Find the receipt element in the DOM
+            const receiptElement = document.querySelector('.pos-receipt-container .pos-receipt') || 
+                                 document.querySelector('.receipt-screen .pos-receipt') ||
+                                 document.querySelector('.order-receipt');
+            
+            if (!receiptElement) {
+                console.warn('[Order Backup] Receipt element not found in DOM');
+                console.log('[Order Backup] Available elements:', {
+                    'pos-receipt-container': !!document.querySelector('.pos-receipt-container'),
+                    'receipt-screen': !!document.querySelector('.receipt-screen'),
+                    'order-receipt': !!document.querySelector('.order-receipt'),
+                });
+                return;
+            }
+            
+            console.log('[Order Backup] Receipt element found');
+            
+            // Clone the element to capture all styles
+            const clone = receiptElement.cloneNode(true);
+            
+            // Get computed styles and embed them inline
+            let styleString = '<style>';
+            
+            // Capture all POS receipt styles
+            const styleSheets = document.styleSheets;
+            for (let sheet of styleSheets) {
+                try {
+                    const rules = sheet.cssRules || sheet.rules;
+                    for (let rule of rules) {
+                        if (rule.selectorText && rule.selectorText.includes('pos-receipt')) {
+                            styleString += rule.cssText + '\n';
+                        }
+                    }
+                } catch (e) {
+                    // Skip cross-origin stylesheets
+                }
+            }
+            styleString += '</style>';
+            
+            // Combine styles with cloned HTML
+            const receiptHtml = styleString + clone.outerHTML;
+            
+            console.log('[Order Backup] Receipt HTML captured from DOM, length:', receiptHtml.length);
+            
+            // Update the backup with receipt HTML
+            const accessToken = order.access_token || order.uid;
+            console.log('[Order Backup] Updating backup with access_token:', accessToken);
+            
+            await this.pos.orderBackupStorage.updateBackupReceipt(accessToken, receiptHtml);
+            
+            console.log('[Order Backup] Receipt HTML saved to backup successfully');
+            
+        } catch (error) {
+            console.error('[Order Backup] Failed to capture receipt:', error);
+        }
+    }
 });

@@ -219,7 +219,7 @@ patch(PosStore.prototype, {
             } else {
                 console.log('[POS Sync] ⚠️ No products in IndexedDB, will sync from server');
                 // Trigger initial sync if no local products
-                setTimeout(() => this.downloadAndSaveProducts(), 1000);
+                setTimeout(() => this.downloadAndSaveAllModels(), 1000);
             }
         } catch (error) {
             console.error('[POS Sync] ❌ Error loading from IndexedDB:', error);
@@ -239,37 +239,21 @@ patch(PosStore.prototype, {
      * 
      * POS Loading (minimal transform):
      *   - Ensure arrays ARE arrays: tags: [1,2,3] ✓
-     *   - Many2one OK as-is: categ_id: [5,'Food'] or 5 both work
-     * 
-     * Create Methods:
-     *   1. this.data.create() ← Preferred Odoo 18
-     *   2. this.models[].create() ← Fallback
-     * 
-     * See DATA_FORMAT_GUIDE.md for complete documentation
+     *   - Many2one OK as-is: categ_id: [5, 'Food'] ✓
+     *   - String fields are strings ✓
      */
     async loadAllModelsFromIndexedDB() {
         const startTime = performance.now();
-        console.log('[POS Sync] 📥 Loading ALL models from IndexedDB...');
+        console.log('[POS Sync] 📥 Loading all models from IndexedDB...');
         
-        // Define models to load in order (dependencies first)
-        const modelsToLoad = [
-            'product.category',
-            'product.tag',
-            'product.attribute',
-            'product.attribute.value',
-            'product.template',
-            'product.template.attribute.line',
-            'product.template.attribute.value',
-            'product.packaging',
-            'product.pricelist',
-            'product.pricelist.item',
-            'product.product'
-        ];
-        
+        // CRITICAL: Load order matters for relational field resolution!
+        // 1. Load pricelists first (no dependencies)
+        // 2. Load products (needed by pricelist items)
+        // 3. Load pricelist items last (references both pricelists and products)
+        const modelsToLoad = ['product.pricelist', 'product.product', 'product.pricelist.item'];
         const stats = {};
         
         for (const modelName of modelsToLoad) {
-            // Check if model exists in POS
             if (!this.models[modelName]) {
                 console.log(`[POS Sync] ⚠️ Model ${modelName} not available, skipping`);
                 continue;
@@ -277,22 +261,104 @@ patch(PosStore.prototype, {
             
             try {
                 const fetchStart = performance.now();
-                const records = await this.productStorage.getAllRecords(modelName);
+                let records = await this.productStorage.getAllRecords(modelName);
                 const fetchTime = (performance.now() - fetchStart).toFixed(2);
+                
+                console.log(`[POS Sync] 📦 ${modelName}: Found ${records.length} records in IndexedDB`);
                 
                 if (records.length > 0) {
                     const loadStart = performance.now();
+                    
+                    // Log details before loading (especially for pricelist items)
+                    if (modelName === 'product.pricelist.item') {
+                        console.log('[POS Sync] Pricelist items RAW from IndexedDB:', records.map(r => ({
+                            id: r.id,
+                            pricelist_id: r.pricelist_id,
+                            pricelist_id_type: typeof r.pricelist_id,
+                            product_id: r.product_id,
+                            product_id_type: typeof r.product_id,
+                            product_tmpl_id: r.product_tmpl_id,
+                            product_tmpl_id_type: typeof r.product_tmpl_id,
+                            applied_on: r.applied_on,
+                        })));
+                        
+                        // Check what models are available
+                        console.log('[POS Sync] Available models:', Object.keys(this.models));
+                        console.log('[POS Sync] product.template model exists:', !!this.models['product.template']);
+                        console.log('[POS Sync] product.template record count:', this.models['product.template']?.getAll()?.length || 0);
+                        
+                        // CRITICAL FIX: Ensure relational fields are in correct format
+                        // loadData expects either numeric ID or null, not false or arrays
+                        records = records.map(r => {
+                            const transformed = { ...r };
+                            
+                            // Convert false to null for all relational fields
+                            if (transformed.product_id === false) transformed.product_id = null;
+                            if (transformed.product_tmpl_id === false) transformed.product_tmpl_id = null;
+                            if (transformed.categ_id === false) transformed.categ_id = null;
+                            if (transformed.base_pricelist_id === false) transformed.base_pricelist_id = null;
+                            
+                            // Ensure numeric fields stay numeric (extract ID from [id, name] if needed)
+                            if (Array.isArray(transformed.pricelist_id) && transformed.pricelist_id.length === 2) {
+                                transformed.pricelist_id = transformed.pricelist_id[0];
+                            }
+                            if (Array.isArray(transformed.product_id) && transformed.product_id.length === 2) {
+                                transformed.product_id = transformed.product_id[0];
+                            }
+                            if (Array.isArray(transformed.product_tmpl_id) && transformed.product_tmpl_id.length === 2) {
+                                transformed.product_tmpl_id = transformed.product_tmpl_id[0];
+                            }
+                            if (Array.isArray(transformed.categ_id) && transformed.categ_id.length === 2) {
+                                transformed.categ_id = transformed.categ_id[0];
+                            }
+                            
+                            return transformed;
+                        });
+                        
+                        console.log('[POS Sync] After transformation (before loadData):', records.map(r => ({
+                            id: r.id,
+                            pricelist_id: r.pricelist_id,
+                            product_id: r.product_id,
+                            product_tmpl_id: r.product_tmpl_id
+                        })));
+                    }
                     
                     // Use data service's loadData method (proper Odoo 18 way)
                     const dataToLoad = { [modelName]: records };
                     const loadedRecords = this.data.models.loadData(dataToLoad);
                     
+                    // Debug pricelist items after loading
+                    if (modelName === 'product.pricelist.item' && loadedRecords[modelName]) {
+                        console.log('[POS Sync] After loadData:', loadedRecords[modelName].slice(0, 3).map(r => ({
+                            id: r.id,
+                            pricelist_id: r.pricelist_id,
+                            pricelist_id_type: typeof r.pricelist_id,
+                            product_id: r.product_id,
+                            product_id_type: typeof r.product_id,
+                            product_tmpl_id: r.product_tmpl_id,
+                            product_tmpl_id_type: typeof r.product_tmpl_id,
+                        })));
+                    }
+                    
                     const loaded = loadedRecords[modelName]?.length || 0;
                     const skipped = records.length - loaded;
                     
                     const loadTime = (performance.now() - loadStart).toFixed(2);
-                    stats[modelName] = { loaded, skipped, fetchTime, loadTime };
-                    console.log(`[POS Sync] ✓ ${modelName}: ${loaded} loaded, ${skipped} skipped (fetch: ${fetchTime}ms, load: ${loadTime}ms)`);
+                    stats[modelName] = { loaded, skipped, fetchTime, loadTime, total: records.length };
+                    
+                    if (skipped > 0) {
+                        console.warn(`[POS Sync] ⚠️ ${modelName}: ${loaded} loaded, ${skipped} skipped from ${records.length} total`);
+                        
+                        // Find which records were skipped
+                        if (loadedRecords[modelName]) {
+                            const loadedIds = new Set(loadedRecords[modelName].map(r => r.id));
+                            const skippedRecords = records.filter(r => !loadedIds.has(r.id));
+                            console.warn(`[POS Sync] Skipped record IDs:`, skippedRecords.map(r => r.id));
+                            console.warn(`[POS Sync] Skipped records:`, skippedRecords);
+                        }
+                    } else {
+                        console.log(`[POS Sync] ✓ ${modelName}: ${loaded} loaded (fetch: ${fetchTime}ms, load: ${loadTime}ms)`);
+                    }
                 }
             } catch (error) {
                 console.error(`[POS Sync] ❌ Error loading ${modelName}:`, error);
@@ -307,10 +373,171 @@ patch(PosStore.prototype, {
         try {
             console.log('[POS Sync] Running post-processing...');
             
+            // Debug: Check what data we have before cache computation
+            const productCount = this.models['product.product']?.getAll()?.length || 0;
+            const pricelistCount = this.models['product.pricelist']?.getAll()?.length || 0;
+            const itemCount = this.models['product.pricelist.item']?.getAll()?.length || 0;
+            console.log(`[POS Sync] Before cache: Products=${productCount}, Pricelists=${pricelistCount}, Items=${itemCount}`);
+            
+            // Log pricelist items details
+            if (itemCount > 0) {
+                const items = this.models['product.pricelist.item'].getAll();
+                console.log('[POS Sync] All pricelist items loaded:', items.length);
+                console.log('[POS Sync] Sample pricelist items:', items.slice(0, 5).map(i => ({
+                    id: i.id,
+                    pricelist_id: i.pricelist_id?.id || i.pricelist_id,
+                    product_id: i.product_id?.id || i.product_id,
+                    product_tmpl_id: i.product_tmpl_id?.id || i.product_tmpl_id,
+                    applied_on: i.applied_on,
+                    compute_price: i.compute_price,
+                    fixed_price: i.fixed_price,
+                    min_quantity: i.min_quantity
+                })));
+                
+                // Check the raw data structure
+                const rawItem = items[0];
+                console.log('[POS Sync] First item raw structure:', {
+                    pricelist_id_type: typeof rawItem.pricelist_id,
+                    pricelist_id_value: rawItem.pricelist_id,
+                    product_tmpl_id_type: typeof rawItem.product_tmpl_id,
+                    product_tmpl_id_value: rawItem.product_tmpl_id,
+                    has_raw: !!rawItem.raw
+                });
+            }
+            
             // Compute product pricelist cache for all loaded products
             if (typeof this.computeProductPricelistCache === 'function') {
+                // CRITICAL DEBUG: Check pricelist items BEFORE cache computation
+                const allItems = this.models['product.pricelist.item']?.getAll() || [];
+                console.log('[POS Sync] 🔍 BEFORE CACHE - Pricelist items check:', {
+                    total_items: allItems.length,
+                    sample_items: allItems.slice(0, 3).map(i => ({
+                        id: i.id,
+                        applied_on: i.applied_on,
+                        pricelist_id: i.pricelist_id,
+                        pricelist_id_is_object: typeof i.pricelist_id === 'object',
+                        pricelist_id_value: typeof i.pricelist_id === 'object' ? i.pricelist_id?.id : i.pricelist_id,
+                        product_id: i.product_id,
+                        product_id_is_object: typeof i.product_id === 'object',
+                        product_id_value: typeof i.product_id === 'object' ? i.product_id?.id : i.product_id,
+                        product_tmpl_id: i.product_tmpl_id,
+                        product_tmpl_id_is_object: typeof i.product_tmpl_id === 'object',
+                        product_tmpl_id_value: typeof i.product_tmpl_id === 'object' ? i.product_tmpl_id?.id : i.product_tmpl_id,
+                        compute_price: i.compute_price,
+                        fixed_price: i.fixed_price,
+                        min_quantity: i.min_quantity
+                    }))
+                });
+                
                 this.computeProductPricelistCache();
                 console.log('[POS Sync] ✓ Product pricelist cache computed');
+                
+                // CRITICAL: Update product lst_price to match pricelist price
+                // The product cards display lst_price directly, not calling get_price()
+                // So we need to update lst_price for each product based on current pricelist
+                const currentPricelist = this.config.pricelist_id;
+                if (currentPricelist) {
+                    console.log('[POS Sync] 🔄 Updating product lst_price based on pricelist:', currentPricelist.name);
+                    
+                    const allProducts = this.models['product.product'].getAll();
+                    let updatedCount = 0;
+                    
+                    for (const product of allProducts) {
+                        const pricelistPrice = product.get_price(currentPricelist, 1);
+                        const originalPrice = product.lst_price;
+                        
+                        // Only update if pricelist price is different
+                        if (pricelistPrice !== originalPrice) {
+                            // Store original lst_price if not already stored
+                            if (product._original_lst_price === undefined) {
+                                product._original_lst_price = originalPrice;
+                            }
+                            
+                            // Update the displayed price to match pricelist
+                            product.lst_price = pricelistPrice;
+                            updatedCount++;
+                        }
+                    }
+                    
+                    console.log(`[POS Sync] ✓ Updated lst_price for ${updatedCount} products to match pricelist`);
+                    
+                    // Log sample of updated product
+                    const product20293 = this.models['product.product'].get(20293);
+                    if (product20293) {
+                        console.log('[POS Sync] 📊 Product 20293 after price update:', {
+                            name: product20293.display_name,
+                            original_lst_price: product20293._original_lst_price,
+                            current_lst_price: product20293.lst_price,
+                            computed_price: product20293.get_price(currentPricelist, 1)
+                        });
+                    }
+                }
+                
+                // Debug: Verify cache structure - USE SPECIFIC PRODUCT 20293
+                let sampleProduct = this.models['product.product'].get(20293);
+                if (!sampleProduct) {
+                    console.warn('[POS Sync] Product 20293 not found, using first product instead');
+                    sampleProduct = this.models['product.product'].getAll()[0];
+                }
+                
+                if (sampleProduct) {
+                    console.log('[POS Sync] Sample product:', {
+                        id: sampleProduct.id,
+                        name: sampleProduct.display_name,
+                        product_tmpl_id: sampleProduct.raw?.product_tmpl_id || sampleProduct.product_tmpl_id,
+                        lst_price: sampleProduct.lst_price,
+                        cachedPricelistRules: sampleProduct.cachedPricelistRules
+                    });
+                    
+                    // Check if the cache has rules for our pricelist
+                    if (sampleProduct.cachedPricelistRules) {
+                        const pricelistIds = Object.keys(sampleProduct.cachedPricelistRules);
+                        console.log('[POS Sync] Cached pricelist IDs:', pricelistIds);
+                        
+                        // Log the rules for the first pricelist
+                        if (pricelistIds.length > 0) {
+                            const firstPricelistId = pricelistIds[0];
+                            const rules = sampleProduct.cachedPricelistRules[firstPricelistId];
+                            console.log(`[POS Sync] Rules for pricelist ${firstPricelistId}:`, {
+                                productItems: Object.keys(rules.productItems || {}),
+                                productTmlpItems: Object.keys(rules.productTmlpItems || {}),
+                                categoryItems: Object.keys(rules.categoryItems || {}),
+                                globalItems: rules.globalItems?.length || 0
+                            });
+                        }
+                    }
+                    
+                    // Test price calculation with detailed breakdown
+                    const currentPricelist = this.config.pricelist_id;
+                    if (currentPricelist) {
+                        const computedPrice = sampleProduct.get_price(currentPricelist, 1);
+                        const rule = sampleProduct.getPricelistRule(currentPricelist, 1);
+                        console.log('[POS Sync] 💰 Price test:', {
+                            product_name: sampleProduct.display_name,
+                            product_id: sampleProduct.id,
+                            product_tmpl_id: sampleProduct.product_tmpl_id?.id || sampleProduct.product_tmpl_id,
+                            pricelist: currentPricelist.name,
+                            pricelist_id: currentPricelist.id,
+                            computed_price: computedPrice,
+                            list_price: sampleProduct.lst_price,
+                            rule_found: !!rule,
+                            rule_details: rule ? {
+                                rule_id: rule.id,
+                                fixed_price: rule.fixed_price,
+                                compute_price: rule.compute_price,
+                                applied_on: rule.applied_on,
+                                product_id: rule.product_id?.id || rule.product_id,
+                                product_tmpl_id: rule.product_tmpl_id?.id || rule.product_tmpl_id
+                            } : null
+                        });
+                        
+                        // If price matches list_price, there's a problem - should use pricelist rule
+                        if (computedPrice === sampleProduct.lst_price && rule) {
+                            console.warn('[POS Sync] ⚠️ WARNING: Price matches list_price despite rule existing!');
+                            console.warn('[POS Sync] This means the pricelist rule is NOT being applied');
+                        }
+                    }
+                }
             }
             
             // Process product attributes
@@ -326,10 +553,11 @@ patch(PosStore.prototype, {
     },
 
     /**
-     * Download all product-related models from server
+     * Download all product models from server and save to IndexedDB
+     * This is called on first load when local DB is empty
      */
     async downloadAndSaveAllModels() {
-        console.log('[POS Sync] Starting initial download of all models from server...');
+        console.log('[POS Sync] ⬇️ Downloading all models from server...');
         
         try {
             const result = await this.data.call(
@@ -367,10 +595,22 @@ patch(PosStore.prototype, {
                 try {
                     console.log('[POS Sync] Running post-processing...');
                     
+                    // Debug: Check what data we have
+                    const productCount = this.models['product.product']?.getAll()?.length || 0;
+                    const pricelistCount = this.models['product.pricelist']?.getAll()?.length || 0;
+                    const itemCount = this.models['product.pricelist.item']?.getAll()?.length || 0;
+                    console.log(`[POS Sync] After download: Products=${productCount}, Pricelists=${pricelistCount}, Items=${itemCount}`);
+                    
                     // Compute product pricelist cache
                     if (typeof this.computeProductPricelistCache === 'function') {
                         this.computeProductPricelistCache();
                         console.log('[POS Sync] ✓ Product pricelist cache computed');
+                        
+                        // Verify a product has the cache
+                        const testProduct = this.models['product.product'].getAll()[0];
+                        if (testProduct) {
+                            console.log('[POS Sync] Test product cache:', Object.keys(testProduct.cachedPricelistRules || {}));
+                        }
                     }
                     
                     // Process product attributes
@@ -455,17 +695,10 @@ patch(PosStore.prototype, {
     },
 
     /**
-     * Sync only products modified since last sync (Background/Automatic)
-     * This runs automatically after loading from local storage
+     * Sync products, pricelists, and pricelist items modified since last sync (Background/Automatic)
      */
     async syncProductsInBackground() {
         if (this.isSyncing || !this.enableLocalStorage) return;
-        
-        // Ensure product model is available
-        if (!this.models['product.product']) {
-            console.error('[Background Sync] ❌ Product model not available!');
-            return;
-        }
 
         this.isSyncing = true;
         console.log('🔄 [Background Sync] Starting...');
@@ -477,56 +710,60 @@ patch(PosStore.prototype, {
                 'pos.session',
                 'sync_products_since',
                 [],
-                { last_sync_date: this.lastSyncDate, limit: 1000 }
+                { last_sync_date: this.lastSyncDate, limit: 1000, config_id: this.config.id }
             );
 
+            // Sync products
             if (result.products && result.products.length > 0) {
                 console.log(`🆕 [Background Sync] Found ${result.products.length} new/updated products`);
-
-                // Count new vs updated
-                let newCount = 0;
-                let updatedCount = 0;
-
-                // Save to local storage first
-                const saveStart = performance.now();
-                await this.productStorage.saveProducts(result.products);
-                console.log(`💾 [Background Sync] Saved to IndexedDB in ${(performance.now() - saveStart).toFixed(2)}ms`);
-
-                // Update in POS
-                for (const productData of result.products) {
-                    const existingProduct = this.models['product.product'].get(productData.id);
-                    if (!existingProduct) {
-                        this.models['product.product'].create(productData);
-                        newCount++;
-                    } else {
-                        Object.assign(existingProduct, productData);
-                        updatedCount++;
-                    }
-                }
+                await this.productStorage.saveRecords('product.product', result.products);
                 
-                console.log(`✅ [Background Sync] Complete: ${newCount} new, ${updatedCount} updated (${(performance.now() - syncStart).toFixed(2)}ms)`);
-            } else {
-                console.log('✓ [Background Sync] No updates found - all products current');
+                // Update POS models
+                const dataToLoad = { 'product.product': result.products };
+                this.data.models.loadData(dataToLoad);
+                console.log(`✓ [Background Sync] Products updated`);
+            }
+
+            // Sync pricelists
+            if (result.pricelists && result.pricelists.length > 0) {
+                console.log(`🆕 [Background Sync] Found ${result.pricelists.length} updated pricelists`);
+                await this.productStorage.saveRecords('product.pricelist', result.pricelists);
+                
+                const dataToLoad = { 'product.pricelist': result.pricelists };
+                this.data.models.loadData(dataToLoad);
+                console.log(`✓ [Background Sync] Pricelists updated`);
+            }
+
+            // Sync pricelist items
+            if (result.pricelist_items && result.pricelist_items.length > 0) {
+                console.log(`🆕 [Background Sync] Found ${result.pricelist_items.length} updated pricelist items`);
+                await this.productStorage.saveRecords('product.pricelist.item', result.pricelist_items);
+                
+                const dataToLoad = { 'product.pricelist.item': result.pricelist_items };
+                this.data.models.loadData(dataToLoad);
+                console.log(`✓ [Background Sync] Pricelist items updated`);
             }
 
             // Handle deleted products
             if (result.deleted_products && result.deleted_products.length > 0) {
                 console.log(`🗑️ [Background Sync] Removing ${result.deleted_products.length} deleted products`);
-                await this.productStorage.deleteProducts(result.deleted_products);
-
-                for (const productId of result.deleted_products) {
-                    const product = this.models['product.product'].get(productId);
-                    if (product) {
-                        this.models['product.product'].delete(product);
-                    }
-                }
+                await this.productStorage.deleteRecords('product.product', result.deleted_products);
             }
 
             // Update last sync date
             this.lastSyncDate = result.sync_date;
             await this.productStorage.setLastSyncDate(result.sync_date);
 
-            console.log('✅ [Background Sync] Completed successfully, next sync in 3 minutes');
+            // Recompute pricelist cache if needed
+            if ((result.pricelists?.length > 0) || (result.pricelist_items?.length > 0)) {
+                if (typeof this.computeProductPricelistCache === 'function') {
+                    this.computeProductPricelistCache();
+                    console.log('✓ [Background Sync] Pricelist cache recomputed');
+                }
+            }
+
+            const syncTime = (performance.now() - syncStart).toFixed(2);
+            console.log(`✅ [Background Sync] Completed in ${syncTime}ms, next sync in 3 minutes`);
 
         } catch (error) {
             console.error('❌ [Background Sync] Error:', error);
@@ -557,14 +794,12 @@ patch(PosStore.prototype, {
                 [],
                 { 
                     last_sync_date: this.lastSyncDate,
-                    config_id: this.config.id
+                    config_id: this.config.id 
                 }
             );
 
             if (result.success) {
-                console.log(`🆕 [Background Sync] Sync info:`, result);
-                
-                // Sync each model
+                // Process each model type
                 for (const [modelName, modelData] of Object.entries(result.models || {})) {
                     if (modelData.records && modelData.records.length > 0) {
                         console.log(`🔄 [Background Sync] ${modelName}: ${modelData.records.length} updates`);
@@ -621,6 +856,8 @@ patch(PosStore.prototype, {
             setTimeout(() => this.syncAllModelsInBackground(), 180000);
         }
     },
+
+
 
     /**
      * Manual sync trigger - Full batch sync
@@ -740,9 +977,15 @@ patch(PosStore.prototype, {
                         try {
                             const existingProduct = this.models['product.product'].get(productData.id);
                             if (!existingProduct) {
-                                this.models['product.product'].create(productData);
+                                // Transform product data before creating
+                                const transformedData = this._transformProductDataForCreate(productData);
+                                this.models['product.product'].create(transformedData);
                             } else {
-                                Object.assign(existingProduct, productData);
+                                // Update existing product with all fields
+                                const transformedData = this._transformProductDataForCreate(productData);
+                                Object.assign(existingProduct, transformedData);
+                                // Trigger update event to refresh UI
+                                existingProduct.update?.(transformedData);
                             }
                         } catch (modelError) {
                             console.warn(`[POS Sync] Error loading product ${productData.id} into model:`, modelError);
@@ -785,6 +1028,21 @@ patch(PosStore.prototype, {
             // Update last sync date
             this.lastSyncDate = completeResult.sync_end_date;
             await this.productStorage.setLastSyncDate(this.lastSyncDate);
+
+            // CRITICAL: Clear search cache after sync to ensure new products are searchable
+            console.log('[POS Sync] Clearing product search cache...');
+            this.clearProductSearchCache();
+            
+            // CRITICAL: Recompute product pricelist cache for new products
+            if (syncedCount > 0 && typeof this.computeProductPricelistCache === 'function') {
+                console.log('[POS Sync] Recomputing product pricelist cache...');
+                try {
+                    this.computeProductPricelistCache();
+                    console.log('[POS Sync] ✓ Pricelist cache recomputed');
+                } catch (cacheError) {
+                    console.warn('[POS Sync] ⚠️ Failed to recompute pricelist cache:', cacheError);
+                }
+            }
 
             console.log('[POS Sync] Manual sync completed successfully:', {
                 synced_count: syncedCount,
@@ -1052,7 +1310,56 @@ patch(PosStore.prototype, {
      * @deprecated Data is already in correct format from server
      */
     _transformProductDataForCreate(productData) {
-        // No transformation needed
-        return productData;
+        // Transform product data to ensure proper format for POS
+        const transformed = { ...productData };
+        
+        // Ensure arrays are properly formatted (Many2many fields)
+        const arrayFields = ['taxes_id', 'optional_product_ids', 
+                            'pos_categ_ids', 'all_product_tag_ids', 'product_template_variant_value_ids',
+                            'attribute_line_ids', 'packaging_ids'];
+        for (const field of arrayFields) {
+            if (transformed[field] && !Array.isArray(transformed[field])) {
+                transformed[field] = [transformed[field]];
+            } else if (!transformed[field]) {
+                transformed[field] = [];
+            }
+        }
+        
+        // Ensure many2one fields are properly formatted or null
+        const many2oneFields = ['categ_id', 'uom_id', 'uom_po_id', 'pos_categ_id', 'product_tmpl_id'];
+        for (const field of many2oneFields) {
+            if (transformed[field] === false || transformed[field] === undefined) {
+                transformed[field] = null;
+            }
+        }
+        
+        // Ensure string fields are strings or null
+        const stringFields = ['barcode', 'default_code', 'name', 'display_name', 
+                             'description', 'description_sale', 'description_purchase'];
+        for (const field of stringFields) {
+            if (transformed[field] === false || transformed[field] === undefined) {
+                transformed[field] = null;
+            } else if (transformed[field] !== null) {
+                transformed[field] = String(transformed[field]);
+            }
+        }
+        
+        // Ensure numeric fields are numbers
+        const numericFields = ['lst_price', 'standard_price', 'list_price'];
+        for (const field of numericFields) {
+            if (transformed[field] !== null && transformed[field] !== undefined) {
+                transformed[field] = parseFloat(transformed[field]) || 0;
+            }
+        }
+        
+        // Ensure boolean fields
+        const boolFields = ['available_in_pos', 'to_weight', 'sale_ok'];
+        for (const field of boolFields) {
+            if (transformed[field] !== null && transformed[field] !== undefined) {
+                transformed[field] = Boolean(transformed[field]);
+            }
+        }
+        
+        return transformed;
     }
 });

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    © 2025 ehuerta _at_ ixer.mx
+    License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl-3.0.html).
+-->
+<odoo>
+    <!-- Product Template Multi UOM Price Views -->
+    <record id="view_product_tmpl_multi_uom_price_tree" model="ir.ui.view">
+        <field name="name">product.tmpl.multi.uom.price.tree</field>
+        <field name="model">product.tmpl.multi.uom.price</field>
+        <field name="arch" type="xml">
+            <list string="Product Template UOM Prices" editable="bottom">
+                <field name="product_tmpl_id" required="1"/>
+                <field name="category_id" column_invisible="1"/>
+                <field name="uom_id" required="1"/>
+                <field name="operating_unit_id" optional="show"/>
+                <field name="price" required="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_product_tmpl_multi_uom_price_form" model="ir.ui.view">
+        <field name="name">product.tmpl.multi.uom.price.form</field>
+        <field name="model">product.tmpl.multi.uom.price</field>
+        <field name="arch" type="xml">
+            <form string="Product Template UOM Price">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="product_tmpl_id"/>
+                            <field name="category_id" invisible="1"/>
+                            <field name="uom_id" domain="[('category_id', '=', category_id)]"/>
+                        </group>
+                        <group>
+                            <field name="operating_unit_id"/>
+                            <field name="price"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_product_tmpl_multi_uom_price_search" model="ir.ui.view">
+        <field name="name">product.tmpl.multi.uom.price.search</field>
+        <field name="model">product.tmpl.multi.uom.price</field>
+        <field name="arch" type="xml">
+            <search string="Search Product Template UOM Prices">
+                <field name="product_tmpl_id" string="Product"/>
+                <field name="uom_id" string="Unit of Measure"/>
+                <field name="operating_unit_id" string="Operating Unit"/>
+                <filter string="Global Prices" name="filter_global" domain="[('operating_unit_id', '=', False)]"/>
+                <filter string="OU Specific" name="filter_ou_specific" domain="[('operating_unit_id', '!=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Product" name="group_product" context="{'group_by': 'product_tmpl_id'}"/>
+                    <filter string="Unit of Measure" name="group_uom" context="{'group_by': 'uom_id'}"/>
+                    <filter string="Operating Unit" name="group_ou" context="{'group_by': 'operating_unit_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Product Variant Multi UOM Price Views -->
+    <record id="view_product_multi_uom_price_tree" model="ir.ui.view">
+        <field name="name">product.multi.uom.price.tree</field>
+        <field name="model">product.multi.uom.price</field>
+        <field name="arch" type="xml">
+            <list string="Product Variant UOM Prices" editable="bottom">
+                <field name="product_id" required="1"/>
+                <field name="category_id" column_invisible="1"/>
+                <field name="uom_id" required="1"/>
+                <field name="operating_unit_id" optional="show"/>
+                <field name="price" required="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_product_multi_uom_price_form" model="ir.ui.view">
+        <field name="name">product.multi.uom.price.form</field>
+        <field name="model">product.multi.uom.price</field>
+        <field name="arch" type="xml">
+            <form string="Product Variant UOM Price">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="product_id"/>
+                            <field name="category_id" invisible="1"/>
+                            <field name="uom_id" domain="[('category_id', '=', category_id)]"/>
+                        </group>
+                        <group>
+                            <field name="operating_unit_id"/>
+                            <field name="price"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_product_multi_uom_price_search" model="ir.ui.view">
+        <field name="name">product.multi.uom.price.search</field>
+        <field name="model">product.multi.uom.price</field>
+        <field name="arch" type="xml">
+            <search string="Search Product Variant UOM Prices">
+                <field name="product_id" string="Product Variant"/>
+                <field name="uom_id" string="Unit of Measure"/>
+                <field name="operating_unit_id" string="Operating Unit"/>
+                <filter string="Global Prices" name="filter_global" domain="[('operating_unit_id', '=', False)]"/>
+                <filter string="OU Specific" name="filter_ou_specific" domain="[('operating_unit_id', '!=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Product Variant" name="group_product" context="{'group_by': 'product_id'}"/>
+                    <filter string="Unit of Measure" name="group_uom" context="{'group_by': 'uom_id'}"/>
+                    <filter string="Operating Unit" name="group_ou" context="{'group_by': 'operating_unit_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_product_tmpl_multi_uom_price" model="ir.actions.act_window">
+        <field name="name">Product Template UOM Prices</field>
+        <field name="res_model">product.tmpl.multi.uom.price</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_group_product': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create Product Template UOM Prices
+            </p>
+            <p>
+                Manage different prices for different units of measure at the product template level.
+                Prices set here will automatically sync to all product variants.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_product_multi_uom_price" model="ir.actions.act_window">
+        <field name="name">Product Variant UOM Prices</field>
+        <field name="res_model">product.multi.uom.price</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_group_product': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create Product Variant UOM Prices
+            </p>
+            <p>
+                Manage different prices for different units of measure at the product variant level.
+                These prices are loaded in POS based on the operating unit configuration.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_pos_multi_uom_price_root"
+              name="POS UOM Prices"
+              parent="point_of_sale.menu_point_root"
+              sequence="10"/>
+
+    <menuitem id="menu_product_tmpl_multi_uom_price"
+              name="Template Prices"
+              parent="menu_pos_multi_uom_price_root"
+              action="action_product_tmpl_multi_uom_price"
+              sequence="10"/>
+
+    <menuitem id="menu_product_multi_uom_price"
+              name="Variant Prices"
+              parent="menu_pos_multi_uom_price_root"
+              action="action_product_multi_uom_price"
+              sequence="20"/>
+
+</odoo>

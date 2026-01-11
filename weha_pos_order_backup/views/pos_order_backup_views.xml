@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View with Enhanced Features -->
+    <record id="view_pos_order_backup_tree" model="ir.ui.view">
+        <field name="name">pos.order.backup.tree</field>
+        <field name="model">pos.order.backup</field>
+        <field name="arch" type="xml">
+            <list string="POS Order Backups" 
+                  decoration-info="state=='synced'" 
+                  decoration-success="state=='verified' or state=='imported'"
+                  decoration-warning="state=='backup'"
+                  decoration-danger="state=='error'"
+                  decoration-muted="state=='duplicate'"
+                  multi_edit="1"
+                  sample="1">
+                <field name="backup_date"/>
+                <field name="pos_reference"/>
+                <field name="session_id"/>
+                <field name="config_id" optional="show"/>
+                <field name="partner_id" optional="show"/>
+                <field name="partner_name" optional="hide"/>
+                <field name="user_id" optional="hide"/>
+                <field name="order_date" optional="hide"/>
+                <field name="amount_total" sum="Total Amount"/>
+                <field name="amount_tax" sum="Total Tax" optional="hide"/>
+                <field name="lines_count" optional="show"/>
+                <field name="payments_count" optional="hide"/>
+                <field name="state" widget="badge" 
+                       decoration-info="state=='synced'"
+                       decoration-success="state in ['verified', 'imported']"
+                       decoration-warning="state=='backup'"
+                       decoration-danger="state=='error'"/>
+                <field name="is_missing" optional="hide" invisible="1"/>
+                <field name="can_import" optional="hide" invisible="1"/>
+                <button name="action_import_order" type="object" 
+                        string="Import" 
+                        icon="fa-download"
+                        invisible="not can_import"/>
+                <button name="action_verify_on_server" type="object"
+                        string="Verify"
+                        icon="fa-check"
+                        invisible="state in ['verified', 'imported', 'duplicate']"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_pos_order_backup_form" model="ir.ui.view">
+        <field name="name">pos.order.backup.form</field>
+        <field name="model">pos.order.backup</field>
+        <field name="arch" type="xml">
+            <form string="POS Order Backup">
+                <header>
+                    <button name="action_import_order" type="object" 
+                            string="Import to POS Orders"
+                            class="oe_highlight" 
+                            invisible="state in ['imported', 'duplicate']"
+                            confirm="Are you sure you want to import this order?"/>
+                    <button name="action_reprint_receipt" type="object"
+                            string="View Receipt"
+                            invisible="not receipt_data"/>
+                    <button name="action_verify_on_server" type="object"
+                            string="Verify on Server"
+                            invisible="state in ['verified', 'imported', 'duplicate']"/>
+                    <button name="action_mark_as_duplicate" type="object"
+                            string="Mark as Duplicate"
+                            invisible="state == 'duplicate'"/>
+                    <field name="state" widget="statusbar" 
+                           statusbar_visible="backup,synced,verified,imported"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(point_of_sale.action_pos_pos_form)s" type="action"
+                                class="oe_stat_button"
+                                icon="fa-shopping-cart"
+                                invisible="not imported_order_id"
+                                context="{'search_default_id': imported_order_id}">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">View Order</span>
+                            </div>
+                        </button>
+                    </div>
+                    
+                    <widget name="web_ribbon" title="Missing on Server" 
+                            bg_color="text-bg-danger" 
+                            invisible="not is_missing"/>
+                    <widget name="web_ribbon" title="Can Import" 
+                            bg_color="text-bg-warning" 
+                            invisible="not can_import"/>
+                    
+                    <group>
+                        <group name="order_info" string="Order Information">
+                            <field name="pos_reference"/>
+                            <field name="access_token"/>
+                            <field name="backup_date"/>
+                            <field name="order_date"/>
+                            <field name="session_id"/>
+                            <field name="config_id"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group name="partner_info" string="Customer">
+                            <field name="partner_id"/>
+                            <field name="partner_name"/>
+                        </group>
+                    </group>
+                    
+                    <group>
+                        <group name="amounts" string="Amounts">
+                            <field name="amount_total"/>
+                            <field name="amount_tax"/>
+                            <field name="amount_paid"/>
+                            <field name="amount_return"/>
+                        </group>
+                        <group name="counts" string="Details">
+                            <field name="lines_count"/>
+                            <field name="payments_count"/>
+                            <field name="is_missing"/>
+                            <field name="can_import"/>
+                        </group>
+                    </group>
+                    
+                    <group name="import_info" string="Import Information" 
+                           invisible="state not in ['imported', 'error']">
+                        <field name="imported_order_id"/>
+                        <field name="import_date"/>
+                        <field name="import_user_id"/>
+                        <field name="error_message" invisible="state != 'error'"/>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Order Data" name="order_data">
+                            <field name="order_data" widget="ace" options="{'mode': 'json'}"/>
+                        </page>
+                        <page string="Receipt" name="receipt" invisible="not receipt_data">
+                            <field name="receipt_data" widget="html"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View with Filters -->
+    <record id="view_pos_order_backup_search" model="ir.ui.view">
+        <field name="name">pos.order.backup.search</field>
+        <field name="model">pos.order.backup</field>
+        <field name="arch" type="xml">
+            <search string="Search POS Order Backups">
+                <field name="pos_reference" string="Order Reference"/>
+                <field name="access_token"/>
+                <field name="session_id"/>
+                <field name="config_id"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                
+                <separator/>
+                
+                <!-- Quick Filters -->
+                <filter string="Not Verified" name="not_verified" 
+                        domain="[('state', 'in', ['backup', 'synced'])]"/>
+                <filter string="Ready to Import" name="ready_import"
+                        domain="[('state', 'in', ['synced', 'backup'])]"/>
+                
+                <separator/>
+                
+                <!-- State Filters -->
+                <filter string="Backup Only" name="state_backup" 
+                        domain="[('state', '=', 'backup')]"/>
+                <filter string="Synced" name="state_synced" 
+                        domain="[('state', '=', 'synced')]"/>
+                <filter string="Verified" name="state_verified" 
+                        domain="[('state', '=', 'verified')]"/>
+                <filter string="Imported" name="state_imported" 
+                        domain="[('state', '=', 'imported')]"/>
+                <filter string="Duplicates" name="state_duplicate" 
+                        domain="[('state', '=', 'duplicate')]"/>
+                <filter string="Errors" name="state_error" 
+                        domain="[('state', '=', 'error')]"/>
+                
+                <separator/>
+                
+                <!-- Date Filters -->
+                <filter string="Today" name="today" 
+                        domain="[('backup_date', '&gt;=', datetime.datetime.now().replace(hour=0, minute=0, second=0))]"/>
+                <filter string="Last 7 Days" name="last_7_days" 
+                        domain="[('backup_date', '&gt;=', (datetime.datetime.now() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <filter string="Last 30 Days" name="last_30_days" 
+                        domain="[('backup_date', '&gt;=', (datetime.datetime.now() - datetime.timedelta(days=30)).strftime('%Y-%m-%d'))]"/>
+                
+                <separator/>
+                
+                <!-- Group By -->
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Session" name="group_session" context="{'group_by': 'session_id'}"/>
+                    <filter string="POS Config" name="group_config" context="{'group_by': 'config_id'}"/>
+                    <filter string="Backup Date" name="group_backup_date" context="{'group_by': 'backup_date:day'}"/>
+                    <filter string="Order Date" name="group_order_date" context="{'group_by': 'order_date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_pos_order_backup" model="ir.actions.act_window">
+        <field name="name">Order Backups</field>
+        <field name="res_model">pos.order.backup</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_last_7_days': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No order backups yet
+            </p>
+            <p>
+                Order backups are automatically created from POS when orders are validated.
+                Use this to recover missing orders or verify backup integrity.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_pos_order_backup_root"
+              name="Order Backups"
+              parent="point_of_sale.menu_point_root"
+              sequence="99"/>
+    
+    <menuitem id="menu_pos_order_backup"
+              name="All Backups"
+              parent="menu_pos_order_backup_root"
+              action="action_pos_order_backup"
+              sequence="1"/>
+
+    <!-- Batch Import Wizard View -->
+    <record id="view_pos_order_backup_import_wizard_form" model="ir.ui.view">
+        <field name="name">pos.order.backup.import.wizard.form</field>
+        <field name="model">pos.order.backup.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Batch Import Order Backups">
+                <group invisible="context.get('show_results', False)">
+                    <group string="Filter Options">
+                        <field name="filter_type" widget="radio"/>
+                        <field name="session_id" invisible="filter_type != 'by_session'"
+                               required="filter_type == 'by_session'"/>
+                        <field name="date_from" invisible="filter_type != 'by_date'"/>
+                        <field name="date_to" invisible="filter_type != 'by_date'"/>
+                        <field name="backup_ids" widget="many2many_tags"
+                               invisible="filter_type != 'selected'"/>
+                    </group>
+                    <group string="Options">
+                        <field name="only_missing"/>
+                        <field name="backup_count" readonly="1"/>
+                    </group>
+                </group>
+                
+                <group invisible="not context.get('show_results', False)">
+                    <field name="result_message" nolabel="1"/>
+                </group>
+                
+                <footer>
+                    <button string="Preview" name="action_preview_backups" 
+                            type="object" class="btn-secondary"
+                            invisible="context.get('show_results', False)"/>
+                    <button string="Import Orders" name="action_import_backups" 
+                            type="object" class="btn-primary"
+                            invisible="context.get('show_results', False)"/>
+                    <button string="Close" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Batch Import Action -->
+    <record id="action_pos_order_backup_import" model="ir.actions.act_window">
+        <field name="name">Batch Import Orders</field>
+        <field name="res_model">pos.order.backup.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_pos_order_backup"/>
+        <field name="binding_view_types">list</field>
+    </record>
+
+    <!-- Cleanup Wizard View -->
+    <record id="view_pos_order_backup_cleanup_wizard_form" model="ir.ui.view">
+        <field name="name">pos.order.backup.cleanup.wizard.form</field>
+        <field name="model">pos.order.backup.cleanup.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Cleanup Old Backups">
+                <group>
+                    <group string="Retention Policy">
+                        <field name="retention_days"/>
+                        <field name="preview_count" readonly="1"/>
+                    </group>
+                    <group string="States to Clean">
+                        <field name="cleanup_verified"/>
+                        <field name="cleanup_imported"/>
+                        <field name="cleanup_duplicate"/>
+                        <field name="cleanup_error"/>
+                    </group>
+                </group>
+                
+                <footer>
+                    <button string="Preview" name="action_preview_cleanup" 
+                            type="object" class="btn-secondary"/>
+                    <button string="Delete Old Backups" name="action_cleanup" 
+                            type="object" class="btn-danger"
+                            confirm="This will permanently delete old backup records. Continue?"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Cleanup Action -->
+    <record id="action_pos_order_backup_cleanup" model="ir.actions.act_window">
+        <field name="name">Cleanup Old Backups</field>
+        <field name="res_model">pos.order.backup.cleanup.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Cleanup Menu -->
+    <menuitem id="menu_pos_order_backup_cleanup"
+              name="Cleanup Old Backups"
+              parent="menu_pos_order_backup_root"
+              action="action_pos_order_backup_cleanup"
+              sequence="10"/>
+</odoo>

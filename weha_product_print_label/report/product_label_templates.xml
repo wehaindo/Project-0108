@@ -1,334 +1,602 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Professional Product Label 2x7 Template -->
+    <!-- Simple Label Template for 2x7 (Table Cell Format - Without Logo) -->
+    <template id="report_simple_label_2x7">
+        <t t-set="table_style" t-value="'width:97mm;height:36mm;' + table_style"/>
+        <td t-att-style="make_invisible and 'visibility:hidden;'">
+            <div class="o_label_full" t-att-style="table_style" style="text-align: center; padding: 2mm; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
+                <div class="o_label_name" style="font-size: 11pt; font-weight: normal; margin-bottom: 2mm; margin-top: 1mm; text-align: center;">
+                    <span t-field="product.display_name"/>
+                </div>
+                <div style="font-size: 24pt; font-weight: bold; margin-bottom: 2mm; text-align: center; line-height: 1.2;">
+                    <strong t-out="pricelist._get_product_price(product, 1, currency=pricelist.currency_id or product.currency_id)"
+                            t-options="{'widget': 'monetary', 'display_currency': pricelist.currency_id or product.currency_id}"/>
+                </div>
+                <t t-if="barcode">
+                    <t t-set="barcode_img" t-value="generate_barcode(barcode, width=400, height=60)"/>
+                    <div t-if="barcode_img" style="text-align: center; margin: 1mm 0; width: 100%;">
+                        <img t-att-src="barcode_img" style="width: 95%; max-width: 95%; height: 10mm;" alt="Barcode"/>
+                    </div>
+                    <div style="font-size: 7pt; text-align: center; font-family: monospace; margin-top: 0.5mm;">
+                        <span t-out="barcode"/>
+                    </div>
+                </t>
+            </div>
+        </td>
+    </template>
+
+    <!-- Simple Label Template for 3x7 (Table Cell Format - Without Logo) -->
+    <template id="report_simple_label_3x7">
+        <t t-set="table_style" t-value="'width:63mm;height:36mm;' + table_style"/>
+        <td t-att-style="make_invisible and 'visibility:hidden;'">
+            <div class="o_label_full" t-att-style="table_style" style="text-align: center; padding: 1.5mm; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
+                <div class="o_label_name" style="font-size: 9pt; font-weight: normal; margin-bottom: 1.5mm; margin-top: 3mm; text-align: center;">
+                    <span t-field="product.display_name"/>
+                </div>
+                <div style="font-size: 18pt; font-weight: bold; margin-bottom: 1.5mm; text-align: center; line-height: 1.2;">
+                    <strong>
+                        Rp <span t-out="int(pricelist._get_product_price(product, 1, currency=pricelist.currency_id or product.currency_id))"/>
+                    </strong>
+                </div>
+                <t t-if="barcode">
+                    <t t-set="barcode_img" t-value="generate_barcode(barcode, width=320, height=50)"/>
+                    <div t-if="barcode_img" style="text-align: center; margin: 1mm 0; width: 100%;">
+                        <img t-att-src="barcode_img" style="width: 95%; max-width: 95%; height: 8mm;" alt="Barcode"/>
+                    </div>
+                    <div style="font-size: 6pt; text-align: center; font-family: monospace; margin-top: 0.5mm;">
+                        <span t-out="barcode"/>
+                    </div>
+                </t>
+            </div>
+        </td>
+    </template>
+
+    <!-- Simple Label Template for 4x7 (Table Cell Format - Without Logo) -->
+    <template id="report_simple_label_4x7">
+        <t t-set="table_style" t-value="'width:47mm;height:36mm;' + table_style"/>
+        <td t-att-style="make_invisible and 'visibility:hidden;'">
+            <div class="o_label_full" t-att-style="table_style" style="text-align: center; padding: 1mm; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
+                <div class="o_label_name" style="font-size: 7.5pt; font-weight: normal; margin-bottom: 1mm; margin-top: 0.8mm; text-align: center;">
+                    <span t-field="product.display_name"/>
+                </div>
+                <div style="font-size: 14pt; font-weight: bold; margin-bottom: 1mm; text-align: center; line-height: 1.2;">
+                    <strong t-out="pricelist._get_product_price(product, 1, currency=pricelist.currency_id or product.currency_id)"
+                            t-options="{'widget': 'monetary', 'display_currency': pricelist.currency_id or product.currency_id}"/>
+                </div>
+                <t t-if="barcode">
+                    <t t-set="barcode_img" t-value="generate_barcode(barcode, width=240, height=42)"/>
+                    <div t-if="barcode_img" style="text-align: center; margin: 0.8mm 0; width: 100%;">
+                        <img t-att-src="barcode_img" style="width: 95%; max-width: 95%; height: 7mm;" alt="Barcode"/>
+                    </div>
+                    <div style="font-size: 5.5pt; text-align: center; font-family: monospace; margin-top: 0.4mm;">
+                        <span t-out="barcode"/>
+                    </div>
+                </t>
+            </div>
+        </td>
+    </template>
+
+    <!-- Simple Label Template for 4x12 (Table Cell Format - Without Logo) -->
+    <template id="report_simple_label_4x12">
+        <t t-set="table_style" t-value="'width:43mm;height:19mm;' + table_style"/>
+        <td t-att-style="make_invisible and 'visibility:hidden;'">
+            <div class="o_label_full" t-att-style="table_style" style="text-align: center; padding: 0.8mm; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
+                <div class="o_label_name" style="font-size: 6.5pt; font-weight: normal; margin-bottom: 0.5mm; margin-top: 0.5mm; text-align: center;">
+                    <span t-field="product.display_name"/>
+                </div>
+                <div style="font-size: 11pt; font-weight: bold; margin-bottom: 0.5mm; text-align: center; line-height: 1.2;">
+                    <strong t-out="pricelist._get_product_price(product, 1, currency=pricelist.currency_id or product.currency_id)"
+                            t-options="{'widget': 'monetary', 'display_currency': pricelist.currency_id or product.currency_id}"/>
+                </div>
+                <t t-if="barcode">
+                    <t t-set="barcode_img" t-value="generate_barcode(barcode, width=220, height=35)"/>
+                    <div t-if="barcode_img" style="text-align: center; margin: 0.4mm 0; width: 100%;">
+                        <img t-att-src="barcode_img" style="width: 95%; max-width: 95%; height: 5mm;" alt="Barcode"/>
+                    </div>
+                    <div style="font-size: 4.5pt; text-align: center; font-family: monospace; margin-top: 0.3mm;">
+                        <span t-out="barcode"/>
+                    </div>
+                </t>
+            </div>
+        </td>
+    </template>
+
+    <!-- Main Report Template Wrapper (Standard Odoo Pattern) -->
     <template id="label_2x7">
-        <t t-call="web.basic_layout">
-            <div class="page" style="font-size: 0;">
-                <style>
-                    .label-2x7 { width: 49%; height: 38mm; padding: 2mm; border: 1pt solid #000; box-sizing: border-box; display: inline-block; vertical-align: top; page-break-inside: avoid; text-align: center; font-size: 12pt; margin: 1mm; overflow: hidden; }
-                    .label-name { font-size: 16pt; font-weight: bold; line-height: 1.2; margin-bottom: 2mm; text-align: center; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-height: 40pt; }
-                    .label-price { font-size: 22pt; font-weight: bold; text-align: center; color: #000; margin-bottom: 2mm; padding: 1.5mm 3mm; display: inline-block; }
-                    .label-barcode { text-align: center; margin: 1mm 0; }
-                    .label-barcode-num { font-size: 10pt; text-align: center; font-family: monospace; margin-top: 0.5mm; color: #333; font-weight: 600; }
-                </style>
-                <t t-foreach="quantity" t-as="product">
-                    <t t-foreach="quantity[product]" t-as="barcode_qty">
-                        <t t-set="barcode_value" t-value="barcode_qty[0]"/>
-                        <t t-set="qty" t-value="barcode_qty[1]"/>
-                        <t t-foreach="range(int(qty))" t-as="item">
-                            <div class="label-2x7">
-                                <div class="label-name" t-esc="product.name if product.name else ''"/>
-                                <div class="label-price">
-                                    <span t-if="pricelist and pricelist.currency_id" t-esc="pricelist.currency_id.symbol or '$'"/>
-                                    <span t-elif="product.currency_id" t-esc="product.currency_id.symbol or '$'"/>
-                                    <span t-else="">$</span>
-                                    <span t-if="pricelist" t-esc="'%.0f' % pricelist._get_product_price(product, 1.0)"/>
-                                    <span t-else="" t-esc="'%.0f' % (product.lst_price or 0)"/>
-                                </div>
-                                <t t-if="barcode_value and barcode_value != 'False'">
-                                    <div class="label-barcode"><img t-att-src="'/report/barcode/Code128/%s?width=300&amp;height=50&amp;humanreadable=0' % barcode_value" style="max-width: 90%; height: 8mm;" alt="Barcode"/></div>
-                                    <div class="label-barcode-num" t-esc="barcode_value"/>
+        <t t-call="web.html_container">
+            <t t-set="padding_page" t-value="'padding: 14mm 3mm'"/>
+            <t t-set="report_to_call" t-value="'2x7'"/>
+            <t t-set="columns" t-value="2"/>
+            <t t-set="rows" t-value="7"/>
+            <t t-set="current_data" t-value="None"/>
+            <t t-set="current_quantity" t-value="0"/>
+            <t t-set="product" t-value="None"/>
+            <t t-set="barcode" t-value="None"/>
+            <!-- Loop to create multiple pages -->
+            <t t-foreach="range(page_numbers)" t-as="page_num">
+                <div class="page" t-att-style="padding_page">
+                    <table class="o_label_sheet" style="border-collapse: collapse; width: 100%;">
+                        <t t-foreach="range(rows)" t-as="row">
+                            <tr>
+                                <t t-foreach="range(columns)" t-as="column">
+                                    <t t-if="current_quantity &lt;= 0 and quantity and not (current_data and current_data[1])">
+                                        <t t-set="current_data" t-value="quantity.popitem()"/>
+                                        <t t-set="product" t-value="current_data[0]"/>
+                                        <t t-set="barcode_and_qty" t-value="current_data[1].pop()"/>
+                                        <t t-set="barcode" t-value="barcode_and_qty[0]"/>
+                                        <t t-set="current_quantity" t-value="barcode_and_qty[1]"/>
+                                    </t>
+                                    <t t-if="current_quantity &gt; 0">
+                                        <t t-set="make_invisible" t-value="False"/>
+                                        <t t-set="current_quantity" t-value="current_quantity - 1"/>
+                                    </t>
+                                    <t t-elif="current_data and current_data[1]">
+                                        <t t-set="barcode_and_qty" t-value="current_data[1].pop()"/>
+                                        <t t-set="barcode" t-value="barcode_and_qty[0]"/>
+                                        <t t-set="current_quantity" t-value="barcode_and_qty[1] - 1"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-set="make_invisible" t-value="True"/>
+                                    </t>
+                                    <t t-set="table_style" t-value="'border: 1px solid black;'"/>
+                                    <t t-call="weha_product_print_label.report_simple_label_2x7"/>
                                 </t>
-                            </div>
+                            </tr>
                         </t>
-                    </t>
-                </t>
-            </div>
+                    </table>
+                </div>
+            </t>
         </t>
     </template>
 
-    <!-- Professional Product Label 3x7 Template -->
     <template id="label_3x7">
-        <t t-call="web.basic_layout">
-            <div class="page" style="font-size: 0;">
-                <style>
-                    .label-3x7 { width: 32%; height: 38mm; padding: 1.5mm; border: 1pt solid #000; box-sizing: border-box; display: inline-block; vertical-align: top; page-break-inside: avoid; text-align: center; font-size: 12pt; margin: 1mm; overflow: hidden; }
-                    .label-name-3x7 { font-size: 12pt; font-weight: bold; line-height: 1.1; margin-bottom: 1.5mm; text-align: center; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-height: 28pt; }
-                    .label-price-3x7 { font-size: 18pt; font-weight: bold; text-align: center; color: #000; margin-bottom: 1.5mm; padding: 1.2mm 2.5mm; display: inline-block; }
-                    .label-barcode-3x7 { text-align: center; margin: 1mm 0; }
-                    .label-barcode-num-3x7 { font-size: 8pt; text-align: center; font-family: monospace; margin-top: 0.5mm; color: #333; font-weight: 600; }
-                </style>
-                <t t-foreach="quantity" t-as="product">
-                    <t t-foreach="quantity[product]" t-as="barcode_qty">
-                        <t t-set="barcode_value" t-value="barcode_qty[0]"/>
-                        <t t-set="qty" t-value="barcode_qty[1]"/>
-                        <t t-foreach="range(int(qty))" t-as="item">
-                            <div class="label-3x7">
-                                <div class="label-name-3x7" t-esc="product.name if product.name else ''"/>
-                                <div class="label-price-3x7">
-                                    <span t-if="pricelist and pricelist.currency_id" t-esc="pricelist.currency_id.symbol or '$'"/>
-                                    <span t-elif="product.currency_id" t-esc="product.currency_id.symbol or '$'"/>
-                                    <span t-else="">$</span>
-                                    <span t-if="pricelist" t-esc="'%.0f' % pricelist._get_product_price(product, 1.0)"/>
-                                    <span t-else="" t-esc="'%.0f' % (product.lst_price or 0)"/>
-                                </div>
-                                <t t-if="barcode_value and barcode_value != 'False'">
-                                    <div class="label-barcode-3x7"><img t-att-src="'/report/barcode/Code128/%s?width=250&amp;height=40&amp;humanreadable=0' % barcode_value" style="max-width: 90%; height: 6mm;" alt="Barcode"/></div>
-                                    <div class="label-barcode-num-3x7" t-esc="barcode_value"/>
+        <t t-call="web.html_container">
+            <t t-set="padding_page" t-value="'padding: 14mm 3mm'"/>
+            <t t-set="report_to_call" t-value="'3x7'"/>
+            <t t-set="columns" t-value="3"/>
+            <t t-set="rows" t-value="7"/>
+            <t t-set="current_data" t-value="None"/>
+            <t t-set="current_quantity" t-value="0"/>
+            <t t-set="product" t-value="None"/>
+            <t t-set="barcode" t-value="None"/>
+            <!-- Loop to create multiple pages -->
+            <t t-foreach="range(page_numbers)" t-as="page_num">
+                <div class="page" t-att-style="padding_page">
+                    <table class="o_label_sheet" style="border-collapse: collapse; width: 100%;">
+                        <t t-foreach="range(rows)" t-as="row">
+                            <tr>
+                                <t t-foreach="range(columns)" t-as="column">
+                                    <t t-if="current_quantity &lt;= 0 and quantity and not (current_data and current_data[1])">
+                                        <t t-set="current_data" t-value="quantity.popitem()"/>
+                                        <t t-set="product" t-value="current_data[0]"/>
+                                        <t t-set="barcode_and_qty" t-value="current_data[1].pop()"/>
+                                        <t t-set="barcode" t-value="barcode_and_qty[0]"/>
+                                        <t t-set="current_quantity" t-value="barcode_and_qty[1]"/>
+                                    </t>
+                                    <t t-if="current_quantity &gt; 0">
+                                        <t t-set="make_invisible" t-value="False"/>
+                                        <t t-set="current_quantity" t-value="current_quantity - 1"/>
+                                    </t>
+                                    <t t-elif="current_data and current_data[1]">
+                                        <t t-set="barcode_and_qty" t-value="current_data[1].pop()"/>
+                                        <t t-set="barcode" t-value="barcode_and_qty[0]"/>
+                                        <t t-set="current_quantity" t-value="barcode_and_qty[1] - 1"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-set="make_invisible" t-value="True"/>
+                                    </t>
+                                    <t t-set="table_style" t-value="'border: 1px solid black;'"/>
+                                    <t t-call="weha_product_print_label.report_simple_label_3x7"/>
                                 </t>
-                            </div>
+                            </tr>
                         </t>
-                    </t>
-                </t>
-            </div>
+                    </table>
+                </div>
+            </t>
         </t>
     </template>
 
-    <!-- Professional Product Label 4x7 Template -->
     <template id="label_4x7">
-        <t t-call="web.basic_layout">
-            <div class="page" style="font-size: 0;">
-                <style>
-                    .label-4x7 { width: 24%; height: 38mm; padding: 1.2mm; border: 1pt solid #000; box-sizing: border-box; display: inline-block; vertical-align: top; page-break-inside: avoid; text-align: center; font-size: 12pt; margin: 1mm; overflow: hidden; }
-                    .label-name-4x7 { font-size: 10pt; font-weight: bold; line-height: 1.05; margin-bottom: 1.2mm; text-align: center; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-height: 22pt; }
-                    .label-price-4x7 { font-size: 14pt; font-weight: bold; text-align: center; color: #000; margin-bottom: 1.2mm; padding: 1mm 2mm; display: inline-block; }
-                    .label-barcode-4x7 { text-align: center; margin: 0.8mm 0; }
-                    .label-barcode-num-4x7 { font-size: 7.5pt; text-align: center; font-family: monospace; margin-top: 0.5mm; color: #333; font-weight: 600; }
-                </style>
-                <t t-foreach="quantity" t-as="product">
-                    <t t-foreach="quantity[product]" t-as="barcode_qty">
-                        <t t-set="barcode_value" t-value="barcode_qty[0]"/>
-                        <t t-set="qty" t-value="barcode_qty[1]"/>
-                        <t t-foreach="range(int(qty))" t-as="item">
-                            <div class="label-4x7">
-                                <div class="label-name-4x7" t-esc="product.name if product.name else ''"/>
-                                <div class="label-price-4x7">
-                                    <span t-if="pricelist and pricelist.currency_id" t-esc="pricelist.currency_id.symbol or '$'"/>
-                                    <span t-elif="product.currency_id" t-esc="product.currency_id.symbol or '$'"/>
-                                    <span t-else="">$</span>
-                                    <span t-if="pricelist" t-esc="'%.0f' % pricelist._get_product_price(product, 1.0)"/>
-                                    <span t-else="" t-esc="'%.0f' % (product.lst_price or 0)"/>
-                                </div>
-                                <t t-if="barcode_value and barcode_value != 'False'">
-                                    <div class="label-barcode-4x7"><img t-att-src="'/report/barcode/Code128/%s?width=200&amp;height=35&amp;humanreadable=0' % barcode_value" style="max-width: 90%; height: 5.5mm;" alt="Barcode"/></div>
-                                    <div class="label-barcode-num-4x7" t-esc="barcode_value"/>
+        <t t-call="web.html_container">
+            <t t-set="padding_page" t-value="'padding: 14mm 3mm'"/>
+            <t t-set="report_to_call" t-value="'4x7'"/>
+            <t t-set="columns" t-value="4"/>
+            <t t-set="rows" t-value="7"/>
+            <t t-set="current_data" t-value="None"/>
+            <t t-set="current_quantity" t-value="0"/>
+            <t t-set="product" t-value="None"/>
+            <t t-set="barcode" t-value="None"/>
+            <!-- Loop to create multiple pages -->
+            <t t-foreach="range(page_numbers)" t-as="page_num">
+                <div class="page" t-att-style="padding_page">
+                    <table class="o_label_sheet" style="border-collapse: collapse; width: 100%;">
+                        <t t-foreach="range(rows)" t-as="row">
+                            <tr>
+                                <t t-foreach="range(columns)" t-as="column">
+                                    <t t-if="current_quantity &lt;= 0 and quantity and not (current_data and current_data[1])">
+                                        <t t-set="current_data" t-value="quantity.popitem()"/>
+                                        <t t-set="product" t-value="current_data[0]"/>
+                                        <t t-set="barcode_and_qty" t-value="current_data[1].pop()"/>
+                                        <t t-set="barcode" t-value="barcode_and_qty[0]"/>
+                                        <t t-set="current_quantity" t-value="barcode_and_qty[1]"/>
+                                    </t>
+                                    <t t-if="current_quantity &gt; 0">
+                                        <t t-set="make_invisible" t-value="False"/>
+                                        <t t-set="current_quantity" t-value="current_quantity - 1"/>
+                                    </t>
+                                    <t t-elif="current_data and current_data[1]">
+                                        <t t-set="barcode_and_qty" t-value="current_data[1].pop()"/>
+                                        <t t-set="barcode" t-value="barcode_and_qty[0]"/>
+                                        <t t-set="current_quantity" t-value="barcode_and_qty[1] - 1"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-set="make_invisible" t-value="True"/>
+                                    </t>
+                                    <t t-set="table_style" t-value="'border: 1px solid black;'"/>
+                                    <t t-call="weha_product_print_label.report_simple_label_4x7"/>
                                 </t>
-                            </div>
+                            </tr>
                         </t>
-                    </t>
-                </t>
-            </div>
+                    </table>
+                </div>
+            </t>
         </t>
     </template>
 
-    <!-- Professional Product Label 4x12 Template -->
     <template id="label_4x12">
-        <t t-call="web.basic_layout">
-            <div class="page" style="font-size: 0;">
-                <style>
-                    .label-4x12 { width: 24%; height: 22mm; padding: 0.8mm; border: 1pt solid #000; box-sizing: border-box; display: inline-block; vertical-align: top; page-break-inside: avoid; text-align: center; font-size: 12pt; margin: 1mm; overflow: hidden; }
-                    .label-name-4x12 { font-size: 8pt; font-weight: bold; line-height: 0.95; margin-bottom: 0.6mm; text-align: center; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-height: 16pt; }
-                    .label-price-4x12 { font-size: 11pt; font-weight: bold; text-align: center; color: #000; margin-bottom: 0.6mm; padding: 0.7mm 1.8mm; display: inline-block; }
-                    .label-barcode-4x12 { text-align: center; margin: 0.4mm 0; }
-                    .label-barcode-num-4x12 { font-size: 6.5pt; text-align: center; font-family: monospace; margin-top: 0.4mm; color: #333; font-weight: 600; }
-                </style>
-                <t t-foreach="quantity" t-as="product">
-                    <t t-foreach="quantity[product]" t-as="barcode_qty">
-                        <t t-set="barcode_value" t-value="barcode_qty[0]"/>
-                        <t t-set="qty" t-value="barcode_qty[1]"/>
-                        <t t-foreach="range(int(qty))" t-as="item">
-                            <div class="label-4x12">
-                                <div class="label-name-4x12" t-esc="product.name if product.name else ''"/>
-                                <div class="label-price-4x12">
-                                    <span t-if="pricelist and pricelist.currency_id" t-esc="pricelist.currency_id.symbol or '$'"/>
-                                    <span t-elif="product.currency_id" t-esc="product.currency_id.symbol or '$'"/>
-                                    <span t-else="">$</span>
-                                    <span t-if="pricelist" t-esc="'%.0f' % pricelist._get_product_price(product, 1.0)"/>
-                                    <span t-else="" t-esc="'%.0f' % (product.lst_price or 0)"/>
-                                </div>
-                                <t t-if="barcode_value and barcode_value != 'False'">
-                                    <div class="label-barcode-4x12"><img t-att-src="'/report/barcode/Code128/%s?width=180&amp;height=30&amp;humanreadable=0' % barcode_value" style="max-width: 90%; height: 4mm;" alt="Barcode"/></div>
-                                    <div class="label-barcode-num-4x12" t-esc="barcode_value"/>
+        <t t-call="web.html_container">
+            <t t-set="padding_page" t-value="'padding: 20mm 4mm'"/>
+            <t t-set="report_to_call" t-value="'4x12'"/>
+            <t t-set="columns" t-value="4"/>
+            <t t-set="rows" t-value="12"/>
+            <t t-set="current_data" t-value="None"/>
+            <t t-set="current_quantity" t-value="0"/>
+            <t t-set="product" t-value="None"/>
+            <t t-set="barcode" t-value="None"/>
+            <!-- Loop to create multiple pages -->
+            <t t-foreach="range(page_numbers)" t-as="page_num">
+                <div class="page" t-att-style="padding_page">
+                    <table class="o_label_sheet" style="border-collapse: collapse; width: 100%;">
+                        <t t-foreach="range(rows)" t-as="row">
+                            <tr>
+                                <t t-foreach="range(columns)" t-as="column">
+                                    <t t-if="current_quantity &lt;= 0 and quantity and not (current_data and current_data[1])">
+                                        <t t-set="current_data" t-value="quantity.popitem()"/>
+                                        <t t-set="product" t-value="current_data[0]"/>
+                                        <t t-set="barcode_and_qty" t-value="current_data[1].pop()"/>
+                                        <t t-set="barcode" t-value="barcode_and_qty[0]"/>
+                                        <t t-set="current_quantity" t-value="barcode_and_qty[1]"/>
+                                    </t>
+                                    <t t-if="current_quantity &gt; 0">
+                                        <t t-set="make_invisible" t-value="False"/>
+                                        <t t-set="current_quantity" t-value="current_quantity - 1"/>
+                                    </t>
+                                    <t t-elif="current_data and current_data[1]">
+                                        <t t-set="barcode_and_qty" t-value="current_data[1].pop()"/>
+                                        <t t-set="barcode" t-value="barcode_and_qty[0]"/>
+                                        <t t-set="current_quantity" t-value="barcode_and_qty[1] - 1"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-set="make_invisible" t-value="True"/>
+                                    </t>
+                                    <t t-set="table_style" t-value="'border: 1px solid black;'"/>
+                                    <t t-call="weha_product_print_label.report_simple_label_4x12"/>
                                 </t>
-                            </div>
+                            </tr>
                         </t>
-                    </t>
-                </t>
-            </div>
+                    </table>
+                </div>
+            </t>
         </t>
     </template>
 
-    <!-- Product Label 2x7 with Logo Template -->
+    <!-- Simple Label Templates (Table Cell Format - WITH LOGO) -->
+    <template id="report_simple_label_2x7_logo">
+        <t t-set="table_style" t-value="'width:97mm;height:36mm;' + table_style"/>
+        <td t-att-style="make_invisible and 'visibility:hidden;'">
+            <div class="o_label_full" t-att-style="table_style" style="padding: 2mm; overflow: hidden;">
+                <div style="width: 30%; float: left; height: 33mm; display: flex; align-items: center; justify-content: center; padding-right: 1mm;">
+                    <img t-if="pricelist.env.company.logo" t-att-src="'data:image/png;base64,%s' % pricelist.env.company.logo.decode('utf-8')" style="max-width: 100%; max-height: 100%; object-fit: contain;" alt="Logo"/>
+                </div>
+                <div style="width: 70%; float: left; text-align: center; height: 33mm; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div style="font-size: 11pt; font-weight: bold; line-height: 1.1; margin-bottom: 1mm;">
+                        <strong t-field="product.display_name"/>
+                    </div>
+                    <div style="font-size: 16pt; font-weight: bold; margin-bottom: 1mm;">
+                        <strong t-out="pricelist._get_product_price(product, 1, currency=pricelist.currency_id or product.currency_id)"
+                                t-options="{'widget': 'monetary', 'display_currency': pricelist.currency_id or product.currency_id}"/>
+                    </div>
+                    <t t-if="barcode">
+                        <t t-set="barcode_img" t-value="generate_barcode(barcode, width=250, height=40)"/>
+                        <div t-if="barcode_img" style="text-align: center;">
+                            <img t-att-src="barcode_img" style="max-width: 95%; height: 7mm;" alt="Barcode"/>
+                            <div style="font-size: 8pt; font-family: monospace; margin-top: 0.3mm;">
+                                <span t-out="barcode"/>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+                <div style="clear: both;"/>
+            </div>
+        </td>
+    </template>
+
+    <template id="report_simple_label_3x7_logo">
+        <t t-set="table_style" t-value="'width:63mm;height:36mm;' + table_style"/>
+        <td t-att-style="make_invisible and 'visibility:hidden;'">
+            <div class="o_label_full" t-att-style="table_style" style="padding: 1.5mm; overflow: hidden;">
+                <div style="width: 30%; float: left; height: 34mm; display: flex; align-items: center; justify-content: center; padding-right: 0.8mm;">
+                    <img t-if="pricelist.env.company.logo" t-att-src="'data:image/png;base64,%s' % pricelist.env.company.logo.decode('utf-8')" style="max-width: 100%; max-height: 100%; object-fit: contain;" alt="Logo"/>
+                </div>
+                <div style="width: 70%; float: left; text-align: center; height: 34mm; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div style="font-size: 9pt; font-weight: bold; line-height: 1.0; margin-bottom: 0.8mm;">
+                        <strong t-field="product.display_name"/>
+                    </div>
+                    <div style="font-size: 13pt; font-weight: bold; margin-bottom: 0.8mm;">
+                        <strong t-out="pricelist._get_product_price(product, 1, currency=pricelist.currency_id or product.currency_id)"
+                                t-options="{'widget': 'monetary', 'display_currency': pricelist.currency_id or product.currency_id}"/>
+                    </div>
+                    <t t-if="barcode">
+                        <t t-set="barcode_img" t-value="generate_barcode(barcode, width=200, height=35)"/>
+                        <div t-if="barcode_img" style="text-align: center;">
+                            <img t-att-src="barcode_img" style="max-width: 95%; height: 5.5mm;" alt="Barcode"/>
+                            <div style="font-size: 7pt; font-family: monospace; margin-top: 0.3mm;">
+                                <span t-out="barcode"/>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+                <div style="clear: both;"/>
+            </div>
+        </td>
+    </template>
+
+    <template id="report_simple_label_4x7_logo">
+        <t t-set="table_style" t-value="'width:47mm;height:36mm;' + table_style"/>
+        <td t-att-style="make_invisible and 'visibility:hidden;'">
+            <div class="o_label_full" t-att-style="table_style" style="padding: 1mm; overflow: hidden;">
+                <div style="width: 30%; float: left; height: 35mm; display: flex; align-items: center; justify-content: center; padding-right: 0.5mm;">
+                    <img t-if="pricelist.env.company.logo" t-att-src="'data:image/png;base64,%s' % pricelist.env.company.logo.decode('utf-8')" style="max-width: 100%; max-height: 100%; object-fit: contain;" alt="Logo"/>
+                </div>
+                <div style="width: 70%; float: left; text-align: center; height: 35mm; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div style="font-size: 7.5pt; font-weight: bold; line-height: 0.95; margin-bottom: 0.6mm;">
+                        <strong t-field="product.display_name"/>
+                    </div>
+                    <div style="font-size: 11pt; font-weight: bold; margin-bottom: 0.6mm;">
+                        <strong t-out="pricelist._get_product_price(product, 1, currency=pricelist.currency_id or product.currency_id)"
+                                t-options="{'widget': 'monetary', 'display_currency': pricelist.currency_id or product.currency_id}"/>
+                    </div>
+                    <t t-if="barcode">
+                        <t t-set="barcode_img" t-value="generate_barcode(barcode, width=180, height=30)"/>
+                        <div t-if="barcode_img" style="text-align: center;">
+                            <img t-att-src="barcode_img" style="max-width: 95%; height: 4.5mm;" alt="Barcode"/>
+                            <div style="font-size: 6pt; font-family: monospace; margin-top: 0.2mm;">
+                                <span t-out="barcode"/>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+                <div style="clear: both;"/>
+            </div>
+        </td>
+    </template>
+
+    <template id="report_simple_label_4x12_logo">
+        <t t-set="table_style" t-value="'width:43mm;height:19mm;' + table_style"/>
+        <td t-att-style="make_invisible and 'visibility:hidden;'">
+            <div class="o_label_full" t-att-style="table_style" style="padding: 0.8mm; overflow: hidden;">
+                <div style="width: 30%; float: left; height: 17.4mm; display: flex; align-items: center; justify-content: center; padding-right: 0.4mm;">
+                    <img t-if="pricelist.env.company.logo" t-att-src="'data:image/png;base64,%s' % pricelist.env.company.logo.decode('utf-8')" style="max-width: 100%; max-height: 100%; object-fit: contain;" alt="Logo"/>
+                </div>
+                <div style="width: 70%; float: left; text-align: center; height: 17.4mm; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div style="font-size: 6.5pt; font-weight: bold; line-height: 0.9; margin-bottom: 0.4mm;">
+                        <strong t-field="product.display_name"/>
+                    </div>
+                    <div style="font-size: 9pt; font-weight: bold; margin-bottom: 0.4mm;">
+                        <strong t-out="pricelist._get_product_price(product, 1, currency=pricelist.currency_id or product.currency_id)"
+                                t-options="{'widget': 'monetary', 'display_currency': pricelist.currency_id or product.currency_id}"/>
+                    </div>
+                    <t t-if="barcode">
+                        <t t-set="barcode_img" t-value="generate_barcode(barcode, width=160, height=25)"/>
+                        <div t-if="barcode_img" style="text-align: center;">
+                            <img t-att-src="barcode_img" style="max-width: 95%; height: 3.5mm;" alt="Barcode"/>
+                            <div style="font-size: 5pt; font-family: monospace; margin-top: 0.2mm;">
+                                <span t-out="barcode"/>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+                <div style="clear: both;"/>
+            </div>
+        </td>
+    </template>
+
+    <!-- Main Report Template Wrappers WITH LOGO -->
     <template id="label_2x7_logo">
-        <t t-call="web.basic_layout">
-            <div class="page" style="font-size: 0;">
-                <style>
-                    .label-2x7-logo { width: 49%; height: 38mm; padding: 2mm; border: 1pt solid #000; box-sizing: border-box; display: inline-block; vertical-align: top; page-break-inside: avoid; font-size: 12pt; margin: 1mm; overflow: hidden; }
-                    .label-logo { width: 35%; float: left; height: 34mm; display: flex; align-items: center; justify-content: center; }
-                    .label-logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
-                    .label-content { width: 65%; float: right; text-align: center; padding-left: 2mm; }
-                    .label-name-logo { font-size: 14pt; font-weight: bold; line-height: 1.1; margin-bottom: 1.5mm; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-height: 32pt; }
-                    .label-price-logo { font-size: 18pt; font-weight: bold; color: #000; margin-bottom: 1.5mm; padding: 1.2mm 2.5mm; display: inline-block; }
-                    .label-barcode-logo { text-align: center; margin: 1mm 0; }
-                    .label-barcode-num-logo { font-size: 9pt; text-align: center; font-family: monospace; margin-top: 0.5mm; color: #333; font-weight: 600; }
-                </style>
-                <t t-foreach="quantity" t-as="product">
-                    <t t-foreach="quantity[product]" t-as="barcode_qty">
-                        <t t-set="barcode_value" t-value="barcode_qty[0]"/>
-                        <t t-set="qty" t-value="barcode_qty[1]"/>
-                        <t t-foreach="range(int(qty))" t-as="item">
-                            <div class="label-2x7-logo">
-                                <div class="label-logo">
-                                    <img t-if="env.company.logo" t-att-src="'data:image/png;base64,%s' % env.company.logo.decode('utf-8')" alt="Company Logo"/>
-                                </div>
-                                <div class="label-content">
-                                    <div class="label-name-logo" t-esc="product.name if product.name else ''"/>
-                                    <div class="label-price-logo">
-                                        <span t-if="pricelist and pricelist.currency_id" t-esc="pricelist.currency_id.symbol or '$'"/>
-                                        <span t-elif="product.currency_id" t-esc="product.currency_id.symbol or '$'"/>
-                                        <span t-else="">$</span>
-                                        <span t-if="pricelist" t-esc="'%.0f' % pricelist._get_product_price(product, 1.0)"/>
-                                        <span t-else="" t-esc="'%.0f' % (product.lst_price or 0)"/>
-                                    </div>
-                                    <t t-if="barcode_value and barcode_value != 'False'">
-                                        <div class="label-barcode-logo"><img t-att-src="'/report/barcode/Code128/%s?width=250&amp;height=40&amp;humanreadable=0' % barcode_value" style="max-width: 95%; height: 7mm;" alt="Barcode"/></div>
-                                        <div class="label-barcode-num-logo" t-esc="barcode_value"/>
+        <t t-call="web.html_container">
+            <t t-set="padding_page" t-value="'padding: 14mm 3mm'"/>
+            <t t-set="report_to_call" t-value="'2x7_logo'"/>
+            <t t-set="columns" t-value="2"/>
+            <t t-set="rows" t-value="7"/>
+            <t t-set="current_data" t-value="None"/>
+            <t t-set="current_quantity" t-value="0"/>
+            <t t-set="product" t-value="None"/>
+            <t t-set="barcode" t-value="None"/>
+            <!-- Loop to create multiple pages -->
+            <t t-foreach="range(page_numbers)" t-as="page_num">
+                <div class="page" t-att-style="padding_page">
+                    <table class="o_label_sheet" style="border-collapse: collapse; width: 100%;">
+                        <t t-foreach="range(rows)" t-as="row">
+                            <tr>
+                                <t t-foreach="range(columns)" t-as="column">
+                                    <t t-if="current_quantity &lt;= 0 and quantity and not (current_data and current_data[1])">
+                                        <t t-set="current_data" t-value="quantity.popitem()"/>
+                                        <t t-set="product" t-value="current_data[0]"/>
+                                        <t t-set="barcode_and_qty" t-value="current_data[1].pop()"/>
+                                        <t t-set="barcode" t-value="barcode_and_qty[0]"/>
+                                        <t t-set="current_quantity" t-value="barcode_and_qty[1]"/>
                                     </t>
-                                </div>
-                                <div style="clear: both;"/>
-                            </div>
+                                    <t t-if="current_quantity &gt; 0">
+                                        <t t-set="make_invisible" t-value="False"/>
+                                        <t t-set="current_quantity" t-value="current_quantity - 1"/>
+                                    </t>
+                                    <t t-elif="current_data and current_data[1]">
+                                        <t t-set="barcode_and_qty" t-value="current_data[1].pop()"/>
+                                        <t t-set="barcode" t-value="barcode_and_qty[0]"/>
+                                        <t t-set="current_quantity" t-value="barcode_and_qty[1] - 1"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-set="make_invisible" t-value="True"/>
+                                    </t>
+                                    <t t-set="table_style" t-value="'border: 1px solid black;'"/>
+                                    <t t-call="weha_product_print_label.report_simple_label_2x7_logo"/>
+                                </t>
+                            </tr>
                         </t>
-                    </t>
-                </t>
-            </div>
+                    </table>
+                </div>
+            </t>
         </t>
     </template>
 
-    <!-- Product Label 3x7 with Logo Template -->
     <template id="label_3x7_logo">
-        <t t-call="web.basic_layout">
-            <div class="page" style="font-size: 0;">
-                <style>
-                    .label-3x7-logo { width: 32%; height: 38mm; padding: 1.5mm; border: 1pt solid #000; box-sizing: border-box; display: inline-block; vertical-align: top; page-break-inside: avoid; font-size: 12pt; margin: 1mm; overflow: hidden; }
-                    .label-logo-3x7 { width: 35%; float: left; height: 35mm; display: flex; align-items: center; justify-content: center; }
-                    .label-logo-3x7 img { max-width: 100%; max-height: 100%; object-fit: contain; }
-                    .label-content-3x7 { width: 65%; float: right; text-align: center; padding-left: 1mm; }
-                    .label-name-logo-3x7 { font-size: 10pt; font-weight: bold; line-height: 1.05; margin-bottom: 1mm; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-height: 22pt; }
-                    .label-price-logo-3x7 { font-size: 15pt; font-weight: bold; color: #000; margin-bottom: 1mm; padding: 1mm 2mm; display: inline-block; }
-                    .label-barcode-logo-3x7 { text-align: center; margin: 0.8mm 0; }
-                    .label-barcode-num-logo-3x7 { font-size: 7.5pt; text-align: center; font-family: monospace; margin-top: 0.4mm; color: #333; font-weight: 600; }
-                </style>
-                <t t-foreach="quantity" t-as="product">
-                    <t t-foreach="quantity[product]" t-as="barcode_qty">
-                        <t t-set="barcode_value" t-value="barcode_qty[0]"/>
-                        <t t-set="qty" t-value="barcode_qty[1]"/>
-                        <t t-foreach="range(int(qty))" t-as="item">
-                            <div class="label-3x7-logo">
-                                <div class="label-logo-3x7">
-                                    <img t-if="env.company.logo" t-att-src="'data:image/png;base64,%s' % env.company.logo.decode('utf-8')" alt="Company Logo"/>
-                                </div>
-                                <div class="label-content-3x7">
-                                    <div class="label-name-logo-3x7" t-esc="product.name if product.name else ''"/>
-                                    <div class="label-price-logo-3x7">
-                                        <span t-if="pricelist and pricelist.currency_id" t-esc="pricelist.currency_id.symbol or '$'"/>
-                                        <span t-elif="product.currency_id" t-esc="product.currency_id.symbol or '$'"/>
-                                        <span t-else="">$</span>
-                                        <span t-if="pricelist" t-esc="'%.0f' % pricelist._get_product_price(product, 1.0)"/>
-                                        <span t-else="" t-esc="'%.0f' % (product.list_price or 0)"/>
-                                    </div>
-                                    <t t-if="barcode_value and barcode_value != 'False'">
-                                        <div class="label-barcode-logo-3x7"><img t-att-src="'/report/barcode/Code128/%s?width=200&amp;height=35&amp;humanreadable=0' % barcode_value" style="max-width: 95%; height: 5mm;" alt="Barcode"/></div>
-                                        <div class="label-barcode-num-logo-3x7" t-esc="barcode_value"/>
+        <t t-call="web.html_container">
+            <t t-set="padding_page" t-value="'padding: 14mm 3mm'"/>
+            <t t-set="report_to_call" t-value="'3x7_logo'"/>
+            <t t-set="columns" t-value="3"/>
+            <t t-set="rows" t-value="7"/>
+            <t t-set="current_data" t-value="None"/>
+            <t t-set="current_quantity" t-value="0"/>
+            <t t-set="product" t-value="None"/>
+            <t t-set="barcode" t-value="None"/>
+            <!-- Loop to create multiple pages -->
+            <t t-foreach="range(page_numbers)" t-as="page_num">
+                <div class="page" t-att-style="padding_page">
+                    <table class="o_label_sheet" style="border-collapse: collapse; width: 100%;">
+                        <t t-foreach="range(rows)" t-as="row">
+                            <tr>
+                                <t t-foreach="range(columns)" t-as="column">
+                                    <t t-if="current_quantity &lt;= 0 and quantity and not (current_data and current_data[1])">
+                                        <t t-set="current_data" t-value="quantity.popitem()"/>
+                                        <t t-set="product" t-value="current_data[0]"/>
+                                        <t t-set="barcode_and_qty" t-value="current_data[1].pop()"/>
+                                        <t t-set="barcode" t-value="barcode_and_qty[0]"/>
+                                        <t t-set="current_quantity" t-value="barcode_and_qty[1]"/>
                                     </t>
-                                </div>
-                                <div style="clear: both;"/>
-                            </div>
+                                    <t t-if="current_quantity &gt; 0">
+                                        <t t-set="make_invisible" t-value="False"/>
+                                        <t t-set="current_quantity" t-value="current_quantity - 1"/>
+                                    </t>
+                                    <t t-elif="current_data and current_data[1]">
+                                        <t t-set="barcode_and_qty" t-value="current_data[1].pop()"/>
+                                        <t t-set="barcode" t-value="barcode_and_qty[0]"/>
+                                        <t t-set="current_quantity" t-value="barcode_and_qty[1] - 1"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-set="make_invisible" t-value="True"/>
+                                    </t>
+                                    <t t-set="table_style" t-value="'border: 1px solid black;'"/>
+                                    <t t-call="weha_product_print_label.report_simple_label_3x7_logo"/>
+                                </t>
+                            </tr>
                         </t>
-                    </t>
-                </t>
-            </div>
+                    </table>
+                </div>
+            </t>
         </t>
     </template>
 
-    <!-- Product Label 4x7 with Logo Template -->
     <template id="label_4x7_logo">
-        <t t-call="web.basic_layout">
-            <div class="page" style="font-size: 0;">
-                <style>
-                    .label-4x7-logo { width: 24%; height: 38mm; padding: 1mm; border: 1pt solid #000; box-sizing: border-box; display: inline-block; vertical-align: top; page-break-inside: avoid; font-size: 12pt; margin: 1mm; overflow: hidden; }
-                    .label-logo-4x7 { width: 35%; float: left; height: 36mm; display: flex; align-items: center; justify-content: center; }
-                    .label-logo-4x7 img { max-width: 100%; max-height: 100%; object-fit: contain; }
-                    .label-content-4x7 { width: 65%; float: right; text-align: center; padding-left: 0.8mm; }
-                    .label-name-logo-4x7 { font-size: 8.5pt; font-weight: bold; line-height: 1.0; margin-bottom: 0.8mm; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-height: 18pt; }
-                    .label-price-logo-4x7 { font-size: 12pt; font-weight: bold; color: #000; margin-bottom: 0.8mm; padding: 0.8mm 1.8mm; display: inline-block; }
-                    .label-barcode-logo-4x7 { text-align: center; margin: 0.6mm 0; }
-                    .label-barcode-num-logo-4x7 { font-size: 6.5pt; text-align: center; font-family: monospace; margin-top: 0.3mm; color: #333; font-weight: 600; }
-                </style>
-                <t t-foreach="quantity" t-as="product">
-                    <t t-foreach="quantity[product]" t-as="barcode_qty">
-                        <t t-set="barcode_value" t-value="barcode_qty[0]"/>
-                        <t t-set="qty" t-value="barcode_qty[1]"/>
-                        <t t-foreach="range(int(qty))" t-as="item">
-                            <div class="label-4x7-logo">
-                                <div class="label-logo-4x7">
-                                    <img t-if="env.company.logo" t-att-src="'data:image/png;base64,%s' % env.company.logo.decode('utf-8')" alt="Company Logo"/>
-                                </div>
-                                <div class="label-content-4x7">
-                                    <div class="label-name-logo-4x7" t-esc="product.name if product.name else ''"/>
-                                    <div class="label-price-logo-4x7">
-                                        <span t-if="pricelist and pricelist.currency_id" t-esc="pricelist.currency_id.symbol or '$'"/>
-                                        <span t-elif="product.currency_id" t-esc="product.currency_id.symbol or '$'"/>
-                                        <span t-else="">$</span>
-                                        <span t-if="pricelist" t-esc="'%.0f' % pricelist._get_product_price(product, 1.0)"/>
-                                        <span t-else="" t-esc="'%.0f' % (product.list_price or 0)"/>
-                                    </div>
-                                    <t t-if="barcode_value and barcode_value != 'False'">
-                                        <div class="label-barcode-logo-4x7"><img t-att-src="'/report/barcode/Code128/%s?width=180&amp;height=30&amp;humanreadable=0' % barcode_value" style="max-width: 95%; height: 4.5mm;" alt="Barcode"/></div>
-                                        <div class="label-barcode-num-logo-4x7" t-esc="barcode_value"/>
+        <t t-call="web.html_container">
+            <t t-set="padding_page" t-value="'padding: 14mm 3mm'"/>
+            <t t-set="report_to_call" t-value="'4x7_logo'"/>
+            <t t-set="columns" t-value="4"/>
+            <t t-set="rows" t-value="7"/>
+            <t t-set="current_data" t-value="None"/>
+            <t t-set="current_quantity" t-value="0"/>
+            <t t-set="product" t-value="None"/>
+            <t t-set="barcode" t-value="None"/>
+            <!-- Loop to create multiple pages -->
+            <t t-foreach="range(page_numbers)" t-as="page_num">
+                <div class="page" t-att-style="padding_page">
+                    <table class="o_label_sheet" style="border-collapse: collapse; width: 100%;">
+                        <t t-foreach="range(rows)" t-as="row">
+                            <tr>
+                                <t t-foreach="range(columns)" t-as="column">
+                                    <t t-if="current_quantity &lt;= 0 and quantity and not (current_data and current_data[1])">
+                                        <t t-set="current_data" t-value="quantity.popitem()"/>
+                                        <t t-set="product" t-value="current_data[0]"/>
+                                        <t t-set="barcode_and_qty" t-value="current_data[1].pop()"/>
+                                        <t t-set="barcode" t-value="barcode_and_qty[0]"/>
+                                        <t t-set="current_quantity" t-value="barcode_and_qty[1]"/>
                                     </t>
-                                </div>
-                                <div style="clear: both;"/>
-                            </div>
+                                    <t t-if="current_quantity &gt; 0">
+                                        <t t-set="make_invisible" t-value="False"/>
+                                        <t t-set="current_quantity" t-value="current_quantity - 1"/>
+                                    </t>
+                                    <t t-elif="current_data and current_data[1]">
+                                        <t t-set="barcode_and_qty" t-value="current_data[1].pop()"/>
+                                        <t t-set="barcode" t-value="barcode_and_qty[0]"/>
+                                        <t t-set="current_quantity" t-value="barcode_and_qty[1] - 1"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-set="make_invisible" t-value="True"/>
+                                    </t>
+                                    <t t-set="table_style" t-value="'border: 1px solid black;'"/>
+                                    <t t-call="weha_product_print_label.report_simple_label_4x7_logo"/>
+                                </t>
+                            </tr>
                         </t>
-                    </t>
-                </t>
-            </div>
+                    </table>
+                </div>
+            </t>
         </t>
     </template>
 
-    <!-- Product Label 4x12 with Logo Template -->
     <template id="label_4x12_logo">
-        <t t-call="web.basic_layout">
-            <div class="page" style="font-size: 0;">
-                <style>
-                    .label-4x12-logo { width: 24%; height: 22mm; padding: 0.8mm; border: 1pt solid #000; box-sizing: border-box; display: inline-block; vertical-align: top; page-break-inside: avoid; font-size: 12pt; margin: 1mm; overflow: hidden; }
-                    .label-logo-4x12 { width: 35%; float: left; height: 20.4mm; display: flex; align-items: center; justify-content: center; }
-                    .label-logo-4x12 img { max-width: 100%; max-height: 100%; object-fit: contain; }
-                    .label-content-4x12 { width: 65%; float: right; text-align: center; padding-left: 0.5mm; }
-                    .label-name-logo-4x12 { font-size: 7pt; font-weight: bold; line-height: 0.95; margin-bottom: 0.5mm; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-height: 14pt; }
-                    .label-price-logo-4x12 { font-size: 9.5pt; font-weight: bold; color: #000; margin-bottom: 0.5mm; padding: 0.6mm 1.5mm; display: inline-block; }
-                    .label-barcode-logo-4x12 { text-align: center; margin: 0.4mm 0; }
-                    .label-barcode-num-logo-4x12 { font-size: 5.5pt; text-align: center; font-family: monospace; margin-top: 0.3mm; color: #333; font-weight: 600; }
-                </style>
-                <t t-foreach="quantity" t-as="product">
-                    <t t-foreach="quantity[product]" t-as="barcode_qty">
-                        <t t-set="barcode_value" t-value="barcode_qty[0]"/>
-                        <t t-set="qty" t-value="barcode_qty[1]"/>
-                        <t t-foreach="range(int(qty))" t-as="item">
-                            <div class="label-4x12-logo">
-                                <div class="label-logo-4x12">
-                                    <img t-if="env.company.logo" t-att-src="'data:image/png;base64,%s' % env.company.logo.decode('utf-8')" alt="Company Logo"/>
-                                </div>
-                                <div class="label-content-4x12">
-                                    <div class="label-name-logo-4x12" t-esc="product.name if product.name else ''"/>
-                                    <div class="label-price-logo-4x12">
-                                        <span t-if="pricelist and pricelist.currency_id" t-esc="pricelist.currency_id.symbol or '$'"/>
-                                        <span t-elif="product.currency_id" t-esc="product.currency_id.symbol or '$'"/>
-                                        <span t-else="">$</span>
-                                        <span t-if="pricelist" t-esc="'%.0f' % pricelist._get_product_price(product, 1.0)"/>
-                                        <span t-else="" t-esc="'%.0f' % (product.list_price or 0)"/>
-                                    </div>
-                                    <t t-if="barcode_value and barcode_value != 'False'">
-                                        <div class="label-barcode-logo-4x12"><img t-att-src="'/report/barcode/Code128/%s?width=160&amp;height=28&amp;humanreadable=0' % barcode_value" style="max-width: 95%; height: 3.5mm;" alt="Barcode"/></div>
-                                        <div class="label-barcode-num-logo-4x12" t-esc="barcode_value"/>
+        <t t-call="web.html_container">
+            <t t-set="padding_page" t-value="'padding: 20mm 4mm'"/>
+            <t t-set="report_to_call" t-value="'4x12_logo'"/>
+            <t t-set="columns" t-value="4"/>
+            <t t-set="rows" t-value="12"/>
+            <t t-set="current_data" t-value="None"/>
+            <t t-set="current_quantity" t-value="0"/>
+            <t t-set="product" t-value="None"/>
+            <t t-set="barcode" t-value="None"/>
+            <!-- Loop to create multiple pages -->
+            <t t-foreach="range(page_numbers)" t-as="page_num">
+                <div class="page" t-att-style="padding_page">
+                    <table class="o_label_sheet" style="border-collapse: collapse; width: 100%;">
+                        <t t-foreach="range(rows)" t-as="row">
+                            <tr>
+                                <t t-foreach="range(columns)" t-as="column">
+                                    <t t-if="current_quantity &lt;= 0 and quantity and not (current_data and current_data[1])">
+                                        <t t-set="current_data" t-value="quantity.popitem()"/>
+                                        <t t-set="product" t-value="current_data[0]"/>
+                                        <t t-set="barcode_and_qty" t-value="current_data[1].pop()"/>
+                                        <t t-set="barcode" t-value="barcode_and_qty[0]"/>
+                                        <t t-set="current_quantity" t-value="barcode_and_qty[1]"/>
                                     </t>
-                                </div>
-                                <div style="clear: both;"/>
-                            </div>
+                                    <t t-if="current_quantity &gt; 0">
+                                        <t t-set="make_invisible" t-value="False"/>
+                                        <t t-set="current_quantity" t-value="current_quantity - 1"/>
+                                    </t>
+                                    <t t-elif="current_data and current_data[1]">
+                                        <t t-set="barcode_and_qty" t-value="current_data[1].pop()"/>
+                                        <t t-set="barcode" t-value="barcode_and_qty[0]"/>
+                                        <t t-set="current_quantity" t-value="barcode_and_qty[1] - 1"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-set="make_invisible" t-value="True"/>
+                                    </t>
+                                    <t t-set="table_style" t-value="'border: 1px solid black;'"/>
+                                    <t t-call="weha_product_print_label.report_simple_label_4x12_logo"/>
+                                </t>
+                            </tr>
                         </t>
-                    </t>
-                </t>
-            </div>
+                    </table>
+                </div>
+            </t>
         </t>
     </template>
 

@@ -14,12 +14,12 @@ class PosSession(models.Model):
         
         Transforms:
         - Many2one fields from [id, 'Name'] to just numeric id
+        - Many2one false values to None (null in JSON)
         - Many2many fields stay as arrays (already correct)
-        - False values stay as false
         
         Example:
-            Input:  {'categ_id': [7, 'Food'], 'taxes_id': [1, 2]}
-            Output: {'categ_id': 7, 'taxes_id': [1, 2]}
+            Input:  {'categ_id': [7, 'Food'], 'product_id': False, 'taxes_id': [1, 2]}
+            Output: {'categ_id': 7, 'product_id': None, 'taxes_id': [1, 2]}
         """
         transformed = {}
         for field, value in record.items():
@@ -27,8 +27,13 @@ class PosSession(models.Model):
             if isinstance(value, (list, tuple)) and len(value) == 2 and isinstance(value[0], int):
                 # Convert Many2one from [id, name] to just id
                 transformed[field] = value[0]
+            elif value is False:
+                # Convert False to None for proper JSON serialization
+                # In Odoo, False means "no value" for relational fields
+                # In JavaScript/JSON, null is the proper empty value
+                transformed[field] = None
             else:
-                # Keep everything else as-is (Many2many arrays, primitives, false, etc.)
+                # Keep everything else as-is (Many2many arrays, primitives, etc.)
                 transformed[field] = value
         return transformed
 
@@ -164,7 +169,9 @@ class PosSession(models.Model):
             'categ_id', 'pos_categ_ids', 'product_tmpl_id',
             'uom_id', 'standard_price', 'lst_price', 'list_price',
             'available_in_pos', 'to_weight', 'tracking',
-            'taxes_id', 'image_128', 'write_date'
+            'taxes_id', 'image_128', 'write_date',
+            'description', 'description_sale',
+            'product_template_variant_value_ids', 'all_product_tag_ids'
         ]
         
         products = self.env['product.product'].search_read(
@@ -200,7 +207,8 @@ class PosSession(models.Model):
         products = self.env['product.product'].search_read(
             domain,
             ['id', 'display_name', 'name', 'default_code', 'barcode', 
-             'lst_price', 'list_price', 'image_128'],
+             'lst_price', 'list_price', 'image_128',
+             'categ_id', 'product_tmpl_id', 'uom_id', 'available_in_pos'],
             limit=limit,
             order='name'
         )
@@ -208,8 +216,9 @@ class PosSession(models.Model):
         return products
 
     @api.model
-    def sync_products_since(self, last_sync_date, limit=1000):
-        """Sync products modified since last sync date"""
+    def sync_products_since(self, last_sync_date, limit=1000, config_id=None):
+        """Sync products, pricelists, and pricelist items modified since last sync date"""
+        # Sync products
         domain = [('available_in_pos', '=', True)]
         
         if last_sync_date:
@@ -218,20 +227,26 @@ class PosSession(models.Model):
             domain.append(('create_date', '>', last_sync_date))
             domain.append(('write_date', '>', last_sync_date))
         
-        field_list = [
-            'id', 'display_name', 'name', 'default_code', 'barcode',
+        product_fields = [
+            'id', 'display_name', 'name', 'default_code', 'barcode', 'type',
             'categ_id', 'pos_categ_ids', 'product_tmpl_id',
-            'uom_id', 'standard_price', 'lst_price', 'list_price',
+            'uom_id', 'uom_po_id', 'standard_price', 'lst_price', 'list_price',
             'available_in_pos', 'to_weight', 'tracking',
-            'taxes_id', 'image_128', 'write_date', 'create_date'
+            'taxes_id', 'image_128', 'write_date', 'create_date',
+            'product_template_variant_value_ids', 'all_product_tag_ids',
+            'attribute_line_ids', 'optional_product_ids', 'packaging_ids',
+            'description', 'description_sale'
         ]
         
         products = self.env['product.product'].search_read(
             domain,
-            field_list,
+            product_fields,
             limit=limit,
             order='write_date DESC'
         )
+        
+        # Transform records for POS format
+        products = [self._transform_record_for_pos(p) for p in products]
         
         _logger.info(
             'Background Sync: Found %s products (new/modified since %s)',
@@ -258,54 +273,165 @@ class PosSession(models.Model):
             len(deleted_products)
         )
         
+        # Sync pricelists
+        pricelists = []
+        pricelist_items = []
+        deleted_pricelist_items = []
+        
+        if config_id:
+            config = self.env['pos.config'].browse(config_id)
+            pricelist_ids = config._get_available_pricelists().ids
+        else:
+            pricelist_ids = self.env['product.pricelist'].search([('active', '=', True)]).ids
+        
+        # Get modified pricelists
+        pricelist_domain = [('id', 'in', pricelist_ids)]
+        if last_sync_date:
+            pricelist_domain.append(('write_date', '>', last_sync_date))
+        
+        pricelists = self.env['product.pricelist'].search_read(
+            pricelist_domain,
+            ['id', 'name', 'display_name', 'currency_id', 'company_id',
+             'active', 'discount_policy', 'country_group_ids', 'write_date']
+        )
+        pricelists = [self._transform_record_for_pos(p) for p in pricelists]
+        
+        # Get modified pricelist items
+        item_domain = [('pricelist_id', 'in', pricelist_ids)]
+        if last_sync_date:
+            item_domain.append(('write_date', '>', last_sync_date))
+        
+        pricelist_items = self.env['product.pricelist.item'].search_read(
+            item_domain,
+            ['id', 'pricelist_id', 'product_tmpl_id', 'product_id', 'categ_id',
+             'min_quantity', 'fixed_price', 'percent_price', 'price_discount',
+             'base', 'compute_price', 'price_surcharge', 'price_round',
+             'price_min_margin', 'price_max_margin', 'date_start', 'date_end',
+             'applied_on', 'company_id', 'write_date']
+        )
+        pricelist_items = [self._transform_record_for_pos(i) for i in pricelist_items]
+        
+        _logger.info(
+            'Background Sync: Found %s pricelists, %s pricelist items',
+            len(pricelists), len(pricelist_items)
+        )
+        
         return {
             'products': products,
             'deleted_products': [p['id'] for p in deleted_products],
+            'pricelists': pricelists,
+            'pricelist_items': pricelist_items,
+            'deleted_pricelist_items': deleted_pricelist_items,
             'sync_date': fields.Datetime.now().isoformat(),
             'has_more': len(products) >= limit
         }
 
     @api.model
-    def get_all_products_for_sync(self, offset=0, limit=500):
-        """Get all products for initial sync with pagination"""
-        domain = [('available_in_pos', '=', True)]
-        
-        field_list = [
-            'id', 'display_name', 'name', 'default_code', 'barcode',
-            'categ_id', 'pos_categ_ids', 'product_tmpl_id',
-            'uom_id', 'standard_price', 'lst_price', 'list_price',
-            'available_in_pos', 'to_weight', 'tracking',
-            'taxes_id', 'image_128', 'write_date', 'create_date'
-        ]
-        
-        products = self.env['product.product'].search_read(
-            domain,
-            field_list,
-            offset=offset,
-            limit=limit,
-            order='id'
-        )
-        
-        total_count = self.env['product.product'].search_count(domain)
-        has_more = (offset + len(products)) < total_count
-        
-        _logger.info(
-            'Product Sync: Downloaded batch offset=%s, count=%s, has_more=%s, total=%s',
-            offset, len(products), has_more, total_count
-        )
-        
-        return {
-            'products': products,
-            'offset': offset,
-            'limit': limit,
-            'total_count': total_count,
-            'has_more': has_more,
-            'sync_date': fields.Datetime.now().isoformat()
-        }
+    def get_all_products_for_sync(self, offset=0, limit=10000, config_id=None):
+        """Get products, pricelists, and pricelist items for initial sync"""
+        try:
+            # Get products
+            domain = [('available_in_pos', '=', True)]
+            
+            # Comprehensive product fields
+            product_fields = [
+                'id', 'display_name', 'name', 'type', 'tracking',
+                'default_code', 'barcode', 'lst_price', 'standard_price',
+                'categ_id', 'pos_categ_ids', 'taxes_id',
+                'active', 'available_in_pos', 'to_weight',
+                'uom_id', 'uom_po_id', 'description_sale',
+                'description', 'image_128', 'product_tmpl_id',
+                'product_template_variant_value_ids', 'all_product_tag_ids',
+                'attribute_line_ids', 'optional_product_ids',
+                'combo_ids', 'is_storable', 'service_tracking',
+                'color', 'invoice_policy', 'detailed_type',
+                'packaging_ids', 'write_date', 'create_date'
+            ]
+            
+            products = self.env['product.product'].search_read(
+                domain,
+                product_fields,
+                offset=offset,
+                limit=limit,
+                order='id'
+            )
+            
+            # Transform records for POS format
+            products = [self._transform_record_for_pos(p) for p in products]
+            
+            total_count = self.env['product.product'].search_count(domain)
+            has_more = (offset + len(products)) < total_count
+            
+            # Get pricelists (only on first batch)
+            pricelists = []
+            pricelist_items = []
+            if offset == 0:
+                # Get config for available pricelists
+                if config_id:
+                    config = self.env['pos.config'].browse(config_id)
+                    pricelist_ids = config._get_available_pricelists().ids
+                else:
+                    pricelist_ids = self.env['product.pricelist'].search([('active', '=', True)]).ids
+                
+                # Get pricelists
+                pricelists = self.env['product.pricelist'].search_read(
+                    [('id', 'in', pricelist_ids)],
+                    ['id', 'name', 'display_name', 'currency_id', 'company_id', 
+                     'active', 'discount_policy', 'country_group_ids', 'write_date']
+                )
+                pricelists = [self._transform_record_for_pos(p) for p in pricelists]
+                
+                # Get pricelist items
+                pricelist_items = self.env['product.pricelist.item'].search_read(
+                    [('pricelist_id', 'in', pricelist_ids)],
+                    ['id', 'pricelist_id', 'product_tmpl_id', 'product_id', 'categ_id',
+                     'min_quantity', 'fixed_price', 'percent_price', 'price_discount',
+                     'base', 'compute_price', 'price_surcharge', 'price_round',
+                     'price_min_margin', 'price_max_margin', 'date_start', 'date_end',
+                     'applied_on', 'company_id', 'write_date']
+                )
+                pricelist_items = [self._transform_record_for_pos(i) for i in pricelist_items]
+                
+                _logger.info(
+                    'Sync: Loaded %s pricelists and %s pricelist items',
+                    len(pricelists), len(pricelist_items)
+                )
+            
+            _logger.info(
+                'Product Sync: Downloaded batch offset=%s, count=%s, has_more=%s, total=%s',
+                offset, len(products), has_more, total_count
+            )
+            
+            return {
+                'success': True,
+                'products': products,
+                'pricelists': pricelists,
+                'pricelist_items': pricelist_items,
+                'offset': offset,
+                'limit': limit,
+                'total_count': total_count,
+                'has_more': has_more,
+                'sync_date': fields.Datetime.now().isoformat()
+            }
+            
+        except Exception as e:
+            _logger.error(f"Error in get_all_products_for_sync: {str(e)}")
+            return {
+                'success': False,
+                'error': str(e),
+                'products': [],
+                'pricelists': [],
+                'pricelist_items': []
+            }
 
     @api.model
     def get_all_product_models_for_sync(self, config_id):
-        """Get all product-related models for initial sync
+        """DEPRECATED: Use get_all_products_for_sync() instead
+        
+        This method is no longer used as we now only sync products to IndexedDB.
+        Other models (pricelists, categories, etc.) load normally through Odoo.
+        
+        Get all product-related models for initial sync
         
         DATA FORMAT OUTPUT:
         ==================
@@ -424,7 +550,9 @@ class PosSession(models.Model):
                 [('pricelist_id', 'in', pricelist_ids)],
                 ['id', 'pricelist_id', 'product_tmpl_id', 'product_id', 'categ_id',
                  'min_quantity', 'fixed_price', 'percent_price', 'price_discount',
-                 'base', 'compute_price', 'write_date']
+                 'base', 'compute_price', 'price_surcharge', 'price_round',
+                 'price_min_margin', 'price_max_margin', 'date_start', 'date_end',
+                 'applied_on', 'write_date']
             )
             result['models']['product.pricelist.item'] = [self._transform_record_for_pos(i) for i in pricelist_items]
             _logger.info('Loaded %s pricelist items', len(pricelist_items))
@@ -449,7 +577,12 @@ class PosSession(models.Model):
 
     @api.model
     def sync_all_product_models_since(self, last_sync_date, config_id):
-        """Sync all product-related models modified since last sync date
+        """DEPRECATED: Use sync_products_since() instead
+        
+        This method is no longer used as we now only sync products to IndexedDB.
+        Other models (pricelists, categories, etc.) load normally through Odoo.
+        
+        Sync all product-related models modified since last sync date
         
         DATA FORMAT OUTPUT:
         ==================
@@ -597,7 +730,9 @@ class PosSession(models.Model):
             'product.pricelist.item', [('pricelist_id', 'in', pricelist_ids)],
             ['id', 'pricelist_id', 'product_tmpl_id', 'product_id', 'categ_id',
              'min_quantity', 'fixed_price', 'percent_price', 'price_discount',
-             'base', 'compute_price', 'write_date']
+             'base', 'compute_price', 'price_surcharge', 'price_round',
+             'price_min_margin', 'price_max_margin', 'date_start', 'date_end',
+             'applied_on', 'write_date']
         )
         
         # Products
@@ -679,11 +814,44 @@ class PosSession(models.Model):
             domain.append(('write_date', '>', last_sync_date))
         
         field_list = [
+            # Basic fields
             'id', 'display_name', 'name', 'default_code', 'barcode',
+            'description', 'description_sale', 'description_purchase',
+            
+            # Categories and classification
             'categ_id', 'pos_categ_ids', 'product_tmpl_id',
-            'uom_id', 'standard_price', 'lst_price', 'list_price',
+            'all_product_tag_ids',
+            
+            # Units and measurements
+            'uom_id', 'uom_po_id',
+            
+            # Pricing
+            'standard_price', 'lst_price', 'list_price',
+            
+            # POS specific
             'available_in_pos', 'to_weight', 'tracking',
-            'taxes_id', 'image_128', 'write_date', 'create_date'
+            
+            # Taxes
+            'taxes_id',
+            
+            # Images
+            'image_128',
+            
+            # Variants and attributes
+            'product_template_variant_value_ids',
+            'attribute_line_ids',
+            
+            # Related products
+            'optional_product_ids',
+            
+            # Packaging
+            'packaging_ids',
+            
+            # Timestamps
+            'write_date', 'create_date',
+            
+            # Type
+            'type',
         ]
         
         products = self.env['product.product'].search_read(

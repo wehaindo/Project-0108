@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add RFID Tags notebook page to Product Form -->
+    <record id="view_product_template_form_rfid" model="ir.ui.view">
+        <field name="name">product.template.form.rfid</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="RFID Tags" name="rfid_tags">
+                    <field name="rfid_tag_ids">
+                        <tree editable="bottom">
+                            <field name="name" placeholder="e.g., RFID-001-ABC123"/>
+                            <field name="status"/>
+                            <field name="last_scanned_date" readonly="1"/>
+                            <field name="scan_count" readonly="1"/>
+                            <field name="notes"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Add RFID Tag count to Product Tree View -->
+    <record id="view_product_template_tree_rfid" model="ir.ui.view">
+        <field name="name">product.template.tree.rfid</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='barcode']" position="after">
+                <field name="rfid_tag_count" string="RFID Tags" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

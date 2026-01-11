@@ -14,6 +14,8 @@ class PosDataLog(models.Model):
     name = fields.Datetime('Sync Date', default=fields.Datetime.now, required=True)
     pos_data = fields.Text('POS Data (JSON)', required=True)
     type = fields.Char('Type', default='order', required=True)
+    order_uid = fields.Char('Order UID', index=True, help='Unique identifier (access_token) for the order')
+    session_id = fields.Many2one('pos.session', string='Session', index=True)
     state = fields.Selection([
         ('backup', 'Backup Only'),
         ('synced', 'Synced'),
@@ -25,19 +27,43 @@ class PosDataLog(models.Model):
     def save_order_backup(self, order_data):
         """Save order backup from POS UI"""
         try:
+            # Extract order identifier (use access_token as primary identifier)
+            order_uid = order_data.get('access_token') or order_data.get('pos_reference')
+            session_id = order_data.get('session_id')
+            
+            if not order_uid:
+                raise ValueError("Order access_token is required for backup")
+            
+            # Check if backup already exists
+            existing_backup = self.search([
+                ('order_uid', '=', order_uid),
+                ('session_id', '=', session_id),
+            ], limit=1)
+            
+            if existing_backup:
+                _logger.info(f"Backup already exists for order {order_uid}, skipping")
+                return {
+                    'success': True,
+                    'id': existing_backup.id,
+                    'existing': True,
+                }
+            
             vals = {
                 'name': fields.Datetime.now(),
                 'pos_data': json.dumps(order_data),
                 'type': 'order',
+                'order_uid': order_uid,
+                'session_id': session_id,
                 'state': 'synced',
             }
             
             backup = self.create(vals)
-            _logger.info(f"Order backup created: {backup.id}")
+            _logger.info(f"Order backup created: {backup.id} for order {order_uid}")
             
             return {
                 'success': True,
                 'id': backup.id,
+                'existing': False,
             }
             
         except Exception as e:

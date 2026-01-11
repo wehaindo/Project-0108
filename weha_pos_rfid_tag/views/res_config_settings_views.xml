@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- POS Configuration Settings -->
+    <record id="res_config_settings_view_form_rfid" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.rfid</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="point_of_sale.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='pos_other_devices']" position="inside">
+                <div class="col-12 col-lg-6 o_setting_box" id="rfid_reader_settings">
+                    <div class="o_setting_left_pane">
+                        <field name="pos_rfid_auto_connect"/>
+                    </div>
+                    <div class="o_setting_right_pane">
+                        <label for="pos_rfid_auto_connect"/>
+                        <div class="text-muted">
+                            Automatically connect to RFID reader when POS session starts
+                        </div>
+                        <div class="content-group mt-2">
+                            <div class="row mt16">
+                                <label for="pos_rfid_websocket_url" class="col-lg-3 o_light_label"/>
+                                <field name="pos_rfid_websocket_url" placeholder="ws://localhost:8765"/>
+                            </div>
+                            <div class="row mt16">
+                                <label for="pos_rfid_sound_enabled" class="col-lg-3 o_light_label" string="Sound"/>
+                                <field name="pos_rfid_sound_enabled"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
