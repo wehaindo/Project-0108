@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Operating Unit Type list View -->
+    <record id="view_operating_unit_type_list" model="ir.ui.view">
+        <field name="name">operating.unit.type.list</field>
+        <field name="model">operating.unit.type</field>
+        <field name="arch" type="xml">
+            <list string="Operating Unit Types">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="level"/>
+                <field name="can_have_parent" widget="boolean_toggle"/>
+                <field name="can_have_children" widget="boolean_toggle"/>
+                <field name="default_revenue_share"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Operating Unit Type Form View -->
+    <record id="view_operating_unit_type_form" model="ir.ui.view">
+        <field name="name">operating.unit.type.form</field>
+        <field name="model">operating.unit.type</field>
+        <field name="arch" type="xml">
+            <form string="Operating Unit Type">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="level"/>
+                            <field name="can_have_parent"/>
+                            <field name="can_have_children"/>
+                            <field name="default_revenue_share"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Operating Unit Type Action -->
+    <record id="action_operating_unit_type" model="ir.actions.act_window">
+        <field name="name">Operating Unit Types</field>
+        <field name="res_model">operating.unit.type</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create Operating Unit Types
+            </p>
+            <p>
+                Define types like HO (Head Office), DC (Distribution Center), Store, etc.
+            </p>
+        </field>
+    </record>
+
+    <!-- Root Menu -->
+    <menuitem id="menu_operating_unit_hierarchy_root"
+              name="Operating Unit Hierarchy"
+              sequence="100"
+              web_icon="weha_operating_unit_hierarchy,static/description/icon.png"/>
+
+    <!-- Configuration Menu -->
+    <menuitem id="menu_operating_unit_hierarchy_config"
+              name="Configuration"
+              parent="menu_operating_unit_hierarchy_root"
+              sequence="100"/>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_operating_unit_type"
+              name="Operating Unit Types"
+              parent="menu_operating_unit_hierarchy_config"
+              action="action_operating_unit_type"
+              sequence="10"/>
+
+</odoo>

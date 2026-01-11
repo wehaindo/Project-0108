@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    
+    <!-- Main Hierarchy Tree Template -->
+    <t t-name="weha_operating_unit_hierarchy.HierarchyTreeTemplate">
+        <div class="ou_hierarchy_tree_dashboard">
+            <!-- Header -->
+            <div class="ou-tree-header">
+                <div class="ou-tree-title">
+                    <i class="fa fa-sitemap me-2"/>
+                    <h3>Operating Unit Hierarchy</h3>
+                </div>
+                <div class="ou-tree-actions">
+                    <!-- Search Box -->
+                    <div class="ou-search-box me-2">
+                        <input type="text" 
+                               class="form-control form-control-sm" 
+                               placeholder="Search by name or code..."
+                               t-model="state.searchQuery"
+                               t-on-input="onSearchInput"/>
+                        <i t-if="state.searchQuery" 
+                           class="fa fa-times ou-search-clear" 
+                           t-on-click="clearSearch"/>
+                        <i t-else="" class="fa fa-search ou-search-icon"/>
+                    </div>
+                    
+                    <button class="btn btn-sm btn-secondary me-2" t-on-click="() => this.expandAll()">
+                        <i class="fa fa-plus-square-o"/> Expand
+                    </button>
+                    <button class="btn btn-sm btn-secondary me-2" t-on-click="() => this.collapseAll()">
+                        <i class="fa fa-minus-square-o"/> Collapse
+                    </button>
+                    <button class="btn btn-sm btn-primary" t-on-click="() => this.refresh()">
+                        <i class="fa fa-refresh"/> Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div t-if="state.loading" class="ou-tree-loading">
+                <i class="fa fa-spinner fa-spin fa-3x"/>
+                <p>Loading hierarchy...</p>
+            </div>
+
+            <!-- Tree Container -->
+            <div t-else="" class="ou-tree-container">
+                <div t-if="state.filteredRootNodes.length === 0" class="ou-tree-empty">
+                    <i class="fa fa-search fa-3x"/>
+                    <p t-if="state.searchQuery">No operating units found matching "<t t-esc="state.searchQuery"/>"</p>
+                    <p t-else="">No operating units found</p>
+                </div>
+                
+                <div t-else="" class="ou-tree-content">
+                    <t t-foreach="state.filteredRootNodes" t-as="node" t-key="node.id">
+                        <t t-call="weha_operating_unit_hierarchy.HierarchyNodeTemplate">
+                            <t t-set="node" t-value="node"/>
+                            <t t-set="level" t-value="0"/>
+                        </t>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- Node Template (Recursive) - Compact Folder Style -->
+    <t t-name="weha_operating_unit_hierarchy.HierarchyNodeTemplate">
+        <div class="ou-tree-node" t-att-data-level="level">
+            <!-- Node Content - Compact -->
+            <div class="ou-node-content ou-node-compact" t-att-class="getOUTypeClass(node.ou_type_code)">
+                <!-- Expand/Collapse Button -->
+                <span class="ou-node-toggle" t-if="node.child_count > 0" t-on-click="() => this.toggleNode(node.id)">
+                    <i t-if="isExpanded(node.id)" class="fa fa-folder-open-o"/>
+                    <i t-else="" class="fa fa-folder-o"/>
+                </span>
+                <span class="ou-node-toggle" t-else="">
+                    <i class="fa fa-file-o"/>
+                </span>
+
+                <!-- Node Info - Simple -->
+                <div class="ou-node-info-simple" t-on-click="() => this.openOUForm(node.id)">
+                    <span class="ou-name" t-esc="node.name"/>
+                    <span class="ou-code" t-esc="'[' + node.code + ']'"/>
+                    <span t-if="node.child_count > 0" class="ou-count" t-esc="'(' + node.child_count + ')'"/>
+                </div>
+            </div>
+
+            <!-- Children (Recursive) -->
+            <div t-if="isExpanded(node.id) and node.children.length > 0" class="ou-node-children">
+                <t t-foreach="node.children" t-as="childNode" t-key="childNode.id">
+                    <t t-call="weha_operating_unit_hierarchy.HierarchyNodeTemplate">
+                        <t t-set="node" t-value="childNode"/>
+                        <t t-set="level" t-value="level + 1"/>
+                    </t>
+                </t>
+            </div>
+        </div>
+    </t>
+
+</templates>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Client Action for OWL Hierarchy Tree Dashboard -->
+    <record id="action_hierarchy_tree_dashboard_owl" model="ir.actions.client">
+        <field name="name">OU Hierarchy Tree (OWL)</field>
+        <field name="tag">hierarchy_tree_dashboard</field>
+    </record>
+
+    <!-- Menu Item for OWL Dashboard -->
+    <menuitem id="menu_hierarchy_tree_dashboard_owl"
+              name="Visual Hierarchy Tree"
+              parent="menu_operating_unit_hierarchy_root"
+              action="action_hierarchy_tree_dashboard_owl"
+              sequence="5"/>
+
+    <!-- Standard Operating Unit List Action for Configuration -->
+    <record id="action_operating_unit_list_config" model="ir.actions.act_window">
+        <field name="name">Operating Units</field>
+        <field name="res_model">operating.unit</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Operating Unit
+            </p>
+            <p>
+                Define your organization structure with Operating Units.<br/>
+                Set up Head Office, Distribution Centers, and Stores.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Item for Operating Units in Configuration -->
+    <menuitem id="menu_operating_unit_list_config"
+              name="Operating Units"
+              parent="menu_operating_unit_hierarchy_config"
+              action="action_operating_unit_list_config"
+              sequence="5"/>
+
+</odoo>

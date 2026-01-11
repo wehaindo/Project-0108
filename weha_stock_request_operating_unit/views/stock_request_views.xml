@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Stock Request Form View -->
+    <record id="view_stock_request_form_inherit_operating_unit" model="ir.ui.view">
+        <field name="name">stock.request.form.inherit.operating.unit</field>
+        <field name="model">stock.request</field>
+        <field name="inherit_id" ref="stock_request.view_stock_request_form"/>
+        <field name="arch" type="xml">
+            
+            <!-- Add operating unit field after warehouse_id -->
+            <field name="warehouse_id" position="after">
+                <field name="operating_unit_id" 
+                    options="{'no_create': True, 'no_open': True}"
+                    groups="stock.group_stock_multi_locations"
+                    readonly="state != 'draft'"/>
+            </field>
+            
+        </field>
+    </record>
+
+    <!-- Stock Request Tree View -->
+    <record id="view_stock_request_tree_inherit_operating_unit" model="ir.ui.view">
+        <field name="name">stock.request.tree.inherit.operating.unit</field>
+        <field name="model">stock.request</field>
+        <field name="inherit_id" ref="stock_request.view_stock_request_tree"/>
+        <field name="arch" type="xml">
+            
+            <!-- Add operating unit field -->
+            <field name="warehouse_id" position="after">
+                <field name="operating_unit_id" optional="show"/>
+            </field>
+            
+        </field>
+    </record>
+
+    <!-- Stock Request Search View -->
+    <record id="view_stock_request_search_inherit_operating_unit" model="ir.ui.view">
+        <field name="name">stock.request.search.inherit.operating.unit</field>
+        <field name="model">stock.request</field>
+        <field name="inherit_id" ref="stock_request.stock_request_search"/>
+        <field name="arch" type="xml">
+            
+            <!-- Add operating unit filter and group by -->
+            <filter name="warehouse" position="after">
+                <filter name="operating_unit_id" 
+                    string="Operating Unit" 
+                    context="{'group_by': 'operating_unit_id'}"/>
+            </filter>
+            
+            <!-- Add operating unit in search -->
+            <field name="warehouse_id" position="after">
+                <field name="operating_unit_id"/>
+            </field>
+            
+        </field>
+    </record>
+
+</odoo>

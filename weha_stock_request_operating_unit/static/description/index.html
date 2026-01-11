@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Stock Request Operating Unit</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 48px;
+            font-weight: 300;
+        }
+        .header p {
+            margin: 20px 0 0 0;
+            font-size: 20px;
+            opacity: 0.9;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section h2 {
+            color: #667eea;
+            margin-top: 0;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .feature-box {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        .feature-box:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+        .feature-box h3 {
+            color: #667eea;
+            margin-top: 0;
+        }
+        .feature-box ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .feature-box li {
+            margin: 8px 0;
+            color: #555;
+        }
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin: 5px 5px 5px 0;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+        }
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📦 Stock Request Operating Unit</h1>
+        <p>Integrate Stock Requests with Operating Units for Multi-Location Management</p>
+        <div style="margin-top: 20px;">
+            <span class="badge">v18.0.1.0.0</span>
+            <span class="badge">OCA Compatible</span>
+            <span class="badge">LGPL-3</span>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <div class="section">
+            <h2>🎯 Overview</h2>
+            <p>
+                This module seamlessly integrates Odoo 18 Stock Request functionality with OCA's Operating Unit framework. 
+                It enables multi-location businesses to track and manage stock requests with proper operating unit assignment, 
+                ensuring accurate inventory tracking and accounting across different stores, departments, or branches.
+            </p>
+            
+            <div class="warning">
+                <strong>⚠️ Prerequisites Required:</strong> This module requires OCA's <code>operating_unit</code>, 
+                <code>stock_operating_unit</code>, and <code>stock_request</code> modules to be installed first.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>✨ Key Features</h2>
+            <div class="features">
+                <div class="feature-box">
+                    <h3>🏢 Operating Unit Assignment</h3>
+                    <ul>
+                        <li>Assign operating units to stock requests</li>
+                        <li>Operating unit on stock request orders</li>
+                        <li>Automatic propagation to child records</li>
+                        <li>Required field validation</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-box">
+                    <h3>🔄 Automatic Inheritance</h3>
+                    <ul>
+                        <li>Stock moves inherit operating unit</li>
+                        <li>Stock pickings tagged automatically</li>
+                        <li>Procurement groups assigned</li>
+                        <li>Full traceability maintained</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-box">
+                    <h3>📊 Enhanced Views</h3>
+                    <ul>
+                        <li>Operating unit in form views</li>
+                        <li>Filter by operating unit</li>
+                        <li>Group by operating unit</li>
+                        <li>Smart buttons on pickings</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-box">
+                    <h3>🔐 Security & Access Control</h3>
+                    <ul>
+                        <li>Multi-operating unit access rules</li>
+                        <li>Users see only their OU requests</li>
+                        <li>Manager override permissions</li>
+                        <li>OCA security compliance</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Installation</h2>
+            <ol>
+                <li><strong>Install Prerequisites:</strong>
+                    <ul>
+                        <li>Install <code>operating_unit</code> from OCA</li>
+                        <li>Install <code>stock_operating_unit</code> from OCA</li>
+                        <li>Install <code>stock_request</code> from OCA</li>
+                    </ul>
+                </li>
+                <li><strong>Install This Module:</strong>
+                    <ul>
+                        <li>Copy module to your Odoo addons directory</li>
+                        <li>Update Apps List</li>
+                        <li>Search for "Stock Request Operating Unit"</li>
+                        <li>Click Install</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>⚙️ Configuration</h2>
+            <h3>1. Set Up Operating Units</h3>
+            <p>Navigate to <strong>Settings → Users & Companies → Operating Units</strong></p>
+            <ul>
+                <li>Create operating units for each store/location</li>
+                <li>Define code, name, and company</li>
+                <li>Assign partner for each unit</li>
+            </ul>
+
+            <h3>2. Assign Operating Units to Users</h3>
+            <p>Navigate to <strong>Settings → Users & Companies → Users</strong></p>
+            <ul>
+                <li>Open user form</li>
+                <li>Assign operating units</li>
+                <li>Set default operating unit</li>
+            </ul>
+
+            <div class="success">
+                <strong>✅ Ready to Use:</strong> Once configured, all stock requests will automatically 
+                require and propagate operating unit assignments!
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📱 Usage Scenarios</h2>
+            
+            <h3>Scenario 1: Multi-Store Replenishment</h3>
+            <p><strong>Store → DC → Supplier Flow:</strong></p>
+            <ul>
+                <li>Store creates stock request tagged with Store OU</li>
+                <li>DC checks inventory with DC OU tag</li>
+                <li>If stock available: Create internal transfer</li>
+                <li>If stock not available: DC purchases from supplier</li>
+                <li>Full operating unit tracking throughout</li>
+            </ul>
+
+            <h3>Scenario 2: Department Stock Management</h3>
+            <p><strong>Restaurant Example:</strong></p>
+            <ul>
+                <li>Kitchen OU requests ingredients</li>
+                <li>Bar OU requests beverages</li>
+                <li>Retail OU requests merchandise</li>
+                <li>Central warehouse fulfills by department</li>
+                <li>Reports separated by operating unit</li>
+            </ul>
+
+            <h3>Scenario 3: Multi-Branch Operations</h3>
+            <p><strong>Franchise Model:</strong></p>
+            <ul>
+                <li>Each branch has own operating unit</li>
+                <li>Stock requests tagged by branch</li>
+                <li>Shared warehouse distribution center</li>
+                <li>Accounting and reporting per branch</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🛠️ Technical Details</h2>
+            <h3>Models Extended</h3>
+            <ul>
+                <li><code>stock.request</code>: Operating unit field (required)</li>
+                <li><code>stock.request.order</code>: Operating unit field (propagates to requests)</li>
+                <li><code>stock.move</code>: Stock request link and OU inheritance</li>
+                <li><code>stock.picking</code>: Stock request smart button</li>
+            </ul>
+
+            <h3>Key Methods</h3>
+            <ul>
+                <li><code>_prepare_procurement_group_values()</code>: OU assignment to procurement</li>
+                <li><code>_prepare_stock_move_values()</code>: OU assignment to moves</li>
+                <li><code>_action_confirm()</code>: OU validation on confirmation</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>📋 Dependencies</h2>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr style="background: #f8f9fa;">
+                    <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Module</th>
+                    <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Source</th>
+                    <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Required</th>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;"><code>stock_request</code></td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">OCA</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">✅ Yes</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;"><code>operating_unit</code></td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">OCA</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">✅ Yes</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;"><code>stock_operating_unit</code></td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">OCA</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">✅ Yes</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>📝 Changelog</h2>
+            <h3>Version 1.0.0 (January 2026)</h3>
+            <ul>
+                <li>✨ Initial release</li>
+                <li>🏢 Operating unit field on stock requests</li>
+                <li>📦 Operating unit field on stock request orders</li>
+                <li>🔄 Automatic OU assignment to stock moves</li>
+                <li>🎯 Smart button on pickings</li>
+                <li>🔐 Security rules for multi-OU access</li>
+                <li>📊 Enhanced views and filters</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>👨‍💻 Author & Support</h2>
+            <p>
+                <strong>Author:</strong> Weha<br>
+                <strong>Website:</strong> <a href="https://weha-id.com">https://weha-id.com</a><br>
+                <strong>License:</strong> LGPL-3
+            </p>
+            <p>For support and inquiries, please contact your Odoo implementation partner.</p>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <p>Stock Request Operating Unit Module for Odoo 18</p>
+        <p>© 2026 Weha. Licensed under <a href="https://www.gnu.org/licenses/lgpl-3.0.html">LGPL-3</a></p>
+    </div>
+</body>
+</html>

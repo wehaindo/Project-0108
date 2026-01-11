@@ -1,0 +1,328 @@
+/* Operating Unit Hierarchy Tree Dashboard Styles */
+
+.ou_hierarchy_tree_dashboard {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background: #f8f9fa;
+}
+
+/* Header */
+.ou-tree-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 12px 15px;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.ou-tree-title {
+    display: flex;
+    align-items: center;
+}
+
+.ou-tree-title h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.ou-tree-title i {
+    color: #3498db;
+    font-size: 22px;
+}
+
+.ou-tree-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Search Box */
+.ou-search-box {
+    position: relative;
+    min-width: 250px;
+}
+
+.ou-search-box input {
+    padding-right: 30px;
+    height: 32px;
+}
+
+.ou-search-icon,
+.ou-search-clear {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #7f8c8d;
+    cursor: pointer;
+}
+
+.ou-search-clear:hover {
+    color: #e74c3c;
+}
+
+.ou-search-icon {
+    pointer-events: none;
+}
+
+/* Loading State */
+.ou-tree-loading {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #7f8c8d;
+}
+
+.ou-tree-loading i {
+    color: #3498db;
+    margin-bottom: 20px;
+}
+
+.ou-tree-loading p {
+    font-size: 18px;
+    margin: 0;
+}
+
+/* Empty State */
+.ou-tree-empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #7f8c8d;
+}
+
+.ou-tree-empty i {
+    color: #bdc3c7;
+    margin-bottom: 20px;
+}
+
+.ou-tree-empty p {
+    font-size: 18px;
+    margin: 0;
+}
+
+/* Tree Container */
+.ou-tree-container {
+    flex: 1;
+    overflow-y: auto;
+    background: white;
+    border-radius: 6px;
+    padding: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.ou-tree-content {
+    position: relative;
+}
+
+/* Node Styling - Compact */
+.ou-tree-node {
+    position: relative;
+    margin-bottom: 2px;
+}
+
+.ou-tree-node[data-level="0"] {
+    margin-left: 0;
+}
+
+.ou-tree-node[data-level="1"] {
+    margin-left: 20px;
+}
+
+.ou-tree-node[data-level="2"] {
+    margin-left: 40px;
+}
+
+.ou-tree-node[data-level="3"] {
+    margin-left: 60px;
+}
+
+/* Node Content - Compact Folder Style */
+.ou-node-compact {
+    display: flex;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 4px;
+    background: transparent;
+    transition: background 0.2s ease;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+}
+
+.ou-node-compact:hover {
+    background: #f8f9fa;
+}
+
+/* OU Type Colors - Subtle */
+.ou-node-compact.ou-type-ho {
+    border-left-color: #3498db;
+}
+
+.ou-node-compact.ou-type-ho:hover {
+    background: rgba(52, 152, 219, 0.05);
+}
+
+.ou-node-compact.ou-type-dc {
+    border-left-color: #1abc9c;
+}
+
+.ou-node-compact.ou-type-dc:hover {
+    background: rgba(26, 188, 156, 0.05);
+}
+
+.ou-node-compact.ou-type-store {
+    border-left-color: #2ecc71;
+}
+
+.ou-node-compact.ou-type-store:hover {
+    background: rgba(46, 204, 113, 0.05);
+}
+
+/* Toggle Button - Folder Icons */
+.ou-node-toggle {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 6px;
+    color: #7f8c8d;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    font-size: 16px;
+}
+
+.ou-node-toggle:hover {
+    color: #2c3e50;
+}
+
+/* Node Info - Simple One Line */
+.ou-node-info-simple {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+}
+
+.ou-name {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.ou-code {
+    color: #7f8c8d;
+    font-size: 12px;
+}
+
+.ou-count {
+    color: #95a5a6;
+    font-size: 12px;
+    font-style: italic;
+}
+
+/* Children Container */
+.ou-node-children {
+    margin-top: 2px;
+    position: relative;
+}
+
+/* Remove old styles - no longer needed with compact design */
+
+/* Responsive */
+@media (max-width: 768px) {
+    .ou_hierarchy_tree_dashboard {
+        padding: 10px;
+    }
+
+    .ou-tree-header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .ou-tree-actions {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .ou-search-box {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .ou-tree-actions button {
+        flex: 1;
+        min-width: 80px;
+    }
+
+    .ou-tree-node[data-level="1"] {
+        margin-left: 15px;
+    }
+
+    .ou-tree-node[data-level="2"] {
+        margin-left: 30px;
+    }
+
+    .ou-tree-node[data-level="3"] {
+        margin-left: 45px;
+    }
+
+    .ou-node-compact {
+        padding: 5px 8px;
+    }
+
+    .ou-name {
+        font-size: 13px;
+    }
+
+    .ou-code {
+        font-size: 11px;
+    }
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ou-tree-node {
+    animation: fadeIn 0.3s ease;
+}
+
+/* Scrollbar Styling */
+.ou-tree-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ou-tree-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.ou-tree-container::-webkit-scrollbar-thumb {
+    background: #bdc3c7;
+    border-radius: 4px;
+}
+
+.ou-tree-container::-webkit-scrollbar-thumb:hover {
+    background: #95a5a6;
+}

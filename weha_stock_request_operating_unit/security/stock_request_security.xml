@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Security Groups -->
+    <record id="group_stock_request_operating_unit" model="res.groups">
+        <field name="name">Stock Request Operating Unit Access</field>
+        <field name="category_id" ref="base.module_category_inventory_inventory"/>
+        <field name="implied_ids" eval="[(4, ref('stock_request.group_stock_request_user'))]"/>
+    </record>
+
+    <!-- Multi-company rules for stock.request -->
+    <record id="stock_request_comp_rule" model="ir.rule">
+        <field name="name">Stock Request Operating Unit</field>
+        <field name="model_id" ref="stock_request.model_stock_request"/>
+        <field name="domain_force">
+            ['|',
+                ('operating_unit_id', '=', False),
+                ('operating_unit_id', 'in', user.operating_unit_ids.ids)
+            ]
+        </field>
+        <field name="groups" eval="[(4, ref('operating_unit.group_multi_operating_unit'))]"/>
+    </record>
+
+    <!-- Multi-company rules for stock.request.order -->
+    <record id="stock_request_order_comp_rule" model="ir.rule">
+        <field name="name">Stock Request Order Operating Unit</field>
+        <field name="model_id" ref="stock_request.model_stock_request_order"/>
+        <field name="domain_force">
+            ['|',
+                ('operating_unit_id', '=', False),
+                ('operating_unit_id', 'in', user.operating_unit_ids.ids)
+            ]
+        </field>
+        <field name="groups" eval="[(4, ref('operating_unit.group_multi_operating_unit'))]"/>
+    </record>
+
+</odoo>

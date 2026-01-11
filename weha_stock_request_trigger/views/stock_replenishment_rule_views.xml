@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Stock Replenishment Rule List View -->
+    <record id="view_stock_replenishment_rule_list" model="ir.ui.view">
+        <field name="name">stock.replenishment.rule.list</field>
+        <field name="model">stock.replenishment.rule</field>
+        <field name="arch" type="xml">
+            <list string="Stock Replenishment Rules" decoration-danger="below_minimum">
+                <field name="name"/>
+                <field name="operating_unit_id"/>
+                <field name="product_id"/>
+                <field name="location_id"/>
+                <field name="current_qty"/>
+                <field name="minimum_qty"/>
+                <field name="maximum_qty"/>
+                <field name="reorder_qty"/>
+                <field name="below_minimum" widget="badge" decoration-danger="below_minimum"/>
+                <field name="auto_trigger" widget="badge"/>
+                <field name="active" widget="badge"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- Stock Replenishment Rule Form View -->
+    <record id="view_stock_replenishment_rule_form" model="ir.ui.view">
+        <field name="name">stock.replenishment.rule.form</field>
+        <field name="model">stock.replenishment.rule</field>
+        <field name="arch" type="xml">
+            <form string="Stock Replenishment Rule">
+                <header>
+                    <button name="action_create_stock_request" 
+                            string="Create Stock Request" 
+                            type="object" 
+                            class="oe_highlight"
+                            invisible="reorder_qty &lt;= 0"/>
+                    <button name="action_view_stock_requests" 
+                            string="View Stock Requests" 
+                            type="object"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" 
+                                type="object" 
+                                class="oe_stat_button" 
+                                icon="fa-archive">
+                            <field name="active" widget="boolean_button" 
+                                   options="{'terminology': 'archive'}"/>
+                        </button>
+                    </div>
+                    
+                    <widget name="web_ribbon" title="Below Minimum" 
+                            bg_color="text-bg-danger" invisible="not below_minimum"/>
+                    
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    
+                    <group>
+                        <group name="operating_unit" string="Operating Unit">
+                            <field name="operating_unit_id" 
+                                   options="{'no_create': True}"/>
+                            <field name="warehouse_id" 
+                                   options="{'no_create': True}"/>
+                            <field name="location_id" 
+                                   options="{'no_create': True}"/>
+                            <field name="company_id" invisible="1"/>
+                        </group>
+                        
+                        <group name="product" string="Product">
+                            <field name="product_id" 
+                                   options="{'no_create': True}"/>
+                            <field name="product_uom_id"/>
+                        </group>
+                    </group>
+                    
+                    <group>
+                        <group name="stock_levels" string="Stock Levels">
+                            <field name="current_qty"/>
+                            <field name="minimum_qty"/>
+                            <field name="maximum_qty"/>
+                            <field name="reorder_qty"/>
+                            <field name="below_minimum" invisible="1"/>
+                        </group>
+                        
+                        <group name="trigger_settings" string="Trigger Settings">
+                            <field name="auto_trigger"/>
+                            <field name="trigger_date"/>
+                        </group>
+                    </group>
+                    
+                    <group>
+                        <group name="source" string="Source (from Hierarchy)">
+                            <field name="source_ou_id"/>
+                            <field name="source_location_id" 
+                                   options="{'no_create': True}"/>
+                            <field name="route_id" 
+                                   options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Stock Replenishment Rule Search View -->
+    <record id="view_stock_replenishment_rule_search" model="ir.ui.view">
+        <field name="name">stock.replenishment.rule.search</field>
+        <field name="model">stock.replenishment.rule</field>
+        <field name="arch" type="xml">
+            <search string="Search Replenishment Rules">
+                <field name="name"/>
+                <field name="operating_unit_id"/>
+                <field name="product_id"/>
+                <field name="location_id"/>
+                
+                <filter name="below_minimum" 
+                        string="Below Minimum" 
+                        domain="[('below_minimum', '=', True)]"/>
+                <filter name="auto_trigger" 
+                        string="Auto Trigger" 
+                        domain="[('auto_trigger', '=', True)]"/>
+                <filter name="active" 
+                        string="Active" 
+                        domain="[('active', '=', True)]"/>
+                <filter name="inactive" 
+                        string="Archived" 
+                        domain="[('active', '=', False)]"/>
+                
+                <separator/>
+                
+                <group expand="0" string="Group By">
+                    <filter name="group_operating_unit" 
+                            string="Operating Unit" 
+                            context="{'group_by': 'operating_unit_id'}"/>
+                    <filter name="group_product" 
+                            string="Product" 
+                            context="{'group_by': 'product_id'}"/>
+                    <filter name="group_location" 
+                            string="Location" 
+                            context="{'group_by': 'location_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Action: Stock Replenishment Rules -->
+    <record id="action_stock_replenishment_rule" model="ir.actions.act_window">
+        <field name="name">Replenishment Rules</field>
+        <field name="res_model">stock.replenishment.rule</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_stock_replenishment_rule_search"/>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first replenishment rule
+            </p>
+            <p>
+                Replenishment rules automatically create stock requests when 
+                product stock falls below minimum level in an operating unit.
+            </p>
+        </field>
+    </record>
+    
+    <!-- Menu: Stock Replenishment -->
+    <menuitem id="menu_stock_replenishment_root"
+              name="Replenishment"
+              parent="stock.menu_stock_root"
+              sequence="50"/>
+    
+    <menuitem id="menu_stock_replenishment_rule"
+              name="Replenishment Rules"
+              parent="menu_stock_replenishment_root"
+              action="action_stock_replenishment_rule"
+              sequence="10"/>
+    
+</odoo>

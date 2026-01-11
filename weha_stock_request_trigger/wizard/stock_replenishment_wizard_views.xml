@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Stock Replenishment Wizard Form -->
+    <record id="view_stock_replenishment_wizard_form" model="ir.ui.view">
+        <field name="name">stock.replenishment.wizard.form</field>
+        <field name="model">stock.replenishment.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Manual Stock Replenishment">
+                <group>
+                    <field name="operating_unit_id" 
+                           options="{'no_create': True}"/>
+                </group>
+                
+                <separator string="Products Below Minimum Stock"/>
+                
+                <field name="line_ids">
+                    <list editable="bottom">
+                        <field name="selected"/>
+                        <field name="product_id"/>
+                        <field name="current_qty"/>
+                        <field name="minimum_qty"/>
+                        <field name="maximum_qty"/>
+                        <field name="reorder_qty"/>
+                        <field name="rule_id" column_invisible="1"/>
+                    </list>
+                </field>
+                
+                <footer>
+                    <button name="action_create_requests" 
+                            string="Create Stock Requests" 
+                            type="object" 
+                            class="oe_highlight"/>
+                    <button string="Cancel" 
+                            class="btn-secondary" 
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Action: Manual Replenishment Wizard -->
+    <record id="action_stock_replenishment_wizard" model="ir.actions.act_window">
+        <field name="name">Manual Replenishment</field>
+        <field name="res_model">stock.replenishment.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_stock_replenishment_rule"/>
+    </record>
+    
+    <!-- Menu: Manual Replenishment -->
+    <menuitem id="menu_stock_replenishment_wizard"
+              name="Manual Replenishment"
+              parent="menu_stock_replenishment_root"
+              action="action_stock_replenishment_wizard"
+              sequence="20"/>
+    
+</odoo>

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Revenue Sharing Rule list View -->
+    <record id="view_revenue_sharing_rule_list" model="ir.ui.view">
+        <field name="name">revenue.sharing.rule.list</field>
+        <field name="model">revenue.sharing.rule</field>
+        <field name="arch" type="xml">
+            <list string="Revenue Sharing Rules">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="operating_unit_id" optional="show"/>
+                <field name="date_from" optional="show"/>
+                <field name="date_to" optional="show"/>
+                <field name="apply_to"/>
+                <field name="categ_id" optional="hide"/>
+                <field name="product_id" optional="hide"/>
+                <field name="total_percentage" widget="percentage"/>
+                <field name="active" widget="boolean_toggle"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Revenue Sharing Rule Form View -->
+    <record id="view_revenue_sharing_rule_form" model="ir.ui.view">
+        <field name="name">revenue.sharing.rule.form</field>
+        <field name="model">revenue.sharing.rule</field>
+        <field name="arch" type="xml">
+            <form string="Revenue Sharing Rule">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <field name="active" widget="boolean_button" options="{'terminology': 'active'}"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="sequence"/>
+                            <field name="operating_unit_id" options="{'no_create': True}"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <label for="apply_to"/>
+                            <div>
+                                <field name="apply_to" class="oe_inline"/>
+                                <div class="text-muted" style="margin-top: 4px;">
+                                    <small>Define which products this rule applies to</small>
+                                </div>
+                            </div>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="categ_id" invisible="apply_to != 'category'" required="apply_to == 'category'"/>
+                            <field name="product_id" invisible="apply_to != 'product'" required="apply_to == 'product'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Revenue Sharing Lines" name="lines">
+                            <div class="alert alert-info" role="alert" style="margin-bottom: 10px;">
+                                <strong>Configuration Guide:</strong>
+                                <ul style="margin-bottom: 0;">
+                                    <li>Add one line for each Operating Unit Type (Store, DC, HO)</li>
+                                    <li>Total percentage must equal <strong>100%</strong></li>
+                                    <li>Example: Store 30% + DC 40% + HO 30% = 100%</li>
+                                </ul>
+                            </div>
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="ou_type_id" options="{'no_create': True}"/>
+                                    <field name="percentage" widget="percentage"/>
+                                    <field name="description"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_percentage" widget="percentage" 
+                                       class="oe_subtotal_footer_separator"
+                                       decoration-success="total_percentage == 100.0"
+                                       decoration-danger="total_percentage != 100.0"/>
+                            </group>
+                            <div class="alert alert-warning" role="alert" 
+                                 invisible="total_percentage == 100.0"
+                                 style="margin-top: 10px;">
+                                <i class="fa fa-warning"/> <strong>Warning:</strong> 
+                                Total is <field name="total_percentage" widget="percentage" readonly="1"/>.
+                                Please adjust percentages to equal 100%.
+                            </div>
+                        </page>
+                        <page string="Contract Information" name="contract_info">
+                            <group>
+                                <group string="Effective Period">
+                                    <label for="date_from"/>
+                                    <div>
+                                        <field name="date_from" class="oe_inline"/>
+                                        <span class="text-muted" style="margin-left: 8px;">
+                                            <i class="fa fa-info-circle"/> Leave empty for no start limit
+                                        </span>
+                                    </div>
+                                    <label for="date_to"/>
+                                    <div>
+                                        <field name="date_to" class="oe_inline"/>
+                                        <span class="text-muted" style="margin-left: 8px;">
+                                            <i class="fa fa-info-circle"/> Leave empty for no end limit
+                                        </span>
+                                    </div>
+                                </group>
+                                <group string="Scope">
+                                    <field name="operating_unit_id"/>
+                                    <div class="text-muted">
+                                        <small>
+                                            <strong>Tip:</strong> Leave empty for global rules that apply to all OUs.
+                                            Specify an OU for location-specific contracts.
+                                        </small>
+                                    </div>
+                                </group>
+                            </group>
+                            <group string="Rule Priority">
+                                <div class="alert alert-info" style="margin: 0;">
+                                    <strong>Rule Selection Priority:</strong>
+                                    <ol style="margin-bottom: 0; padding-left: 20px;">
+                                        <li><strong>Specific OU + Specific Product</strong> (Highest priority)</li>
+                                        <li><strong>Any OU + Specific Product</strong></li>
+                                        <li><strong>Specific OU + Product Category</strong></li>
+                                        <li><strong>Any OU + Product Category</strong></li>
+                                        <li><strong>Specific OU + All Products</strong></li>
+                                        <li><strong>Any OU + All Products</strong> (Default/Lowest priority)</li>
+                                    </ol>
+                                    <p style="margin-top: 8px; margin-bottom: 0;">
+                                        <i class="fa fa-lightbulb-o"/> The system will use the most specific matching rule for each transaction.
+                                    </p>
+                                </div>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Revenue Sharing Rule Search View -->
+    <record id="view_revenue_sharing_rule_search" model="ir.ui.view">
+        <field name="name">revenue.sharing.rule.search</field>
+        <field name="model">revenue.sharing.rule</field>
+        <field name="arch" type="xml">
+            <search string="Revenue Sharing Rules">
+                <field name="name"/>
+                <field name="operating_unit_id"/>
+                <field name="categ_id"/>
+                <field name="product_id"/>
+                <filter string="Active" name="filter_active" domain="[('active', '=', True)]"/>
+                <filter string="Archived" name="filter_archived" domain="[('active', '=', False)]"/>
+                <separator/>
+                <filter string="Global Rules" name="filter_global" 
+                        domain="[('operating_unit_id', '=', False)]"
+                        help="Rules that apply to all Operating Units"/>
+                <filter string="OU-Specific Rules" name="filter_ou_specific" 
+                        domain="[('operating_unit_id', '!=', False)]"
+                        help="Rules for specific Operating Units"/>
+                <separator/>
+                <filter string="Currently Valid" name="filter_current" 
+                        domain="['|', ('date_from', '=', False), ('date_from', '&lt;=', context_today().strftime('%Y-%m-%d')),
+                                 '|', ('date_to', '=', False), ('date_to', '&gt;=', context_today().strftime('%Y-%m-%d'))]"
+                        help="Rules valid today"/>
+                <filter string="Future Rules" name="filter_future" 
+                        domain="[('date_from', '&gt;', context_today().strftime('%Y-%m-%d'))]"
+                        help="Rules that will become effective in the future"/>
+                <filter string="Expired Rules" name="filter_expired" 
+                        domain="[('date_to', '&lt;', context_today().strftime('%Y-%m-%d'))]"
+                        help="Rules that are no longer valid"/>
+                <separator/>
+                <filter string="All Products" name="filter_all" domain="[('apply_to', '=', 'all')]"/>
+                <filter string="By Category" name="filter_category" domain="[('apply_to', '=', 'category')]"/>
+                <filter string="Specific Product" name="filter_product" domain="[('apply_to', '=', 'product')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Operating Unit" name="group_by_ou" context="{'group_by': 'operating_unit_id'}"/>
+                    <filter string="Apply To" name="group_by_apply_to" context="{'group_by': 'apply_to'}"/>
+                    <filter string="Product Category" name="group_by_category" context="{'group_by': 'categ_id'}"/>
+                    <filter string="Valid From Month" name="group_by_date_from" context="{'group_by': 'date_from:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Revenue Sharing Rule Action -->
+    <record id="action_revenue_sharing_rule" model="ir.actions.act_window">
+        <field name="name">Revenue Sharing Rules</field>
+        <field name="res_model">revenue.sharing.rule</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_revenue_sharing_rule_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_revenue_sharing_rule_form')}),
+        ]"/>
+        <field name="context">{'search_default_filter_active': 1, 'search_default_filter_current': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create Revenue Sharing Rules
+            </p>
+            <p>
+                Define how revenue is shared across the hierarchy (Store, DC, HO).
+            </p>
+            <p>
+                <strong>Configuration Steps:</strong>
+            </p>
+            <ol>
+                <li>Create a new rule and specify:
+                    <ul>
+                        <li><strong>Operating Unit:</strong> Leave empty for global rules, or select specific OU for location-specific contracts</li>
+                        <li><strong>Effective Dates:</strong> Set Valid From/To dates for contract renewals (leave empty for always active)</li>
+                        <li><strong>Product Scope:</strong> Apply to All Products, Category, or Specific Product</li>
+                    </ul>
+                </li>
+                <li>Add sharing lines - one for each Operating Unit Type (Store, DC, HO)</li>
+                <li>Set percentages that <strong>total exactly 100%</strong> (e.g., Store: 30%, DC: 40%, HO: 30%)</li>
+                <li>Save the rule</li>
+            </ol>
+            <p>
+                <strong>💡 Use Cases:</strong>
+            </p>
+            <ul>
+                <li><strong>Contract Renewals:</strong> Create new rules with different dates for updated revenue sharing terms</li>
+                <li><strong>Location-Specific:</strong> Different sharing percentages for different stores or regions</li>
+                <li><strong>Seasonal:</strong> Special sharing rules for specific time periods</li>
+            </ul>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_revenue_sharing_root"
+              name="Revenue Sharing"
+              parent="point_of_sale.menu_point_root"
+              sequence="50"/>
+
+    <menuitem id="menu_revenue_sharing_rule"
+              name="Revenue Sharing Rules"
+              parent="menu_revenue_sharing_root"
+              action="action_revenue_sharing_rule"
+              sequence="10"/>
+
+</odoo>

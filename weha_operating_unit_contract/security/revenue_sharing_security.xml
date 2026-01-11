@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Revenue Sharing Rule - Multi-OU Record Rule -->
+    <record id="revenue_sharing_rule_multi_ou" model="ir.rule">
+        <field name="name">Revenue Sharing Rule Multi-OU</field>
+        <field name="model_id" ref="model_revenue_sharing_rule"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Revenue Sharing Period - Multi-OU Record Rule -->
+    <record id="revenue_sharing_period_multi_ou" model="ir.rule">
+        <field name="name">Revenue Sharing Period Multi-OU</field>
+        <field name="model_id" ref="model_revenue_sharing_period"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Revenue Sharing Entry - Multi-OU Record Rule -->
+    <record id="revenue_sharing_entry_multi_ou" model="ir.rule">
+        <field name="name">Revenue Sharing Entry Multi-OU</field>
+        <field name="model_id" ref="model_revenue_sharing_entry"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+    </record>
+
+</odoo>

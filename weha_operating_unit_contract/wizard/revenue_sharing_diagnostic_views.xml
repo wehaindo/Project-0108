@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Revenue Sharing Diagnostic Wizard Form -->
+    <record id="view_revenue_sharing_diagnostic_form" model="ir.ui.view">
+        <field name="name">revenue.sharing.diagnostic.form</field>
+        <field name="model">revenue.sharing.diagnostic</field>
+        <field name="arch" type="xml">
+            <form string="Revenue Sharing Diagnostic">
+                <sheet>
+                    <group>
+                        <field name="period_id" readonly="1"/>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Diagnostic Results">
+                            <group string="POS Orders">
+                                <field name="total_pos_orders"/>
+                                <field name="orders_with_state"/>
+                                <field name="orders_with_ou"/>
+                                <field name="orders_matching"/>
+                            </group>
+                            
+                            <group string="Operating Units">
+                                <field name="total_ous"/>
+                                <field name="ous_with_auto_share"/>
+                                <field name="ous_with_parents"/>
+                            </group>
+                            
+                            <group string="Revenue Sharing Rules">
+                                <field name="total_rules"/>
+                                <field name="active_rules"/>
+                            </group>
+                            
+                            <group string="Report" col="1">
+                                <field name="diagnostic_message" nolabel="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                
+                <footer>
+                    <button name="action_run_diagnostic" 
+                            string="Run Diagnostic" 
+                            type="object" 
+                            class="btn-primary"/>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action to open diagnostic wizard -->
+    <record id="action_revenue_sharing_diagnostic" model="ir.actions.act_window">
+        <field name="name">Revenue Sharing Diagnostic</field>
+        <field name="res_model">revenue.sharing.diagnostic</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_revenue_sharing_period"/>
+        <field name="binding_view_types">form</field>
+    </record>
+
+</odoo>

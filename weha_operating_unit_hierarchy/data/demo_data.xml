@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Operating Unit Types -->
+    <record id="ou_type_ho" model="operating.unit.type">
+        <field name="name">Head Office</field>
+        <field name="code">HO</field>
+        <field name="sequence">10</field>
+        <field name="level">0</field>
+        <field name="can_have_parent" eval="False"/>
+        <field name="can_have_children" eval="True"/>
+        <field name="default_revenue_share">10.0</field>
+    </record>
+
+    <record id="ou_type_dc" model="operating.unit.type">
+        <field name="name">Distribution Center</field>
+        <field name="code">DC</field>
+        <field name="sequence">20</field>
+        <field name="level">1</field>
+        <field name="can_have_parent" eval="True"/>
+        <field name="can_have_children" eval="True"/>
+        <field name="default_revenue_share">20.0</field>
+    </record>
+
+    <record id="ou_type_store" model="operating.unit.type">
+        <field name="name">Store</field>
+        <field name="code">STORE</field>
+        <field name="sequence">30</field>
+        <field name="level">2</field>
+        <field name="can_have_parent" eval="True"/>
+        <field name="can_have_children" eval="False"/>
+        <field name="default_revenue_share">70.0</field>
+    </record>
+
+    <!-- Operating Units - Head Office -->
+    <record id="ou_head_office" model="operating.unit">
+        <field name="name">Head Office Jakarta</field>
+        <field name="code">HO-JKT</field>
+        <field name="ou_type_id" ref="ou_type_ho"/>
+        <field name="revenue_share_percentage">10.0</field>
+        <field name="auto_share_revenue" eval="True"/>
+    </record>
+
+    <!-- Operating Units - Distribution Centers -->
+    <record id="ou_dc_jakarta" model="operating.unit">
+        <field name="name">DC Jakarta</field>
+        <field name="code">DC-JKT</field>
+        <field name="ou_type_id" ref="ou_type_dc"/>
+        <field name="parent_id" ref="ou_head_office"/>
+        <field name="revenue_share_percentage">20.0</field>
+        <field name="auto_share_revenue" eval="True"/>
+    </record>
+
+    <record id="ou_dc_surabaya" model="operating.unit">
+        <field name="name">DC Surabaya</field>
+        <field name="code">DC-SBY</field>
+        <field name="ou_type_id" ref="ou_type_dc"/>
+        <field name="parent_id" ref="ou_head_office"/>
+        <field name="revenue_share_percentage">20.0</field>
+        <field name="auto_share_revenue" eval="True"/>
+    </record>
+
+    <!-- Operating Units - Stores under DC Jakarta -->
+    <record id="ou_store_jakarta_01" model="operating.unit">
+        <field name="name">Store Jakarta 01</field>
+        <field name="code">STORE-JKT-01</field>
+        <field name="ou_type_id" ref="ou_type_store"/>
+        <field name="parent_id" ref="ou_dc_jakarta"/>
+        <field name="revenue_share_percentage">70.0</field>
+        <field name="auto_share_revenue" eval="True"/>
+        <field name="default_source_ou_id" ref="ou_dc_jakarta"/>
+        <field name="auto_request_from_parent" eval="True"/>
+    </record>
+
+    <record id="ou_store_jakarta_02" model="operating.unit">
+        <field name="name">Store Jakarta 02</field>
+        <field name="code">STORE-JKT-02</field>
+        <field name="ou_type_id" ref="ou_type_store"/>
+        <field name="parent_id" ref="ou_dc_jakarta"/>
+        <field name="revenue_share_percentage">70.0</field>
+        <field name="auto_share_revenue" eval="True"/>
+        <field name="default_source_ou_id" ref="ou_dc_jakarta"/>
+        <field name="auto_request_from_parent" eval="True"/>
+    </record>
+
+    <!-- Operating Units - Stores under DC Surabaya -->
+    <record id="ou_store_surabaya_01" model="operating.unit">
+        <field name="name">Store Surabaya 01</field>
+        <field name="code">STORE-SBY-01</field>
+        <field name="ou_type_id" ref="ou_type_store"/>
+        <field name="parent_id" ref="ou_dc_surabaya"/>
+        <field name="revenue_share_percentage">70.0</field>
+        <field name="auto_share_revenue" eval="True"/>
+        <field name="default_source_ou_id" ref="ou_dc_surabaya"/>
+        <field name="auto_request_from_parent" eval="True"/>
+    </record>
+
+    <!-- Revenue Sharing Rule - Default (All Products) -->
+    <record id="revenue_sharing_rule_default" model="revenue.sharing.rule">
+        <field name="name">Default Revenue Sharing (70-20-10)</field>
+        <field name="sequence">100</field>
+        <field name="apply_to">all</field>
+    </record>
+
+    <!-- Revenue Sharing Rule Lines - Default -->
+    <record id="revenue_sharing_rule_default_line_store" model="revenue.sharing.rule.line">
+        <field name="rule_id" ref="revenue_sharing_rule_default"/>
+        <field name="sequence">10</field>
+        <field name="ou_type_id" ref="ou_type_store"/>
+        <field name="percentage">70.0</field>
+        <field name="description">Store keeps 70% of revenue</field>
+    </record>
+
+    <record id="revenue_sharing_rule_default_line_dc" model="revenue.sharing.rule.line">
+        <field name="rule_id" ref="revenue_sharing_rule_default"/>
+        <field name="sequence">20</field>
+        <field name="ou_type_id" ref="ou_type_dc"/>
+        <field name="percentage">20.0</field>
+        <field name="description">DC gets 20% commission</field>
+    </record>
+
+    <record id="revenue_sharing_rule_default_line_ho" model="revenue.sharing.rule.line">
+        <field name="rule_id" ref="revenue_sharing_rule_default"/>
+        <field name="sequence">30</field>
+        <field name="ou_type_id" ref="ou_type_ho"/>
+        <field name="percentage">10.0</field>
+        <field name="description">HO gets 10% commission</field>
+    </record>
+
+</odoo>

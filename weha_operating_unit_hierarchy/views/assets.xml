@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Assets bundle for Hierarchy Tree OWL Component -->
+    <template id="assets_backend" name="weha_operating_unit_hierarchy assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <!-- JavaScript Component -->
+            <script type="text/javascript" src="/weha_operating_unit_hierarchy/static/src/components/hierarchy_tree/hierarchy_tree.js"/>
+            
+            <!-- XML Template -->
+            <t t-call-assets="weha_operating_unit_hierarchy.hierarchy_tree_templates"/>
+            
+            <!-- SCSS Styles -->
+            <link rel="stylesheet" type="text/scss" href="/weha_operating_unit_hierarchy/static/src/components/hierarchy_tree/hierarchy_tree.scss"/>
+        </xpath>
+    </template>
+
+    <!-- Template Assets -->
+    <template id="hierarchy_tree_templates" name="Hierarchy Tree Templates">
+        <t t-call-assets="weha_operating_unit_hierarchy.hierarchy_tree_xml_templates" t-js="false"/>
+    </template>
+
+    <template id="hierarchy_tree_xml_templates">
+        <t t-call="weha_operating_unit_hierarchy.HierarchyTreeTemplate"/>
+        <t t-call="weha_operating_unit_hierarchy.HierarchyNodeTemplate"/>
+    </template>
+</odoo>

@@ -1,0 +1,17 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_revenue_sharing_rule_user,access.revenue.sharing.rule.user,model_revenue_sharing_rule,point_of_sale.group_pos_user,1,0,0,0
+access_revenue_sharing_rule_manager,access.revenue.sharing.rule.manager,model_revenue_sharing_rule,point_of_sale.group_pos_manager,1,1,1,1
+
+access_revenue_sharing_rule_line_user,access.revenue.sharing.rule.line.user,model_revenue_sharing_rule_line,point_of_sale.group_pos_user,1,0,0,0
+access_revenue_sharing_rule_line_manager,access.revenue.sharing.rule.line.manager,model_revenue_sharing_rule_line,point_of_sale.group_pos_manager,1,1,1,1
+
+access_revenue_sharing_period_user,access.revenue.sharing.period.user,model_revenue_sharing_period,point_of_sale.group_pos_user,1,0,0,0
+access_revenue_sharing_period_manager,access.revenue.sharing.period.manager,model_revenue_sharing_period,point_of_sale.group_pos_manager,1,1,1,0
+access_revenue_sharing_period_accountant,access.revenue.sharing.period.accountant,model_revenue_sharing_period,account.group_account_user,1,1,1,1
+
+access_revenue_sharing_entry_user,access.revenue.sharing.entry.user,model_revenue_sharing_entry,point_of_sale.group_pos_user,1,0,0,0
+access_revenue_sharing_entry_manager,access.revenue.sharing.entry.manager,model_revenue_sharing_entry,point_of_sale.group_pos_manager,1,0,0,0
+access_revenue_sharing_entry_accountant,access.revenue.sharing.entry.accountant,model_revenue_sharing_entry,account.group_account_user,1,1,1,1
+
+access_revenue_sharing_diagnostic_manager,access.revenue.sharing.diagnostic.manager,model_revenue_sharing_diagnostic,point_of_sale.group_pos_manager,1,1,1,1

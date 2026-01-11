@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Demo: Replenishment Rules for Store A -->
+        <record id="replenishment_rule_store_a_product_1" model="stock.replenishment.rule">
+            <field name="operating_unit_id" ref="weha_operating_unit_hierarchy.operating_unit_store_a"/>
+            <field name="warehouse_id" ref="stock.warehouse0"/>
+            <field name="location_id" ref="stock.stock_location_stock"/>
+            <field name="product_id" ref="product.product_product_4"/>
+            <field name="minimum_qty">10.0</field>
+            <field name="maximum_qty">50.0</field>
+            <field name="auto_trigger" eval="True"/>
+            <field name="active" eval="True"/>
+        </record>
+        
+        <record id="replenishment_rule_store_a_product_2" model="stock.replenishment.rule">
+            <field name="operating_unit_id" ref="weha_operating_unit_hierarchy.operating_unit_store_a"/>
+            <field name="warehouse_id" ref="stock.warehouse0"/>
+            <field name="location_id" ref="stock.stock_location_stock"/>
+            <field name="product_id" ref="product.product_product_5"/>
+            <field name="minimum_qty">20.0</field>
+            <field name="maximum_qty">100.0</field>
+            <field name="auto_trigger" eval="True"/>
+            <field name="active" eval="True"/>
+        </record>
+        
+        <!-- Demo: Replenishment Rules for Store B -->
+        <record id="replenishment_rule_store_b_product_1" model="stock.replenishment.rule">
+            <field name="operating_unit_id" ref="weha_operating_unit_hierarchy.operating_unit_store_b"/>
+            <field name="warehouse_id" ref="stock.warehouse0"/>
+            <field name="location_id" ref="stock.stock_location_stock"/>
+            <field name="product_id" ref="product.product_product_6"/>
+            <field name="minimum_qty">15.0</field>
+            <field name="maximum_qty">75.0</field>
+            <field name="auto_trigger" eval="True"/>
+            <field name="active" eval="True"/>
+        </record>
+        
+        <!-- Demo: Replenishment Rules for Store C -->
+        <record id="replenishment_rule_store_c_product_1" model="stock.replenishment.rule">
+            <field name="operating_unit_id" ref="weha_operating_unit_hierarchy.operating_unit_store_c"/>
+            <field name="warehouse_id" ref="stock.warehouse0"/>
+            <field name="location_id" ref="stock.stock_location_stock"/>
+            <field name="product_id" ref="product.product_product_7"/>
+            <field name="minimum_qty">5.0</field>
+            <field name="maximum_qty">30.0</field>
+            <field name="auto_trigger" eval="True"/>
+            <field name="active" eval="True"/>
+        </record>
+        
+    </data>
+</odoo>

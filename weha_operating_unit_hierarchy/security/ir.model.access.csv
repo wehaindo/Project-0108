@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_operating_unit_type_user,access.operating.unit.type.user,model_operating_unit_type,operating_unit.group_multi_operating_unit,1,0,0,0
+access_operating_unit_type_manager,access.operating.unit.type.manager,model_operating_unit_type,operating_unit.group_manager_operating_unit,1,1,1,1

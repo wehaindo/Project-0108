@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Stock Request Order Form View -->
+    <record id="view_stock_request_order_form_inherit_operating_unit" model="ir.ui.view">
+        <field name="name">stock.request.order.form.inherit.operating.unit</field>
+        <field name="model">stock.request.order</field>
+        <field name="inherit_id" ref="stock_request.stock_request_order_form"/>
+        <field name="arch" type="xml">
+            
+            <!-- Add operating unit field after warehouse_id -->
+            <field name="warehouse_id" position="after">
+                <field name="operating_unit_id" 
+                    options="{'no_create': True, 'no_open': True}"
+                    groups="stock.group_stock_multi_locations"
+                    readonly="state != 'draft'"/>
+            </field>
+            
+        </field>
+    </record>
+
+    <!-- Stock Request Order Tree View -->
+    <record id="view_stock_request_order_tree_inherit_operating_unit" model="ir.ui.view">
+        <field name="name">stock.request.order.tree.inherit.operating.unit</field>
+        <field name="model">stock.request.order</field>
+        <field name="inherit_id" ref="stock_request.stock_request_order_tree"/>
+        <field name="arch" type="xml">
+            
+            <!-- Add operating unit field -->
+            <field name="warehouse_id" position="after">
+                <field name="operating_unit_id" optional="show"/>
+            </field>
+            
+        </field>
+    </record>
+
+    <!-- Stock Request Order Search View -->
+    <record id="view_stock_request_order_search_inherit_operating_unit" model="ir.ui.view">
+        <field name="name">stock.request.order.search.inherit.operating.unit</field>
+        <field name="model">stock.request.order</field>
+        <field name="inherit_id" ref="stock_request.stock_request_order_search"/>
+        <field name="arch" type="xml">
+            
+            <!-- Add operating unit filter and group by -->
+            <filter name="warehouse" position="after">
+                <filter name="operating_unit_id" 
+                    string="Operating Unit" 
+                    context="{'group_by': 'operating_unit_id'}"/>
+            </filter>
+            
+            <!-- Add operating unit in search -->
+            <field name="warehouse_id" position="after">
+                <field name="operating_unit_id"/>
+            </field>
+            
+        </field>
+    </record>
+
+    <!-- Stock Picking Form View - Add Smart Button -->
+    <record id="view_picking_form_inherit_stock_request_ou" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit.stock.request.ou</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            
+            <!-- Add smart button for stock requests -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_stock_requests"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-list-alt"
+                    invisible="stock_request_count == 0">
+                    <field name="stock_request_count" widget="statinfo" string="Stock Requests"/>
+                </button>
+            </xpath>
+            
+            <!-- Add invisible fields for compute -->
+            <xpath expr="//sheet" position="before">
+                <field name="stock_request_ids" invisible="1"/>
+            </xpath>
+            
+        </field>
+    </record>
+
+</odoo>

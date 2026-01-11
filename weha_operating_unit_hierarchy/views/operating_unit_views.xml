@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Operating Unit Form View - Add Hierarchy Fields -->
+    <record id="view_operating_unit_form_hierarchy" model="ir.ui.view">
+        <field name="name">operating.unit.form.hierarchy</field>
+        <field name="model">operating.unit</field>
+        <field name="inherit_id" ref="operating_unit.view_operating_unit_form"/>
+        <field name="arch" type="xml">
+            <!-- Add hierarchy group after company_id -->
+            <field name="company_id" position="after">
+                <field name="ou_type_id" options="{'no_create': True}"/>
+            </field>
+            
+            <!-- Add hierarchy tab -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Hierarchy" name="hierarchy">
+                    <group>
+                        <group string="Parent/Child Relationships">
+                            <field name="parent_id" options="{'no_create': True}"/>
+                            <field name="level" readonly="1"/>
+                            <field name="parent_path" readonly="1"/>
+                        </group>
+                        <group string="Revenue Sharing">
+                            <field name="revenue_share_percentage"/>
+                            <field name="auto_share_revenue"/>
+                        </group>
+                    </group>
+                    <group string="Stock Request Settings">
+                        <field name="default_source_ou_id" options="{'no_create': True}"/>
+                        <field name="auto_request_from_parent"/>
+                    </group>
+                    <separator string="Child Operating Units"/>
+                    <field name="child_ids" nolabel="1">
+                        <list>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="ou_type_id"/>
+                            <field name="level"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Operating Unit list View - Add Type and Parent -->
+    <record id="view_operating_unit_list_hierarchy" model="ir.ui.view">
+        <field name="name">operating.unit.list.hierarchy</field>
+        <field name="model">operating.unit</field>
+        <field name="inherit_id" ref="operating_unit.view_operating_unit_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="ou_type_id"/>
+                <field name="parent_id"/>
+                <field name="level"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Operating Unit Hierarchy list View -->
+    <record id="view_operating_unit_hierarchy_list" model="ir.ui.view">
+        <field name="name">operating.unit.hierarchy.list</field>
+        <field name="model">operating.unit</field>
+        <field name="arch" type="xml">
+            <list string="Operating Unit Hierarchy">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="ou_type_id"/>
+                <field name="parent_id"/>
+                <field name="revenue_share_percentage"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Operating Unit Hierarchy Action -->
+    <record id="action_operating_unit_hierarchy" model="ir.actions.act_window">
+        <field name="name">Operating Unit Hierarchy</field>
+        <field name="res_model">operating.unit</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_operating_unit_hierarchy_list"/>
+        <field name="domain">[('parent_id', '=', False)]</field>
+        <field name="context">{'search_default_group_by_type': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create Operating Unit Hierarchy
+            </p>
+            <p>
+                Set up your organization structure: HO → DC → Store
+            </p>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_operating_unit_search_hierarchy" model="ir.ui.view">
+        <field name="name">operating.unit.search.hierarchy</field>
+        <field name="model">operating.unit</field>
+        <field name="inherit_id" ref="operating_unit.view_operating_unit_search"/>
+        <field name="arch" type="xml">
+            <search position="inside">
+                <filter string="Head Office" name="filter_ho" domain="[('ou_type_id.code', '=', 'HO')]"/>
+                <filter string="Distribution Center" name="filter_dc" domain="[('ou_type_id.code', '=', 'DC')]"/>
+                <filter string="Store" name="filter_store" domain="[('ou_type_id.code', '=', 'STORE')]"/>
+                <separator/>
+                <filter string="Auto Share Revenue" name="filter_auto_share" domain="[('auto_share_revenue', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="OU Type" name="group_by_type" context="{'group_by': 'ou_type_id'}"/>
+                    <filter string="Parent OU" name="group_by_parent" context="{'group_by': 'parent_id'}"/>
+                    <filter string="Level" name="group_by_level" context="{'group_by': 'level'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_operating_unit_hierarchy"
+              name="OU Hierarchy"
+              parent="weha_operating_unit_hierarchy.menu_operating_unit_hierarchy_config"
+              action="action_operating_unit_hierarchy"
+              sequence="15"/>
+
+</odoo>

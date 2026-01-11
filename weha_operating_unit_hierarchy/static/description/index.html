@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Operating Unit Hierarchy</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 3em;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.3em;
+            opacity: 0.9;
+        }
+        .section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .section h2 {
+            color: #667eea;
+            margin-top: 0;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .feature-card h3 {
+            color: #667eea;
+            margin-top: 0;
+        }
+        .feature-card ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .feature-card li {
+            margin: 8px 0;
+        }
+        .flow-diagram {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-family: monospace;
+            white-space: pre;
+            overflow-x: auto;
+        }
+        .example {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .example h4 {
+            margin-top: 0;
+            color: #2e7d32;
+        }
+        .highlight {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .benefits {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .benefit-badge {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .workflow {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .workflow-step {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        .workflow-step .number {
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+        .workflow-step .content {
+            flex: 1;
+        }
+        .workflow-step .content strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #667eea;
+            color: white;
+        }
+        tr:hover {
+            background: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏢 Operating Unit Hierarchy</h1>
+        <p>Multi-level organization structure with automated monthly revenue sharing</p>
+        <p><strong>Version 18.0.1.0.0</strong> | Odoo 18.0</p>
+    </div>
+
+    <div class="section">
+        <h2>📋 Overview</h2>
+        <p>
+            This module manages operating unit hierarchy for multi-level business structures with automated 
+            monthly revenue sharing from POS orders. Perfect for retail chains with distribution centers 
+            and multiple stores.
+        </p>
+        
+        <div class="flow-diagram">
+<strong>Hierarchy Structure:</strong>
+
+    🏛️ Head Office (HO)
+         ↓
+    📦 Distribution Center (DC)
+         ↓
+    🏪 Store
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>✨ Key Features</h2>
+        <div class="features">
+            <div class="feature-card">
+                <h3>🔗 Hierarchy Management</h3>
+                <ul>
+                    <li>Parent-child relationships</li>
+                    <li>Multi-level structure support</li>
+                    <li>Automatic validation</li>
+                    <li>Visual hierarchy tree</li>
+                    <li>Configurable OU types</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h3>💰 Monthly Revenue Sharing</h3>
+                <ul>
+                    <li>Batch processing by month</li>
+                    <li>Automatic distribution</li>
+                    <li>Configurable percentages</li>
+                    <li>Multiple rule support</li>
+                    <li>Complete audit trail</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h3>⚙️ Flexible Configuration</h3>
+                <ul>
+                    <li>Product category rules</li>
+                    <li>Product-specific rules</li>
+                    <li>OU type-based rules</li>
+                    <li>Default percentages</li>
+                    <li>Rule priority system</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h3>📊 Reporting & Analysis</h3>
+                <ul>
+                    <li>Revenue by OU</li>
+                    <li>Period comparisons</li>
+                    <li>Product analysis</li>
+                    <li>Pivot tables</li>
+                    <li>Visual charts</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>💼 Business Flow</h2>
+        
+        <div class="example">
+            <h4>Revenue Sharing Example:</h4>
+            <p><strong>Store Jakarta 01</strong> sells a laptop for <strong>Rp 10,000,000</strong></p>
+            <br>
+            <p><strong>Revenue Distribution (70-20-10 rule):</strong></p>
+            <ul>
+                <li>🏪 <strong>Store Jakarta 01</strong> keeps: 70% → <strong>Rp 7,000,000</strong></li>
+                <li>📦 <strong>DC Jakarta</strong> gets: 20% → <strong>Rp 2,000,000</strong></li>
+                <li>🏛️ <strong>Head Office</strong> gets: 10% → <strong>Rp 1,000,000</strong></li>
+            </ul>
+        </div>
+
+        <div class="workflow">
+            <h3>Monthly Processing Workflow:</h3>
+            
+            <div class="workflow-step">
+                <div class="number">1</div>
+                <div class="content">
+                    <strong>Daily Operations</strong>
+                    Stores make POS sales throughout the month. Orders are automatically linked to revenue sharing periods.
+                </div>
+            </div>
+            
+            <div class="workflow-step">
+                <div class="number">2</div>
+                <div class="content">
+                    <strong>Calculate</strong>
+                    At month end, open the period and click "Calculate Revenue Sharing" to process all orders.
+                </div>
+            </div>
+            
+            <div class="workflow-step">
+                <div class="number">3</div>
+                <div class="content">
+                    <strong>Review</strong>
+                    Verify entries using pivot tables and graphs. Check amounts and percentages.
+                </div>
+            </div>
+            
+            <div class="workflow-step">
+                <div class="number">4</div>
+                <div class="content">
+                    <strong>Validate</strong>
+                    Lock the calculations to prevent changes.
+                </div>
+            </div>
+            
+            <div class="workflow-step">
+                <div class="number">5</div>
+                <div class="content">
+                    <strong>Post & Close</strong>
+                    Generate accounting entries and close the period.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🎯 Benefits</h2>
+        <div class="benefits">
+            <div class="benefit-badge">⚡ Better Performance</div>
+            <div class="benefit-badge">📦 Batch Processing</div>
+            <div class="benefit-badge">🔄 Easy Corrections</div>
+            <div class="benefit-badge">📊 Detailed Reporting</div>
+            <div class="benefit-badge">✅ Complete Audit Trail</div>
+            <div class="benefit-badge">🎨 Flexible Rules</div>
+            <div class="benefit-badge">💼 Accounting Ready</div>
+            <div class="benefit-badge">🔒 Secure & Validated</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>📦 Installation</h2>
+        
+        <div class="highlight">
+            <h3>Prerequisites:</h3>
+            <p><strong>Required OCA modules:</strong></p>
+            <ul>
+                <li><code>operating_unit</code> - Base OU framework</li>
+                <li><code>account_operating_unit</code> - Accounting integration</li>
+            </ul>
+            <p><strong>Required custom modules:</strong></p>
+            <ul>
+                <li><code>weha_pos_operating_unit</code> - POS + OU integration</li>
+            </ul>
+            <p><strong>Optional modules:</strong></p>
+            <ul>
+                <li><code>stock_request</code> (OCA) - For stock flow features</li>
+                <li><code>weha_stock_request_operating_unit</code> - Stock request + OU</li>
+            </ul>
+        </div>
+        
+        <h3>Install Steps:</h3>
+        <ol>
+            <li>Copy this module to your Odoo addons directory</li>
+            <li>Update the app list in Odoo</li>
+            <li>Search for "Operating Unit Hierarchy"</li>
+            <li>Click Install</li>
+            <li>Install demo data to see example structure</li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <h2>⚙️ Configuration</h2>
+        
+        <h3>1. Create Operating Unit Types</h3>
+        <p>Navigate to: <strong>Operating Units → Configuration → Operating Unit Types</strong></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Code</th>
+                    <th>Level</th>
+                    <th>Can Have Parent</th>
+                    <th>Can Have Children</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Head Office</td>
+                    <td>HO</td>
+                    <td>0</td>
+                    <td>No</td>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <td>Distribution Center</td>
+                    <td>DC</td>
+                    <td>1</td>
+                    <td>Yes</td>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <td>Store</td>
+                    <td>STORE</td>
+                    <td>2</td>
+                    <td>Yes</td>
+                    <td>No</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3>2. Create Operating Units</h3>
+        <p>Navigate to: <strong>Operating Units → Configuration → OU Hierarchy</strong></p>
+        <p>Create your hierarchy structure and configure:</p>
+        <ul>
+            <li><strong>OU Type:</strong> Select appropriate type (HO/DC/Store)</li>
+            <li><strong>Parent OU:</strong> Select parent (if applicable)</li>
+            <li><strong>Revenue Share %:</strong> Percentage this OU receives</li>
+            <li><strong>Auto Share Revenue:</strong> Enable automatic revenue sharing</li>
+        </ul>
+        
+        <h3>3. Create Revenue Sharing Rules</h3>
+        <p>Navigate to: <strong>Point of Sale → Revenue Sharing → Revenue Sharing Rules</strong></p>
+        <p>Create rules with lines defining percentage for each OU type. Total must equal 100%.</p>
+    </div>
+
+    <div class="section">
+        <h2>📱 Usage</h2>
+        
+        <h3>Process Monthly Revenue Sharing:</h3>
+        <ol>
+            <li>Navigate to: <strong>Point of Sale → Revenue Sharing → Revenue Sharing Periods</strong></li>
+            <li>Open the period (e.g., "January 2026")</li>
+            <li>Click <strong>"Calculate Revenue Sharing"</strong> button</li>
+            <li>Review entries using the smart button</li>
+            <li>Click <strong>"Validate"</strong> to lock calculations</li>
+            <li>Click <strong>"Post Accounting"</strong> (future feature)</li>
+            <li>Click <strong>"Close Period"</strong> to finalize</li>
+        </ol>
+        
+        <h3>View Revenue Sharing Entries:</h3>
+        <p>Navigate to: <strong>Point of Sale → Revenue Sharing → Revenue Sharing Entries</strong></p>
+        <p>Available views:</p>
+        <ul>
+            <li><strong>Tree:</strong> List of all entries</li>
+            <li><strong>Pivot:</strong> Analysis by OU, period, product</li>
+            <li><strong>Graph:</strong> Visual charts of revenue distribution</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>🎨 Demo Data</h2>
+        <p>Install demo data to see a complete example structure:</p>
+        
+        <div class="flow-diagram">
+🏛️ Head Office Jakarta
+    ├── 📦 DC Jakarta
+    │       ├── 🏪 Store Jakarta 01
+    │       └── 🏪 Store Jakarta 02
+    └── 📦 DC Surabaya
+            └── 🏪 Store Surabaya 01
+        </div>
+        
+        <p>Includes:</p>
+        <ul>
+            <li>3 Operating Unit Types (HO, DC, Store)</li>
+            <li>6 Operating Units (1 HO, 2 DC, 3 Stores)</li>
+            <li>Default revenue sharing rule (70-20-10)</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>🔮 Future Enhancements</h2>
+        <ul>
+            <li>🏦 Accounting integration (auto-create journal entries)</li>
+            <li>📦 Stock request hierarchy routing</li>
+            <li>💵 Commission payments to employees</li>
+            <li>📈 Advanced reporting dashboard</li>
+            <li>🌍 Multi-currency support</li>
+            <li>📧 Email notifications for period processing</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>📞 Support</h2>
+        <p><strong>Author:</strong> Weha</p>
+        <p><strong>Website:</strong> <a href="https://weha-id.com">https://weha-id.com</a></p>
+        <p><strong>Email:</strong> support@weha-id.com</p>
+        <p><strong>License:</strong> LGPL-3</p>
+        <p><strong>Version:</strong> 18.0.1.0.0</p>
+    </div>
+</body>
+</html>

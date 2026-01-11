@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Main Menu -->
+    <menuitem id="menu_revenue_sharing_root"
+              name="Revenue Sharing"
+              sequence="100"
+              web_icon="weha_operating_unit_contract,static/description/icon.png"/>
+    
+    <!-- Configuration Menu -->
+    <menuitem id="menu_revenue_sharing_configuration"
+              name="Configuration"
+              parent="menu_revenue_sharing_root"
+              sequence="100"/>
+    
+    <menuitem id="menu_revenue_sharing_rule"
+              name="Sharing Rules"
+              parent="menu_revenue_sharing_configuration"
+              action="action_revenue_sharing_rule"
+              sequence="10"/>
+    
+    <!-- Operations Menu -->
+    <menuitem id="menu_revenue_sharing_operations"
+              name="Operations"
+              parent="menu_revenue_sharing_root"
+              sequence="10"/>
+    
+    <menuitem id="menu_revenue_sharing_period"
+              name="Sharing Periods"
+              parent="menu_revenue_sharing_operations"
+              action="action_revenue_sharing_period"
+              sequence="10"/>
+    
+    <menuitem id="menu_revenue_sharing_entry"
+              name="Sharing Entries"
+              parent="menu_revenue_sharing_operations"
+              action="action_revenue_sharing_entry"
+              sequence="20"/>
+
+</odoo>
