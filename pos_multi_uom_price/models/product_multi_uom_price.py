@@ -34,6 +34,18 @@ class ProductTmplMultiUom(models.Model):
         domain="[('category_id', '=', category_id)]",
         required=True
     )
+    uom_factor = fields.Float(
+        string='UoM Factor',
+        related='uom_id.factor',
+        readonly=True,
+        help='How much bigger or smaller this UoM is compared to the reference UoM (ratio = 1 / factor)'
+    )
+    uom_ratio = fields.Float(
+        string='UoM Ratio',
+        related='uom_id.factor_inv',
+        readonly=True,
+        help='How many reference UoM are contained in this UoM'
+    )
     price = fields.Float('Price',
         required=True,
         digits='Product Price'
@@ -133,6 +145,18 @@ class ProductMultiUom(models.Model):
         string="Unit of Measure",
         domain="[('category_id', '=', category_id)]",
         required=True
+    )
+    uom_factor = fields.Float(
+        string='UoM Factor',
+        related='uom_id.factor',
+        readonly=True,
+        help='How much bigger or smaller this UoM is compared to the reference UoM (ratio = 1 / factor)'
+    )
+    uom_ratio = fields.Float(
+        string='UoM Ratio',
+        related='uom_id.factor_inv',
+        readonly=True,
+        help='How many reference UoM are contained in this UoM'
     )
     price = fields.Float('Price',
         required=True,

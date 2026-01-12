@@ -11,31 +11,34 @@ import { SelectionPopup } from "@point_of_sale/app/utils/input_popups/selection_
 
 patch(ControlButtons.prototype, {
     async onClickUOMSelector() {
-	const selectedLine = this.currentOrder.get_selected_orderline();
-    if (!selectedLine) {
-        this.dialog.add(AlertDialog, {
-            title: _t("No product"),
-            body: _t("Select a product line first."),
-        });
-        return;
-    }
-    let uom_price = null;
-    if (this.pos.models["product.multi.uom.price"].filter(rec => rec.product_id.id === selectedLine.product_id.id ).length ) {
-        uom_price = await makeAwaitable(this.dialog, SelectionPopup, {
-            title: _t("UOM"),
-            list: this.pos.models["product.multi.uom.price"].filter((rec) => rec.product_id.id === selectedLine.product_id.id).map((rec) => (
-                {id: rec.uom_id.id,
-                 label: rec.uom_id.name,
-                 item: rec,
-                 isSelected: true,
-                 }))
-        });
-    }
-    if (uom_price){
-        selectedLine.set_unit_price(uom_price.price);
-        selectedLine.price_type = "manual";
-        selectedLine.set_uom(uom_price.uom_id)
-    }
-
+        const selectedLine = this.currentOrder.get_selected_orderline();
+        if (!selectedLine) {
+            this.dialog.add(AlertDialog, {
+                title: _t("No product"),
+                body: _t("Select a product line first."),
+            });
+            return;
+        }
+        let uom_price = null;
+        if (this.pos.models["product.multi.uom.price"].filter(rec => rec.product_id.id === selectedLine.product_id.id ).length ) {
+            uom_price = await makeAwaitable(this.dialog, SelectionPopup, {
+                title: _t("UOM"),
+                list: this.pos.models["product.multi.uom.price"].filter((rec) => rec.product_id.id === selectedLine.product_id.id).map((rec) => {
+                    const ratio = rec.uom_ratio || rec.uom_id.factor_inv || 1.0;
+                    const ratioText = ratio !== 1.0 ? ` (${ratio})` : '';
+                    return {
+                        id: rec.uom_id.id,
+                        label: `${rec.uom_id.name}${ratioText}`,
+                        item: rec,
+                        isSelected: true,
+                    };
+                })
+            });
+        }
+        if (uom_price){
+            selectedLine.set_unit_price(uom_price.price);
+            selectedLine.price_type = "manual";
+            selectedLine.set_uom(uom_price.uom_id)
+        }
     },
 });
