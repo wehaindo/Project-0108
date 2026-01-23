@@ -262,7 +262,8 @@ class StockRequest(models.Model):
                 )
 
     def _action_confirm(self):
-        self._action_launch_procurement_rule()
+        # Procurement disabled - stock requests will not automatically create transfers/POs/MOs
+        # self._action_launch_procurement_rule()
         self.filtered(lambda x: x.state != "done").write({"state": "open"})
 
     def action_confirm(self):

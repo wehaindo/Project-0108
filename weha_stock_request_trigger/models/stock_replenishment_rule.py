@@ -214,6 +214,37 @@ class StockReplenishmentRule(models.Model):
             if rule.maximum_qty < rule.minimum_qty:
                 raise ValidationError(_('Maximum quantity must be >= minimum quantity!'))
     
+    @api.constrains('warehouse_id', 'location_id', 'operating_unit_id')
+    def _check_operating_unit_consistency(self):
+        """Validate that warehouse, location and operating unit are consistent"""
+        for rule in self:
+            # Check warehouse belongs to the operating unit
+            if rule.warehouse_id and rule.operating_unit_id:
+                if rule.warehouse_id.operating_unit_id != rule.operating_unit_id:
+                    raise ValidationError(_(
+                        'Configuration Error. The Warehouse "%s" must belong to the Operating Unit "%s". '
+                        'Currently, the warehouse belongs to "%s".'
+                    ) % (
+                        rule.warehouse_id.name,
+                        rule.operating_unit_id.name,
+                        rule.warehouse_id.operating_unit_id.name if rule.warehouse_id.operating_unit_id else 'No OU'
+                    ))
+            
+            # Check location belongs to the warehouse's operating unit
+            if rule.warehouse_id and rule.location_id:
+                if (rule.warehouse_id.operating_unit_id and 
+                    rule.location_id.operating_unit_id and
+                    rule.warehouse_id.operating_unit_id != rule.location_id.operating_unit_id):
+                    raise ValidationError(_(
+                        'Configuration Error. The Operating Unit of the Warehouse and the Location must be the same. '
+                        'Warehouse "%s" belongs to "%s" but Location "%s" belongs to "%s".'
+                    ) % (
+                        rule.warehouse_id.name,
+                        rule.warehouse_id.operating_unit_id.name,
+                        rule.location_id.complete_name,
+                        rule.location_id.operating_unit_id.name
+                    ))
+    
     def action_create_stock_request(self):
         """Manually create stock request"""
         self.ensure_one()

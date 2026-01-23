@@ -18,7 +18,7 @@ models = xmlrpc.client.ServerProxy(f"{url}/xmlrpc/2/object")
 pricelist_id = models.execute_kw(
     db, uid, password,
     'product.pricelist', 'search',
-    [[['name', '=', 'Pasar Kemis Pricelist']]]
+    [[['name', '=', 'Cibeber Pricelist']]]
 )
 
 if pricelist_id:
