@@ -158,14 +158,56 @@ class StockRequest(models.Model):
     
     def _action_launch_procurement_rule(self):
         """
-        Override to fix the AttributeError: 'UserError' object has no attribute 'name'
-        
-        The base module tries to access error.name on UserError exceptions,
-        but UserError doesn't have a name attribute. We need to convert it to string.
+        Override to fix server bug: AttributeError 'UserError' object has no attribute 'name'
+        Server has old version with error.name, local has str(error). Use local implementation.
         """
-        try:
-            return super()._action_launch_procurement_rule()
-        except UserError as error:
-            # Re-raise with proper error message handling
-            # UserError objects don't have 'name' attribute, use str() to get the message
-            raise UserError(str(error))
+        from odoo.tools import float_compare
+        
+        # Copy implementation from local Module/stock_request with the fix
+        precision = self.env["decimal.precision"].precision_get("Product Unit of Measure")
+        errors = []
+        for request in self:
+            if request._skip_procurement():
+                continue
+            qty = 0.0
+            for move in request.move_ids.filtered(lambda r: r.state != "cancel"):
+                qty += move.product_qty
+
+            if float_compare(qty, request.product_qty, precision_digits=precision) >= 0:
+                continue
+
+            if request.company_id.stock_request_check_available_first:
+                if (
+                    float_compare(
+                        request.product_id.sudo()
+                        .with_context(location=request.location_id.id)
+                        .free_qty,
+                        request.product_uom_qty,
+                        precision_digits=precision,
+                    )
+                    >= 0
+                ):
+                    request._action_use_stock_available()
+                    continue
+
+            values = request._prepare_procurement_values(group_id=request.procurement_group_id)
+            try:
+                procurements = []
+                procurements.append(
+                    self.env["procurement.group"].Procurement(
+                        request.product_id,
+                        request.product_uom_qty,
+                        request.product_uom_id,
+                        request.location_id,
+                        request.name,
+                        request.name,
+                        self.env.company,
+                        values,
+                    )
+                )
+                self.env["procurement.group"].run(procurements)
+            except UserError as error:
+                errors.append(str(error))  # FIX: str(error) not error.name
+        if errors:
+            raise UserError("\n".join(errors))
+        return True
