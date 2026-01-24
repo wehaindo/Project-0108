@@ -81,7 +81,6 @@
         'views/stock_replenishment_rule_views.xml',
         'views/stock_request_views.xml',
         'wizard/stock_replenishment_wizard_views.xml',
-        'views/fix_operating_unit_wizard_views.xml',
     ],
     'demo': [
         'data/demo_data.xml',

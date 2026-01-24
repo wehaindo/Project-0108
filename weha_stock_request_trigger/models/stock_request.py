@@ -3,6 +3,7 @@
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0).
 
 from odoo import api, fields, models
+from odoo.exceptions import UserError
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -154,3 +155,17 @@ class StockRequest(models.Model):
             _logger.info('Procurement group for %s: OU=%s', self.name, self.operating_unit_id.name)
             
         return res
+    
+    def _action_launch_procurement_rule(self):
+        """
+        Override to fix the AttributeError: 'UserError' object has no attribute 'name'
+        
+        The base module tries to access error.name on UserError exceptions,
+        but UserError doesn't have a name attribute. We need to convert it to string.
+        """
+        try:
+            return super()._action_launch_procurement_rule()
+        except UserError as error:
+            # Re-raise with proper error message handling
+            # UserError objects don't have 'name' attribute, use str() to get the message
+            raise UserError(str(error))
